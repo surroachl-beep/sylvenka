@@ -538,7 +538,7 @@ function downloadImage(){
 
 function copyText(){
   if(!text.trim()){toast('Nothing to copy');return;}
-  navigator.clipboard?.writeText(text.trim()+'\n\nSylvenka · sylvenka.com')
+  navigator.clipboard?.writeText(textToUnicode(text))
     .then(()=>toast('Copied!'))
     .catch(()=>toast('Copy failed'));
 }
