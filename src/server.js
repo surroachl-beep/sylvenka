@@ -533,7 +533,7 @@ app.get('/api/certificate/:email', (req, res) => {
 app.get('/api/pricing-stats', (_req, res) => {
   res.json({
     total_speakers: stmts.countSpeakers.get().n,
-    pro_subscribers: 0,
+    pro_subscribers: stmts2.proCount.get().n,
     poems: stmts.getVelasin.all().length,
   });
 });
@@ -541,9 +541,4 @@ app.get('/api/pricing-stats', (_req, res) => {
 // Serve /pro page
 app.get('/pro', (_req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'pro', 'index.html'));
-});
-
-// Serve keyboard at /keyboard
-app.get('/keyboard', (_req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'public', 'keyboard', 'index.html'));
 });
