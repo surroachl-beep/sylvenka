@@ -322,7 +322,7 @@ app.get('/sitemap.xml', (_req, res) => {
 const stripe = process.env.STRIPE_SECRET_KEY
   ? require('stripe')(process.env.STRIPE_SECRET_KEY)
   : null;
-const jwt = require('jsonwebtoken');
+let jwt=null;try{jwt=require('jsonwebtoken');}catch(e){}
 const JWT_SECRET = process.env.JWT_SECRET || 'sylvenka-shila-ve-va-secret';
 
 // ── Database upgrades for pro users ──────────────────────────
