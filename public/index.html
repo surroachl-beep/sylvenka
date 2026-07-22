@@ -1193,7 +1193,7 @@ function quickAsk(text){
   const inp=document.getElementById('chatInput');
   if(inp){inp.value=text;sendChat();}
 }
-
+function addMsg(role,html){
   const log=document.getElementById('chatLog');
   const div=document.createElement('div');
   div.className=`msg ${role}`;
