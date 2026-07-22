@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#030d08">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Sylvenka Chat — shila ve-va</title>
+<meta property="og:title" content="Sylvenka Chat">
+<meta property="og:description" content="Talk to Sylvenka speakers in 21 languages. Real-time rooms, built-in keyboard, evidence markers colour-coded.">
+<meta property="og:url" content="https://sylvenka.com/chat">
+<link rel="manifest" href="/manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Spline+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#020507;--surface:#0a0f0c;--card:#0f1a14;--border:#1a3020;--border2:#2F6B5A44;
+  --va:#2F6B5A;--va-bg:#0f2a1e;--va-light:#5ecfa0;
+  --shi:#3F72A3;--shi-bg:#0f1828;--shi-light:#7ab8f5;
+  --nu:#A9761F;--nu-bg:#281c08;--nu-light:#f5c06a;
+  --le:#6E549C;--le-bg:#1e1030;--le-light:#c4a0f5;
+  --text:#e8f0ec;--muted:#6a8870;--faint:#3a5040;
+  --serif:Fraunces,serif;--sans:'Spline Sans',sans-serif;--mono:'Courier New',monospace;
+  --radius:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;overflow:hidden}
+/* ── LAYOUT ── */
+.app{display:flex;height:100vh;max-width:1100px;margin:0 auto;position:relative}
+/* Sidebar */
+.sidebar{width:220px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--surface)}
+.sidebar-top{padding:.9rem .8rem .7rem;border-bottom:1px solid var(--border)}
+.app-name{font-family:var(--serif);font-size:1.15rem;color:var(--va-light);font-style:italic;margin-bottom:.15rem}
+.app-sub{font-size:.7rem;color:var(--faint);letter-spacing:.1em;font-family:var(--mono)}
+.rooms-label{font-size:.68rem;color:var(--faint);letter-spacing:.12em;text-transform:uppercase;font-family:var(--mono);padding:.6rem .8rem .3rem}
+.room-btn{display:flex;align-items:center;gap:.5rem;width:100%;background:none;border:none;padding:.5rem .8rem;color:var(--muted);cursor:pointer;border-left:3px solid transparent;transition:all .15s;font-family:var(--sans);font-size:.88rem;text-align:left}
+.room-btn:hover{color:var(--text);background:var(--card)}
+.room-btn.active{color:var(--va-light);border-left-color:var(--va);background:var(--va-bg)}
+.room-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.room-count{font-size:.7rem;font-family:var(--mono);color:var(--faint);margin-left:auto}
+.sidebar-bottom{margin-top:auto;padding:.8rem;border-top:1px solid var(--border)}
+.user-pill{display:flex;align-items:center;gap:.5rem;cursor:pointer;padding:.4rem .5rem;border-radius:var(--radius);transition:background .15s}
+.user-pill:hover{background:var(--card)}
+.avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:.9rem;font-style:italic;flex-shrink:0}
+.user-info{flex:1;min-width:0}
+.user-name{font-size:.82rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-level{font-size:.68rem;color:var(--faint);font-family:var(--mono)}
+/* Main chat */
+.chat-main{flex:1;display:flex;flex-direction:column;min-width:0}
+.chat-header{padding:.7rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.7rem;background:var(--surface)}
+.room-name{font-family:var(--serif);font-size:1.05rem;color:var(--va-light);font-style:italic}
+.room-theme{font-size:.75rem;color:var(--faint);flex:1}
+.online-badge{font-size:.68rem;font-family:var(--mono);color:var(--va-light);background:var(--va-bg);border:.5px solid var(--va);border-radius:999px;padding:1px 7px}
+/* Messages */
+.messages{flex:1;overflow-y:auto;padding:.8rem .9rem;display:flex;flex-direction:column;gap:.5rem;scroll-behavior:smooth}
+.messages::-webkit-scrollbar{width:3px}.messages::-webkit-scrollbar-track{background:transparent}.messages::-webkit-scrollbar-thumb{background:var(--border)}
+.msg-group{display:flex;flex-direction:column;gap:2px}
+.msg-meta{display:flex;align-items:center;gap:.4rem;margin-bottom:.2rem;padding-left:36px}
+.msg-author{font-size:.75rem;font-weight:500}
+.msg-time{font-size:.68rem;color:var(--faint);font-family:var(--mono)}
+.msg-level{font-size:.65rem;color:var(--faint);font-family:var(--mono);background:var(--card);border-radius:3px;padding:0 4px}
+.msg-row{display:flex;gap:.5rem;align-items:flex-start}
+.msg-av{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;font-size:.85rem;margin-top:1px}
+.msg-av.bot{background:var(--va-bg);color:var(--va-light)}
+.bubble{background:var(--card);border:1px solid var(--border);border-radius:12px;border-top-left-radius:4px;padding:.55rem .8rem;max-width:min(480px,80vw);position:relative}
+.bubble.own{background:var(--va-bg);border-color:var(--va);border-top-left-radius:12px;border-top-right-radius:4px;margin-left:auto}
+.bubble.bot{border-color:var(--va)44}
+.msg-syl{font-family:var(--serif);font-style:italic;font-size:.95rem;line-height:1.5;color:var(--text)}
+.msg-ev{display:flex;gap:.3rem;margin-top:.3rem;flex-wrap:wrap}
+.ev-pip{font-size:.65rem;border-radius:999px;padding:1px 6px;font-family:var(--mono)}
+.pip-va{background:var(--va-bg);color:var(--va-light);border:.5px solid var(--va)}
+.pip-shi{background:var(--shi-bg);color:var(--shi-light);border:.5px solid var(--shi)}
+.pip-nu{background:var(--nu-bg);color:var(--nu-light);border:.5px solid var(--nu)}
+.pip-le{background:var(--le-bg);color:var(--le-light);border:.5px solid var(--le)}
+.pip-none{background:var(--card);color:var(--faint);border:.5px solid var(--border)}
+.msg-tr{font-size:.78rem;color:var(--muted);margin-top:.3rem;line-height:1.4;font-style:italic;border-top:1px solid var(--border);padding-top:.3rem}
+.msg-tr .ev-label{color:var(--va-light);font-style:normal}
+.play-btn{background:none;border:none;color:var(--faint);cursor:pointer;font-size:.75rem;padding:0 .2rem;transition:color .15s}
+.play-btn:hover{color:var(--va-light)}
+.tr-toggle{font-size:.65rem;color:var(--faint);font-family:var(--mono);cursor:pointer;border:none;background:none;padding:0;margin-top:.2rem;transition:color .15s}
+.tr-toggle:hover{color:var(--muted)}
+/* Input area */
+.input-area{border-top:1px solid var(--border);background:var(--surface);padding:.6rem .8rem .7rem}
+/* Keyboard switcher */
+.kb-modes{display:flex;gap:.3rem;margin-bottom:.5rem}
+.kb-mode{background:none;border:.5px solid var(--border);border-radius:999px;color:var(--faint);padding:.2rem .7rem;font-size:.72rem;cursor:pointer;font-family:var(--mono);letter-spacing:.04em;transition:all .15s}
+.kb-mode.active{background:var(--va-bg);border-color:var(--va);color:var(--va-light)}
+/* Sylvenka keyboard */
+.syl-keyboard{margin-bottom:.5rem}
+.kb-row{display:flex;gap:.3rem;margin-bottom:.3rem;flex-wrap:wrap}
+/* Evidence marker buttons */
+.ev-btns{display:flex;gap:.4rem;margin-bottom:.4rem}
+.ev-btn{flex:1;border:none;border-radius:8px;padding:.4rem .3rem;font-family:var(--serif);font-style:italic;font-size:.85rem;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:1px}
+.ev-btn-label{font-size:.6rem;font-family:var(--mono);font-style:normal;opacity:.7;letter-spacing:.04em}
+.ev-btn.va{background:var(--va-bg);color:var(--va-light);border:.5px solid var(--va)}
+.ev-btn.shi{background:var(--shi-bg);color:var(--shi-light);border:.5px solid var(--shi)}
+.ev-btn.nu{background:var(--nu-bg);color:var(--nu-light);border:.5px solid var(--nu)}
+.ev-btn.le{background:var(--le-bg);color:var(--le-light);border:.5px solid var(--le)}
+.ev-btn:hover{filter:brightness(1.2);transform:translateY(-1px)}
+.ev-btn:active{transform:scale(.96)}
+/* Quick phrases */
+.quick-phrases{display:flex;gap:.3rem;overflow-x:auto;padding-bottom:.2rem;margin-bottom:.4rem}
+.quick-phrases::-webkit-scrollbar{height:2px}.quick-phrases::-webkit-scrollbar-thumb{background:var(--border)}
+.qp-btn{flex-shrink:0;background:var(--card);border:.5px solid var(--border);border-radius:999px;padding:.25rem .7rem;font-size:.75rem;color:var(--muted);cursor:pointer;font-family:var(--serif);font-style:italic;white-space:nowrap;transition:all .15s}
+.qp-btn:hover{border-color:var(--va);color:var(--va-light)}
+/* Suggestions */
+.suggestions{display:flex;gap:.3rem;margin-bottom:.4rem;flex-wrap:wrap}
+.sug{background:var(--card);border:.5px solid var(--border);border-radius:6px;padding:.25rem .55rem;font-size:.78rem;cursor:pointer;transition:all .15s;font-family:var(--serif);font-style:italic;color:var(--text)}
+.sug:hover{border-color:var(--va);background:var(--va-bg)}
+.sug-ev{font-size:.6rem;font-family:var(--mono);font-style:normal;opacity:.6;margin-left:.2rem}
+/* Message input row */
+.input-row{display:flex;gap:.5rem;align-items:flex-end}
+.msg-input{flex:1;background:var(--card);border:.5px solid var(--border);border-radius:10px;padding:.6rem .8rem;color:var(--text);font-family:var(--serif);font-style:italic;font-size:.95rem;resize:none;max-height:100px;outline:none;transition:border-color .15s;line-height:1.5}
+.msg-input:focus{border-color:var(--va)}
+.msg-input::placeholder{color:var(--faint);font-style:italic}
+.send-btn{width:38px;height:38px;border-radius:10px;background:var(--va);border:none;color:#fff;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.send-btn:hover{background:#3d8a6e}.send-btn:active{transform:scale(.94)}
+/* Glyph toggle */
+.glyph-toggle{display:flex;align-items:center;gap:.4rem;margin-bottom:.4rem}
+.gt-label{font-size:.7rem;color:var(--faint);font-family:var(--mono)}
+.gt-switch{position:relative;width:32px;height:16px;flex-shrink:0}
+.gt-switch input{opacity:0;width:0;height:0}
+.gt-slider{position:absolute;inset:0;background:var(--border);border-radius:8px;cursor:pointer;transition:.2s}
+.gt-slider:before{content:'';position:absolute;width:12px;height:12px;left:2px;top:2px;background:var(--faint);border-radius:50%;transition:.2s}
+input:checked+.gt-slider{background:var(--va)}
+input:checked+.gt-slider:before{transform:translateX(16px);background:#fff}
+.glyph-preview{font-size:.8rem;color:var(--va-light);font-family:var(--mono);margin-left:.3rem}
+/* Onboarding overlay */
+.onboard{position:fixed;inset:0;background:rgba(2,5,7,.92);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem}
+.onboard-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.8rem;width:min(420px,92vw);max-height:90vh;overflow-y:auto}
+.ob-title{font-family:var(--serif);font-size:1.6rem;font-style:italic;color:var(--va-light);margin-bottom:.3rem}
+.ob-sub{font-size:.85rem;color:var(--muted);margin-bottom:1.4rem;line-height:1.5}
+.ob-label{font-size:.72rem;color:var(--faint);letter-spacing:.1em;font-family:var(--mono);text-transform:uppercase;margin-bottom:.3rem}
+.ob-input{width:100%;background:var(--card);border:.5px solid var(--border);border-radius:8px;padding:.6rem .8rem;color:var(--text);font-family:var(--sans);font-size:.95rem;outline:none;margin-bottom:1rem;transition:border-color .15s}
+.ob-input:focus{border-color:var(--va)}
+.ob-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem}
+.ob-pick{background:var(--card);border:.5px solid var(--border);border-radius:8px;padding:.6rem .7rem;cursor:pointer;transition:all .15s;text-align:center}
+.ob-pick:hover,.ob-pick.sel{border-color:var(--va);background:var(--va-bg)}
+.ob-pick-name{font-weight:500;font-size:.85rem}
+.ob-pick-desc{font-size:.72rem;color:var(--faint);margin-top:.1rem}
+.lang-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;margin-bottom:1rem;max-height:160px;overflow-y:auto}
+.lang-btn{background:var(--card);border:.5px solid var(--border);border-radius:6px;padding:.4rem .5rem;cursor:pointer;font-size:.78rem;text-align:center;transition:all .15s;color:var(--muted)}
+.lang-btn:hover,.lang-btn.sel{border-color:var(--va);color:var(--va-light);background:var(--va-bg)}
+.ob-btn{width:100%;background:var(--va);border:none;border-radius:8px;padding:.75rem;color:#fff;font-size:.95rem;font-weight:500;cursor:pointer;font-family:var(--sans);transition:all .15s}
+.ob-btn:hover{background:#3d8a6e}
+/* Responsive */
+@media(max-width:700px){
+  .sidebar{display:none}
+  .mobile-rooms{display:flex!important}
+}
+.mobile-rooms{display:none;overflow-x:auto;padding:.5rem .6rem;gap:.4rem;border-bottom:1px solid var(--border);background:var(--surface)}
+.mob-room{flex-shrink:0;background:var(--card);border:.5px solid var(--border);border-radius:999px;padding:.3rem .8rem;font-size:.78rem;color:var(--muted);cursor:pointer;transition:all .15s}
+.mob-room.active{background:var(--va-bg);border-color:var(--va);color:var(--va-light)}
+/* System message */
+.sys-msg{text-align:center;font-size:.72rem;color:var(--faint);font-family:var(--mono);padding:.3rem 0;letter-spacing:.04em}
+/* Typing indicator */
+.typing-ind{display:flex;align-items:center;gap:.3rem;padding:.3rem .5rem}
+.tdot{width:5px;height:5px;border-radius:50%;background:var(--va);animation:td .9s ease-in-out infinite}
+.tdot:nth-child(2){animation-delay:.15s}.tdot:nth-child(3){animation-delay:.3s}
+@keyframes td{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+</style>
+</head>
+<body>
+
+<!-- ONBOARDING -->
+<div class="onboard" id="onboard">
+  <div class="onboard-card">
+    <div class="ob-title">Shila ve-va.</div>
+    <div class="ob-sub">Speak only what you have witnessed. Join the Sylvenka community — choose your name, level and language.</div>
+    <div class="ob-label">Your speaker name</div>
+    <input class="ob-input" id="ob-name" placeholder="e.g. soren-tovi or your own name" maxlength="24">
+    <div class="ob-label">Your level</div>
+    <div class="ob-grid" id="ob-levels">
+      <div class="ob-pick sel" data-level="melo"><div class="ob-pick-name">Melo</div><div class="ob-pick-desc">just beginning</div></div>
+      <div class="ob-pick" data-level="nashuen"><div class="ob-pick-name">Nashuen</div><div class="ob-pick-desc">traveling</div></div>
+      <div class="ob-pick" data-level="veloen"><div class="ob-pick-name">Veloen</div><div class="ob-pick-desc">witness</div></div>
+      <div class="ob-pick" data-level="loven"><div class="ob-pick-name">Loven</div><div class="ob-pick-desc">teacher</div></div>
+    </div>
+    <div class="ob-label">Your language — translations will appear in this language</div>
+    <div class="lang-grid" id="ob-langs">
+      <div class="lang-btn sel" data-lang="English">English</div>
+      <div class="lang-btn" data-lang="Hindi">Hindi</div>
+      <div class="lang-btn" data-lang="Telugu">Telugu</div>
+      <div class="lang-btn" data-lang="Tamil">Tamil</div>
+      <div class="lang-btn" data-lang="Punjabi">Punjabi</div>
+      <div class="lang-btn" data-lang="Bengali">Bengali</div>
+      <div class="lang-btn" data-lang="Kannada">Kannada</div>
+      <div class="lang-btn" data-lang="Malayalam">Malayalam</div>
+      <div class="lang-btn" data-lang="Marathi">Marathi</div>
+      <div class="lang-btn" data-lang="Arabic">Arabic</div>
+      <div class="lang-btn" data-lang="Spanish">Spanish</div>
+      <div class="lang-btn" data-lang="French">French</div>
+      <div class="lang-btn" data-lang="German">German</div>
+      <div class="lang-btn" data-lang="Japanese">Japanese</div>
+      <div class="lang-btn" data-lang="Korean">Korean</div>
+      <div class="lang-btn" data-lang="Mandarin">Mandarin</div>
+      <div class="lang-btn" data-lang="Swahili">Swahili</div>
+      <div class="lang-btn" data-lang="Portuguese">Portuguese</div>
+      <div class="lang-btn" data-lang="Russian">Russian</div>
+      <div class="lang-btn" data-lang="Indonesian">Indonesian</div>
+      <div class="lang-btn" data-lang="Turkish">Turkish</div>
+    </div>
+    <button class="ob-btn" onclick="finishOnboard()">Velo-thi — enter the language</button>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div class="app">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-top">
+      <div class="app-name">Sylvenka</div>
+      <div class="app-sub">shila ve-va · speak what you witness</div>
+    </div>
+    <div class="rooms-label">Conversation rooms</div>
+    <div id="room-list"></div>
+    <div class="sidebar-bottom">
+      <div class="user-pill" onclick="showProfile()">
+        <div class="avatar" id="sb-avatar" style="background:var(--va-bg);color:var(--va-light)">?</div>
+        <div class="user-info">
+          <div class="user-name" id="sb-name">—</div>
+          <div class="user-level" id="sb-level">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="chat-main">
+    <!-- Mobile room tabs -->
+    <div class="mobile-rooms" id="mobile-rooms"></div>
+
+    <!-- Header -->
+    <div class="chat-header">
+      <div>
+        <div class="room-name" id="room-title">selaka</div>
+        <div class="room-theme" id="room-theme">Describe nature — use -va for what you see</div>
+      </div>
+      <div class="online-badge" id="online-badge">● live</div>
+    </div>
+
+    <!-- Messages -->
+    <div class="messages" id="messages"></div>
+
+    <!-- Input area -->
+    <div class="input-area">
+      <!-- Keyboard mode switcher -->
+      <div class="kb-modes">
+        <button class="kb-mode active" id="km-syl" onclick="setMode('syl')">Sylvenka</button>
+        <button class="kb-mode" id="km-eng" onclick="setMode('eng')">English</button>
+        <button class="kb-mode" id="km-nat" onclick="setMode('nat')">Your language</button>
+      </div>
+
+      <!-- Sylvenka keyboard (shown in syl mode) -->
+      <div id="syl-kb">
+        <!-- Evidence marker buttons -->
+        <div class="ev-btns">
+          <button class="ev-btn va" onclick="addEv('va')"><span>-va</span><span class="ev-btn-label">witnessed</span></button>
+          <button class="ev-btn shi" onclick="addEv('shi')"><span>-shi</span><span class="ev-btn-label">hearsay</span></button>
+          <button class="ev-btn nu" onclick="addEv('nu')"><span>-nu</span><span class="ev-btn-label">inferred</span></button>
+          <button class="ev-btn le" onclick="addEv('le')"><span>-le</span><span class="ev-btn-label">dreamed</span></button>
+        </div>
+
+        <!-- Glyph toggle -->
+        <div class="glyph-toggle">
+          <span class="gt-label">venashi script</span>
+          <label class="gt-switch"><input type="checkbox" id="glyph-toggle" onchange="toggleGlyph()"><span class="gt-slider"></span></label>
+          <span class="glyph-preview" id="glyph-prev"></span>
+        </div>
+
+        <!-- Word suggestions -->
+        <div class="suggestions" id="suggestions"></div>
+
+        <!-- Quick phrases -->
+        <div class="quick-phrases" id="quick-phrases"></div>
+      </div>
+
+      <!-- Message input row -->
+      <div class="input-row">
+        <textarea class="msg-input" id="msg-input" rows="1" placeholder="Shila ve-va…" oninput="onInput()" onkeydown="onKey(event)"></textarea>
+        <button class="send-btn" onclick="sendMessage()" aria-label="Send">&#9658;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══ USER STATE ══════════════════════════════════════════════════
+let user={name:'nashuen',level:'melo',lang:'English',color:'#2F6B5A',av:'N'};
+let kbMode='syl';
+let glyphOn=false;
+let currentRoom='sela';
+
+const AVATAR_COLORS=['#2F6B5A','#3F72A3','#A9761F','#6E549C','#1D9E75','#185FA5','#854F0B','#534AB7'];
+
+// ══ ROOMS ════════════════════════════════════════════════════════
+const ROOMS=[
+  {id:'sela',name:'Selaka',icon:'◈',theme:'Describe nature — use -va for what you see, -nu for what you infer'},
+  {id:'tovi',name:'Tovithi',icon:'◉',theme:'Greetings, introductions, small talk. Beginners welcome.'},
+  {id:'lama',name:'Lamaka',icon:'◆',theme:'Stories and imagination — -le lives here'},
+  {id:'miren',name:'Miren-sela',icon:'◇',theme:'Advanced: discuss the world in -shi and -nu'},
+  {id:'velasin',name:'Velasin',icon:'◎',theme:'Post your four-line poems here'},
+];
+
+// ══ SAMPLE MESSAGES PER ROOM ══════════════════════════════════════
+const SEED={
+  sela:[
+    {name:'Yara',level:'veloen',lang:'English',color:'#2F6B5A',text:'Sela ovan velova.',ev:'va',tr:'The water is vast — I see it.',ts:Date.now()-420000},
+    {name:'Kenji',level:'nashuen',lang:'Japanese',color:'#3F72A3',text:'Miren soren velonu.',ev:'nu',tr:'The sky looks bright — I can tell.',ts:Date.now()-300000},
+    {name:'Mira',level:'loven',lang:'English',color:'#6E549C',text:'Velo-thi! Nasi sela velo — soren ovan velomile.',ev:'le',tr:'Welcome! We look at the water together — I dream the light will be bright.',ts:Date.now()-180000,isBot:true},
+  ],
+  tovi:[
+    {name:'Priya',level:'melo',lang:'Hindi',color:'#A9761F',text:'Shila ve-va! Na Priya.',ev:'none',tr:'Speak only what you witness! I am Priya.',ts:Date.now()-600000},
+    {name:'Mira',level:'loven',lang:'English',color:'#6E549C',text:'Velo-thi, Priya! Na soren noreva — si Sylvenka lovu.',ev:'va',tr:'Welcome, Priya! I feel bright — you are learning Sylvenka.',ts:Date.now()-540000,isBot:true},
+  ],
+  lama:[
+    {name:'Lars',level:'nashuen',lang:'German',color:'#2F6B5A',text:'Nolu-mishi lamaka ne velomile.',ev:'le',tr:'I dream of seeing an owl in the forest.',ts:Date.now()-200000},
+  ],
+  miren:[
+    {name:'Aisha',level:'veloen',lang:'Arabic',color:'#A9761F',text:'Velomo ovan esorenu.',ev:'nu',tr:'The situation seems beautiful — I infer this.',ts:Date.now()-100000},
+  ],
+  velasin:[
+    {name:'Tomás',level:'loven',lang:'Spanish',color:'#3F72A3',text:'Soren lamaka veloreva.\nTovi selaka nashureshi.\nMiren-sela solominu.\nNasi velomile.',ev:'va',tr:'I saw light in the forest (witnessed).\nMy friend went to the lake (hearsay).\nRain is coming (inferred).\nWe will see each other (dreamed).',ts:Date.now()-50000},
+  ],
+};
+
+// ══ WORD SUGGESTIONS ═════════════════════════════════════════════
+const WORD_BANK=[
+  {root:'sela',meaning:'water'},{root:'lama',meaning:'tree'},{root:'soren',meaning:'light'},
+  {root:'tovi',meaning:'friend'},{root:'nashu',meaning:'go'},{root:'velo',meaning:'see'},
+  {root:'shila',meaning:'speak'},{root:'lashu',meaning:'meet'},{root:'lovu',meaning:'learn'},
+  {root:'solo',meaning:'rain'},{root:'miren',meaning:'sky'},{root:'nolu',meaning:'night'},
+  {root:'sola',meaning:'sun'},{root:'mishi',meaning:'bird'},{root:'thela',meaning:'fire'},
+  {root:'mela',meaning:'snow'},{root:'venoru',meaning:'wind'},{root:'noreva',meaning:'greet'},
+  {root:'nasi',meaning:'we (inclusive)'},{root:'velomile',meaning:'we will see it (dream)'},
+  {root:'shilamo',meaning:'language'},{root:'velomo',meaning:'vision'},
+];
+
+const QUICK=[
+  {text:'Shila ve-va.',hint:'the greeting'},{text:'Velo-thi!',hint:'welcome'},
+  {text:'Na soren noreva.',hint:'I feel well'},
+  {text:'Nasi lashusa!',hint:"let's meet"},
+  {text:'Totovi-thi o!',hint:'dear friends!'},
+  {text:'Veno si veloreva?',hint:"what did you see?"},
+  {text:'Nasi velomile.',hint:'we will see it'},
+  {text:'Nashusa soren.',hint:'go in brightness'},
+];
+
+// ══ ONBOARDING ═══════════════════════════════════════════════════
+let obLevel='melo', obLang='English';
+
+document.querySelectorAll('#ob-levels .ob-pick').forEach(el=>{
+  el.addEventListener('click',()=>{
+    document.querySelectorAll('#ob-levels .ob-pick').forEach(e=>e.classList.remove('sel'));
+    el.classList.add('sel');obLevel=el.dataset.level;
+  });
+});
+document.querySelectorAll('#ob-langs .lang-btn').forEach(el=>{
+  el.addEventListener('click',()=>{
+    document.querySelectorAll('#ob-langs .lang-btn').forEach(e=>e.classList.remove('sel'));
+    el.classList.add('sel');obLang=el.dataset.lang;
+  });
+});
+
+function finishOnboard(){
+  const name=(document.getElementById('ob-name').value.trim()||'nashuen').slice(0,24);
+  const colorIdx=name.split('').reduce((a,c)=>a+c.charCodeAt(0),0)%AVATAR_COLORS.length;
+  user={name,level:obLevel,lang:obLang,color:AVATAR_COLORS[colorIdx],av:name[0].toUpperCase()};
+  localStorage.setItem('sylv_chat_user',JSON.stringify(user));
+  document.getElementById('onboard').style.display='none';
+  init();
+}
+
+function loadUser(){
+  const saved=localStorage.getItem('sylv_chat_user');
+  if(saved){try{user=JSON.parse(saved);return true;}catch(e){}}
+  return false;
+}
+
+// ══ INIT ═════════════════════════════════════════════════════════
+function init(){
+  // Update sidebar
+  document.getElementById('sb-avatar').textContent=user.av;
+  document.getElementById('sb-avatar').style.background=user.color+'33';
+  document.getElementById('sb-avatar').style.color=user.color;
+  document.getElementById('sb-name').textContent=user.name;
+  document.getElementById('sb-level').textContent=user.level+' · '+user.lang;
+  // Render rooms
+  renderRooms();
+  // Render keyboard
+  renderQuickPhrases();
+  // Load first room
+  switchRoom('sela');
+}
+
+function renderRooms(){
+  const list=document.getElementById('room-list');
+  const mob=document.getElementById('mobile-rooms');
+  list.innerHTML='';mob.innerHTML='';
+  ROOMS.forEach(r=>{
+    const btn=document.createElement('button');
+    btn.className='room-btn'+(r.id===currentRoom?' active':'');
+    btn.innerHTML=`<span style="color:var(--va-light);font-size:.85rem">${r.icon}</span>${r.name}<span class="room-count">${(SEED[r.id]||[]).length}</span>`;
+    btn.onclick=()=>switchRoom(r.id);
+    list.appendChild(btn);
+    const mb=document.createElement('div');
+    mb.className='mob-room'+(r.id===currentRoom?' active':'');
+    mb.textContent=r.name;mb.onclick=()=>switchRoom(r.id);
+    mob.appendChild(mb);
+  });
+}
+
+function switchRoom(id){
+  currentRoom=id;
+  const room=ROOMS.find(r=>r.id===id);
+  document.getElementById('room-title').textContent=room.name;
+  document.getElementById('room-theme').textContent=room.theme;
+  renderRooms();
+  renderMessages();
+}
+
+// ══ MESSAGES ═════════════════════════════════════════════════════
+let localMessages={};
+ROOMS.forEach(r=>localMessages[r.id]=[...(SEED[r.id]||[])]);
+
+function renderMessages(){
+  const container=document.getElementById('messages');
+  container.innerHTML='';
+  const msgs=localMessages[currentRoom]||[];
+  if(!msgs.length){
+    container.innerHTML='<div class="sys-msg">No messages yet. Be the first — shila ve-va.</div>';
+    return;
+  }
+  msgs.forEach(m=>appendMsgEl(m,false));
+  container.scrollTop=container.scrollHeight;
+}
+
+function appendMsgEl(msg,scroll=true){
+  const container=document.getElementById('messages');
+  const isOwn=msg.name===user.name;
+  const ev=msg.ev||'none';
+  const evClass=ev!=='none'?`pip-${ev}`:'pip-none';
+  const evLabel=ev!=='none'?`-${ev} · ${{va:'witnessed',shi:'hearsay',nu:'inferred',le:'dreamed'}[ev]}`:'no marker';
+
+  // Get translation in user's language
+  const trText=msg.translations?.[user.lang]||msg.tr||'';
+
+  const div=document.createElement('div');
+  div.className='msg-group';
+
+  // Meta line (skip for consecutive same author — simplified)
+  const meta=document.createElement('div');
+  meta.className='msg-meta';
+  meta.innerHTML=`<span class="msg-author" style="color:${msg.color||'var(--va-light)'}">${msg.name}</span><span class="msg-level">${msg.level||''}</span><span class="msg-time">${timeAgo(msg.ts)}</span>`;
+
+  const row=document.createElement('div');
+  row.className='msg-row';
+  if(isOwn)row.style.flexDirection='row-reverse';
+
+  const av=document.createElement('div');
+  av.className='msg-av'+(msg.isBot?' bot':'');
+  av.style.background=(msg.color||'#2F6B5A')+'22';
+  av.style.color=msg.color||'var(--va-light)';
+  av.textContent=(msg.name||'?')[0].toUpperCase();
+
+  const bubble=document.createElement('div');
+  bubble.className='bubble'+(isOwn?' own':'')+(msg.isBot?' bot':'');
+
+  const sylText=document.createElement('div');
+  sylText.className='msg-syl';
+  sylText.style.whiteSpace='pre-line';
+  sylText.textContent=msg.text;
+
+  const evRow=document.createElement('div');
+  evRow.className='msg-ev';
+  evRow.innerHTML=`<span class="ev-pip ${evClass}">${evLabel}</span>
+    <button class="play-btn" onclick="speakMsg('${msg.text.replace(/'/g,"\\'")}')">▶</button>`;
+
+  bubble.appendChild(sylText);
+  bubble.appendChild(evRow);
+
+  if(trText){
+    const tr=document.createElement('div');
+    tr.className='msg-tr';
+    tr.innerHTML=`<span class="ev-label">${user.lang}:</span> ${trText}`;
+    bubble.appendChild(tr);
+    const tog=document.createElement('button');
+    tog.className='tr-toggle';tog.textContent='hide translation';
+    tog.onclick=()=>{tr.style.display=tr.style.display==='none'?'':'none';tog.textContent=tr.style.display==='none'?'show translation':'hide translation';};
+    bubble.appendChild(tog);
+  }
+
+  row.appendChild(av);row.appendChild(bubble);
+  div.appendChild(meta);div.appendChild(row);
+  container.appendChild(div);
+  if(scroll)container.scrollTop=container.scrollHeight;
+}
+
+function timeAgo(ts){
+  const s=Math.floor((Date.now()-ts)/1000);
+  if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';
+  if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';
+}
+
+function speakMsg(text){
+  if(!window.speechSynthesis)return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  const vs=speechSynthesis.getVoices();
+  const v=vs.find(v=>v.lang.startsWith('es-')||v.lang.startsWith('it-'))||vs.find(v=>v.lang.startsWith('en-'))||null;
+  if(v)u.voice=v;u.rate=.75;u.pitch=1.05;speechSynthesis.speak(u);
+}
+
+// ══ KEYBOARD ═════════════════════════════════════════════════════
+function setMode(mode){
+  kbMode=mode;
+  ['syl','eng','nat'].forEach(m=>{
+    document.getElementById('km-'+m).classList.toggle('active',m===mode);
+  });
+  document.getElementById('syl-kb').style.display=mode==='syl'?'':'none';
+  const input=document.getElementById('msg-input');
+  if(mode==='syl')input.placeholder='Shila ve-va… (Sylvenka)';
+  else if(mode==='eng')input.placeholder='Write in English…';
+  else input.placeholder=`Write in ${user.lang}…`;
+  input.focus();
+}
+
+function addEv(ev){
+  const inp=document.getElementById('msg-input');
+  const val=inp.value.trimEnd();
+  // Remove any existing evidence marker at end
+  const cleaned=val.replace(/-(va|shi|nu|le)\s*$/,'').trimEnd();
+  inp.value=cleaned+(cleaned?' ':'')+'-'+ev+' ';
+  inp.focus();
+  updateSuggestions(inp.value);
+}
+
+function toggleGlyph(){
+  glyphOn=document.getElementById('glyph-toggle').checked;
+  const prev=document.getElementById('glyph-prev');
+  prev.textContent=glyphOn?'showing script glyphs (decorative)':'';
+}
+
+function renderQuickPhrases(){
+  const container=document.getElementById('quick-phrases');
+  container.innerHTML=QUICK.map(q=>`<button class="qp-btn" onclick="insertPhrase('${q.text.replace(/'/g,"\\'")}')"><span>${q.text}</span></button>`).join('');
+}
+
+function insertPhrase(text){
+  const inp=document.getElementById('msg-input');
+  inp.value=text+' ';inp.focus();
+  updateSuggestions(text);
+}
+
+function updateSuggestions(val){
+  const container=document.getElementById('suggestions');
+  if(!val.trim()||kbMode!=='syl'){container.innerHTML='';return;}
+  const words=val.trim().split(/\s+/);
+  const last=words[words.length-1].toLowerCase().replace(/[-]/g,'');
+  if(last.length<2){container.innerHTML='';return;}
+  const matches=WORD_BANK.filter(w=>w.root.startsWith(last)&&w.root!==last).slice(0,5);
+  if(!matches.length){container.innerHTML='';return;}
+  container.innerHTML=matches.map(m=>`<div class="sug" onclick="insertWord('${m.root}')">${m.root}<span class="sug-ev">${m.meaning}</span></div>`).join('');
+}
+
+function insertWord(word){
+  const inp=document.getElementById('msg-input');
+  const words=inp.value.trim().split(/\s+/);
+  words[words.length-1]=word;
+  inp.value=words.join(' ')+' ';inp.focus();
+  document.getElementById('suggestions').innerHTML='';
+}
+
+function onInput(){
+  const inp=document.getElementById('msg-input');
+  inp.style.height='auto';
+  inp.style.height=Math.min(inp.scrollHeight,100)+'px';
+  updateSuggestions(inp.value);
+}
+
+function onKey(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}
+}
+
+// ══ SEND MESSAGE ══════════════════════════════════════════════════
+async function sendMessage(){
+  const inp=document.getElementById('msg-input');
+  const text=inp.value.trim();if(!text)return;
+  inp.value='';inp.style.height='auto';
+  document.getElementById('suggestions').innerHTML='';
+
+  // Detect evidence marker in text
+  const evMatch=text.match(/-(va|shi|nu|le)\b/);
+  const ev=evMatch?evMatch[1]:'none';
+
+  const msg={
+    name:user.name,level:user.level,lang:user.lang,
+    color:user.color,text,ev,ts:Date.now(),
+    translations:{}
+  };
+
+  // Add locally immediately
+  localMessages[currentRoom].push(msg);
+  appendMsgEl(msg,true);
+
+  // Get translation via Claude
+  if(text&&kbMode==='syl'){
+    try{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-6',max_tokens:200,
+          messages:[{role:'user',content:`Translate this Sylvenka text to ${user.lang}. Sylvenka grammar: -va=witnessed firsthand, -shi=hearsay, -nu=inferred, -le=dreamed/hoped. Preserve the epistemic nuance in translation. Reply with ONLY the translation, no explanation. Text: "${text}"`}]
+        })
+      });
+      const d=await res.json();
+      const tr=d.content?.[0]?.text?.trim()||'';
+      if(tr){
+        // Find and update the message
+        const msgEl=document.getElementById('messages').lastElementChild;
+        if(msgEl){
+          const existing=msgEl.querySelector('.msg-tr');
+          if(!existing){
+            const trDiv=document.createElement('div');
+            trDiv.className='msg-tr';
+            trDiv.innerHTML=`<span class="ev-label">${user.lang}:</span> ${tr}`;
+            msgEl.querySelector('.bubble')?.appendChild(trDiv);
+          }
+        }
+        msg.translations[user.lang]=tr;
+      }
+    }catch(e){}
+  }
+
+  // If in a room, get Mira's occasional response
+  if(Math.random()<0.35){
+    setTimeout(()=>getMiraResponse(text,ev),1800);
+  }
+}
+
+// ══ MIRA BOT RESPONSE ═════════════════════════════════════════════
+async function getMiraResponse(userMsg,ev){
+  const container=document.getElementById('messages');
+  // Show typing
+  const typing=document.createElement('div');
+  typing.className='msg-group';
+  typing.innerHTML=`<div class="msg-row"><div class="msg-av bot">M</div><div class="bubble bot"><div class="typing-ind"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div></div></div>`;
+  container.appendChild(typing);container.scrollTop=container.scrollHeight;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',max_tokens:180,
+        system:`You are Mira, Sylvenka tutor bot in a chat room. Respond briefly (1-2 sentences max) in a mix of Sylvenka and English. Always use correct evidence markers (-va witnessed, -shi hearsay, -nu inferred, -le dreamed). Note if the student used the wrong evidence marker. Be warm and encouraging. Sign off occasionally with a Sylvenka phrase. Current room: ${currentRoom}.`,
+        messages:[{role:'user',content:`Student "${user.name}" (level: ${user.level}) wrote: "${userMsg}" (evidence marker used: -${ev}). Give a brief warm response.`}]
+      })
+    });
+    const d=await res.json();
+    const reply=d.content?.[0]?.text?.trim()||'';
+    typing.remove();
+    if(reply){
+      const botMsg={
+        name:'Mira',level:'loven',lang:'English',
+        color:'#6E549C',isBot:true,
+        text:reply,ev:'va',
+        tr:'',ts:Date.now()
+      };
+      localMessages[currentRoom].push(botMsg);
+      appendMsgEl(botMsg,true);
+    }
+  }catch(e){typing.remove();}
+}
+
+// ══ BOOT ═════════════════════════════════════════════════════════
+if(loadUser()){
+  document.getElementById('onboard').style.display='none';
+  init();
+}
+if(window.speechSynthesis)speechSynthesis.onvoiceschanged=()=>{};
+</script>
+</body>
+</html>

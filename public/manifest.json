@@ -1,0 +1,19 @@
+{
+  "name": "Sylvenka",
+  "short_name": "Sylvenka",
+  "description": "The language of how you know — shila ve-va",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020507",
+  "theme_color": "#2F6B5A",
+  "lang": "en",
+  "categories": ["education", "language", "social"],
+  "icons": [
+    {"src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ],
+  "shortcuts": [
+    {"name": "Sylvenka Chat", "url": "/chat", "description": "Open the conversation rooms"},
+    {"name": "Learn Sylvenka", "url": "/#lessons", "description": "Start the lessons"}
+  ]
+}
