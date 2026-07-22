@@ -95,7 +95,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
 
 /* Mode switcher */
 .mode-row{display:flex;gap:.3rem;margin-bottom:.4rem}
-.mode-btn{flex:1;background:#0f1a14;border:1px solid #2F6B5A;border-radius:999px;color:#5ecfa0;padding:.3rem .5rem;font-size:.78rem;cursor:pointer;font-family:var(--mono);letter-spacing:.04em;transition:all .15s}
+.mode-btn{flex:1;background:none;border:.5px solid var(--border);border-radius:999px;color:var(--faint);padding:.25rem .5rem;font-size:.72rem;cursor:pointer;font-family:var(--mono);letter-spacing:.04em;transition:all .15s}
 .mode-btn.active{background:var(--va-bg);border-color:var(--va);color:var(--va-light)}
 
 /* Share overlay */
@@ -221,7 +221,6 @@ const WORDS=[
   {r:'totovi',m:'friends (pl)'},{r:'totovi-thi',m:'dear friends'},
 ];
 
-const GM={s:"ꜱ",h:"ʜ",i:"ι",l:"ʟ",a:"α",e:"ε",o:"ο",u:"υ",n:"η",t:"τ",v:"ν",r:"ρ",m:"м",k:"κ"};function toU(w){var ev=w.match(/-(va|shi|nu|le)$/i);var b=w.replace(/-(va|shi|nu|le)$/i,"").toLowerCase();var r="";for(var i=0;i<b.length;i++){r+=GM[b[i]]||b[i];}return r+(ev?" ("+ev[1]+")":"");}function textToUnicode(t){return t.trim().split(/\s+/).filter(function(w){return w;}).map(toU).join("  ");}
 const PHRASES=[
   {t:'Shila ve-va.',h:'the greeting'},
   {t:'Velo-thi!',h:'welcome'},
@@ -234,9 +233,9 @@ const PHRASES=[
 
 // ══ KEYBOARDS ════════════════════════════════════════════════
 const KEYS_SYL=[
-  ['s','h','i','l','a','e','o','u','⎵'],
+  ['s','h','i','l','a','e','o','u'],
   ['n','t','v','r','m','k','th','sh'],
-  ['⌫',' ','↵'],
+  ['⌫','SPACE','↵'],
 ];
 const KEYS_ENG=[
   ['q','w','e','r','t','y','u','i','o','p'],
@@ -341,7 +340,7 @@ function renderKeyboard(){
       if(key==='SPACE'){btn.className+=' space';btn.textContent='space';}
       else if(key==='⌫'){btn.className+=' backspace';btn.textContent='⌫';}
       else if(key==='↵'){btn.className+=' action';btn.textContent='↵';}
-      else if(key==='_'){btn.className+=' wide';btn.textContent='⎵';}else if(key.length>2){btn.className+=' wide';btn.textContent=key;}
+      else if(key.length>2){btn.className+=' wide';btn.textContent=key;}
       else btn.textContent=key;
       btn.addEventListener('click',()=>pressKey(key));
       div.appendChild(btn);
@@ -372,7 +371,7 @@ function renderSuggestions(){
 function pressKey(key){
   if(key==='⌫'){
     text=text.slice(0,-1);
-  } else if(key===' '||key==='SPACE'||key==='·'||key==='space'||key==='_'){
+  } else if(key==='SPACE'){
     text+=' ';
   } else if(key==='↵'){
     text+='\n';
@@ -483,7 +482,7 @@ async function shareNative(){
     }
   }catch(e){
     // Fallback
-    try{await navigator.clipboard.writeText(text.trim());toast('Copied!');}catch(e2){}
+    try{await navigator.clipboard.writeText(text.trim()+'\n\nsylvenka.com');toast('Copied!');}catch(e2){}
   }
 }
 
@@ -538,7 +537,7 @@ function downloadImage(){
 
 function copyText(){
   if(!text.trim()){toast('Nothing to copy');return;}
-  navigator.clipboard?.writeText(textToUnicode(text))
+  navigator.clipboard?.writeText(text.trim()+'\n\nSylvenka · sylvenka.com')
     .then(()=>toast('Copied!'))
     .catch(()=>toast('Copy failed'));
 }
