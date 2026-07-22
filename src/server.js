@@ -547,3 +547,5 @@ app.get('/keyboard', (_req, res) => {
   res.setHeader('Cache-Control','no-cache,no-store,must-revalidate');
   res.sendFile(require('path').join(__dirname, '..', 'public', 'keyboard', 'index.html'));
 });
+
+app.get('/keyboard',(_req,res)=>{res.setHeader('Cache-Control','no-cache,no-store');res.sendFile(require('path').join(__dirname,'..','public','keyboard','index.html'));});
