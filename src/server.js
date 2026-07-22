@@ -549,3 +549,5 @@ app.get('/keyboard', (_req, res) => {
 });
 
 app.get('/keyboard',(_req,res)=>{res.setHeader('Cache-Control','no-cache,no-store');res.sendFile(require('path').join(__dirname,'..','public','keyboard','index.html'));});
+
+app.get('/kb',(_req,res)=>{res.setHeader('Cache-Control','no-cache');res.sendFile(require('path').join(__dirname,'..','public','keyboard','app.html'));});
