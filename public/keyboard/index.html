@@ -337,7 +337,7 @@ function renderKeyboard(){
     row.forEach(key=>{
       const btn=document.createElement('button');
       btn.className='kb-key';
-      if(key==='SPACE'){btn.className='key space-key';btn.textContent='SPACE ';}
+      if(key==='SPACE'){btn.style.cssText='flex:3;max-width:200px;background:#2F6B5A;color:white;border-radius:7px;font-weight:600;height:42px;border:none;font-size:14px;cursor:pointer';btn.textContent='SPACE';}
       else if(key==='⌫'){btn.className+=' backspace';btn.textContent='⌫';}
       else if(key==='↵'){btn.className+=' action';btn.textContent='↵';}
       else if(key.length>2){btn.className+=' wide';btn.textContent=key;}
