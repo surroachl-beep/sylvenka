@@ -533,7 +533,7 @@ app.get('/api/certificate/:email', (req, res) => {
 app.get('/api/pricing-stats', (_req, res) => {
   res.json({
     total_speakers: stmts.countSpeakers.get().n,
-    pro_subscribers: stmts2.proCount.get().n,
+    pro_subscribers: 0,
     poems: stmts.getVelasin.all().length,
   });
 });
