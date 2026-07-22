@@ -482,7 +482,7 @@ async function shareNative(){
     }
   }catch(e){
     // Fallback
-    try{await navigator.clipboard.writeText(text.trim()+'\n\nsylvenka.com');toast('Copied!');}catch(e2){}
+    try{await navigator.clipboard.writeText(text.trim());toast('Copied!');}catch(e2){}
   }
 }
 
