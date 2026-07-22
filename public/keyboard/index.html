@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#030d08">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Sylvenka Keyboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Spline+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#020507;--surface:#0a0f0c;--card:#0f1a14;--border:#1a3020;
+  --va:#2F6B5A;--va-light:#5ecfa0;--va-bg:#0f2a1e;
+  --shi:#3F72A3;--shi-light:#7ab8f5;--shi-bg:#0f1828;
+  --nu:#A9761F;--nu-light:#f5c06a;--nu-bg:#281c08;
+  --le:#6E549C;--le-light:#c4a0f5;--le-bg:#1e1030;
+  --text:#e8f0ec;--muted:#6a8870;--faint:#3a5040;
+  --serif:Fraunces,serif;--sans:'Spline Sans',sans-serif;--mono:'Courier New',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);overflow:hidden}
+.app{display:flex;flex-direction:column;height:100vh;max-width:480px;margin:0 auto;position:relative}
+
+/* Header */
+.header{padding:.7rem 1rem .5rem;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;gap:.6rem}
+.header-logo{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--va-light);flex:1}
+.header-sub{font-size:.68rem;color:var(--faint);font-family:var(--mono);letter-spacing:.08em}
+.back-link{font-size:.75rem;color:var(--faint);text-decoration:none;font-family:var(--mono);letter-spacing:.06em;transition:color .15s}
+.back-link:hover{color:var(--va-light)}
+
+/* Message preview area */
+.preview-area{flex:1;display:flex;flex-direction:column;padding:.8rem;gap:.6rem;overflow:hidden;min-height:0}
+.preview-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem 1.1rem;flex:1;display:flex;flex-direction:column;gap:.5rem;overflow:hidden;position:relative}
+.preview-label{font-size:.68rem;color:var(--faint);font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;flex-shrink:0}
+.preview-roman{font-family:var(--serif);font-style:italic;font-size:clamp(16px,4vw,22px);color:var(--text);line-height:1.6;flex:1;min-height:40px;word-break:break-word;overflow-y:auto}
+.preview-roman.empty{color:var(--faint);font-style:italic}
+.preview-ev{display:flex;gap:.3rem;flex-wrap:wrap;flex-shrink:0}
+.ev-pip{font-size:.68rem;border-radius:999px;padding:2px 8px;font-family:var(--mono);letter-spacing:.04em}
+.pip-va{background:var(--va-bg);color:var(--va-light);border:.5px solid var(--va)}
+.pip-shi{background:var(--shi-bg);color:var(--shi-light);border:.5px solid var(--shi)}
+.pip-nu{background:var(--nu-bg);color:var(--nu-light);border:.5px solid var(--nu)}
+.pip-le{background:var(--le-bg);color:var(--le-light);border:.5px solid var(--le)}
+
+/* Glyph preview */
+.glyph-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:.7rem;flex-shrink:0}
+.glyph-label{font-size:.65rem;color:var(--faint);font-family:var(--mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem}
+.glyph-svg-wrap{min-height:54px;display:flex;align-items:center}
+
+/* Share button */
+.share-row{display:flex;gap:.5rem;flex-shrink:0}
+.share-btn{flex:1;background:var(--va);border:none;border-radius:10px;padding:.7rem;color:#fff;font-family:var(--sans);font-size:.9rem;font-weight:500;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:.4rem}
+.share-btn:hover{background:#3d8a6e}
+.share-btn:active{transform:scale(.97)}
+.copy-btn{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;color:var(--muted);font-family:var(--sans);font-size:.85rem;cursor:pointer;transition:all .15s}
+.copy-btn:hover{border-color:var(--va);color:var(--va-light)}
+.clear-btn{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.7rem .9rem;color:var(--muted);font-family:var(--sans);font-size:.85rem;cursor:pointer;transition:all .15s}
+.clear-btn:active{background:#1a0808;border-color:#c0392b;color:#f07070}
+
+/* Keyboard area */
+.keyboard{background:var(--surface);border-top:1px solid var(--border);flex-shrink:0;padding:.6rem .5rem .8rem}
+
+/* Evidence markers */
+.ev-row{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-bottom:.5rem}
+.ev-btn{border:none;border-radius:10px;padding:.55rem .3rem;font-family:var(--serif);font-style:italic;font-size:.9rem;cursor:pointer;transition:all .12s;display:flex;flex-direction:column;align-items:center;gap:1px;-webkit-tap-highlight-color:transparent}
+.ev-btn span.label{font-size:.6rem;font-family:var(--mono);font-style:normal;opacity:.7;letter-spacing:.04em}
+.ev-va{background:var(--va-bg);color:var(--va-light);border:.5px solid var(--va)}
+.ev-shi{background:var(--shi-bg);color:var(--shi-light);border:.5px solid var(--shi)}
+.ev-nu{background:var(--nu-bg);color:var(--nu-light);border:.5px solid var(--nu)}
+.ev-le{background:var(--le-bg);color:var(--le-light);border:.5px solid var(--le)}
+.ev-btn:active{transform:scale(.94);filter:brightness(1.2)}
+
+/* Word suggestions */
+.suggestions{display:flex;gap:.3rem;overflow-x:auto;margin-bottom:.4rem;padding-bottom:.2rem;min-height:34px;align-items:center}
+.suggestions::-webkit-scrollbar{display:none}
+.sug{background:var(--card);border:.5px solid var(--border);border-radius:6px;padding:.25rem .6rem;font-size:.78rem;cursor:pointer;white-space:nowrap;color:var(--text);font-family:var(--serif);font-style:italic;flex-shrink:0;transition:all .12s}
+.sug:active{background:var(--va-bg);border-color:var(--va)}
+.sug-meaning{font-size:.6rem;font-family:var(--mono);font-style:normal;color:var(--faint);margin-left:.2rem}
+
+/* Quick phrases */
+.phrases-row{display:flex;gap:.3rem;overflow-x:auto;margin-bottom:.4rem;padding-bottom:.2rem}
+.phrases-row::-webkit-scrollbar{display:none}
+.phrase-btn{flex-shrink:0;background:var(--card);border:.5px solid var(--border);border-radius:999px;padding:.25rem .7rem;font-size:.75rem;color:var(--muted);cursor:pointer;font-family:var(--serif);font-style:italic;white-space:nowrap;transition:all .12s}
+.phrase-btn:active{border-color:var(--va);color:var(--va-light)}
+
+/* Letter keyboard */
+.kb-rows{display:flex;flex-direction:column;gap:.3rem}
+.kb-row{display:flex;gap:.25rem;justify-content:center}
+.kb-key{background:var(--card);border:.5px solid var(--border);border-radius:8px;padding:.55rem .4rem;font-family:var(--sans);font-size:.85rem;color:var(--text);cursor:pointer;flex:1;max-width:38px;text-align:center;transition:all .1s;min-height:40px;display:flex;align-items:center;justify-content:center}
+.kb-key:active{background:var(--va-bg);border-color:var(--va);transform:scale(.93)}
+.kb-key.wide{max-width:56px;font-size:.72rem;color:var(--muted)}
+.kb-key.space{max-width:none;flex:3;color:var(--faint);font-size:.72rem;letter-spacing:.06em}
+.kb-key.action{background:var(--va);border-color:var(--va);color:#fff;max-width:56px}
+.kb-key.backspace{background:#1a0a0a;border-color:#3a1010;color:#f07070;max-width:52px}
+
+/* Mode switcher */
+.mode-row{display:flex;gap:.3rem;margin-bottom:.4rem}
+.mode-btn{flex:1;background:none;border:.5px solid var(--border);border-radius:999px;color:var(--faint);padding:.25rem .5rem;font-size:.72rem;cursor:pointer;font-family:var(--mono);letter-spacing:.04em;transition:all .15s}
+.mode-btn.active{background:var(--va-bg);border-color:var(--va);color:var(--va-light)}
+
+/* Share overlay */
+.share-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:none;align-items:center;justify-content:center;padding:1rem;flex-direction:column;gap:.8rem}
+.share-overlay.open{display:flex}
+.share-canvas-wrap{background:#020507;border:1px solid var(--va);border-radius:16px;padding:1.4rem;text-align:center;max-width:340px;width:100%}
+.share-actions{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.sa-btn{background:var(--va);color:#fff;border:none;border-radius:8px;padding:.6rem 1.1rem;font-family:var(--sans);font-size:.88rem;font-weight:500;cursor:pointer;transition:all .15s}
+.sa-btn.ghost{background:transparent;color:var(--va-light);border:1px solid var(--va)}
+.share-msg{font-size:.78rem;color:var(--faint);font-family:var(--mono);text-align:center}
+
+/* Toast */
+.toast{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);background:var(--va);color:#fff;padding:.5rem 1.2rem;border-radius:999px;font-size:.82rem;font-family:var(--sans);opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;z-index:200}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <div class="header-logo">Sylvenka</div>
+      <div class="header-sub">shila ve-va · speak what you witness</div>
+    </div>
+    <a href="/" class="back-link">← site</a>
+  </div>
+
+  <!-- Preview area -->
+  <div class="preview-area">
+    <div class="preview-card">
+      <div class="preview-label">your message</div>
+      <div class="preview-roman" id="preview">
+        <span class="empty" id="placeholder">Start typing in Sylvenka below…</span>
+      </div>
+      <div class="preview-ev" id="ev-display"></div>
+    </div>
+
+    <!-- Glyph preview -->
+    <div class="glyph-card">
+      <div class="glyph-label">venashi script</div>
+      <div class="glyph-svg-wrap" id="glyph-wrap">
+        <svg id="glyph-svg" width="100%" height="54" viewBox="0 0 320 54" role="img">
+          <title>Venashi script preview</title>
+          <text x="10" y="34" font-family="Courier New" font-size="11" fill="#3a5040" letter-spacing="1">type to see the script…</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Share row -->
+    <div class="share-row">
+      <button class="share-btn" onclick="openShare()">
+        <span>⬆</span> Share image
+      </button>
+      <button class="copy-btn" onclick="copyText()">Copy</button>
+      <button class="clear-btn" onclick="clearAll()">✕</button>
+    </div>
+  </div>
+
+  <!-- Keyboard -->
+  <div class="keyboard">
+    <!-- Mode switcher -->
+    <div class="mode-row">
+      <button class="mode-btn active" id="m-syl" onclick="setMode('syl')">Sylvenka</button>
+      <button class="mode-btn" id="m-eng" onclick="setMode('eng')">English</button>
+      <button class="mode-btn" id="m-num" onclick="setMode('num')">Numbers</button>
+    </div>
+
+    <!-- Evidence markers -->
+    <div class="ev-row" id="ev-row">
+      <button class="ev-btn ev-va" onclick="addEv('va')">-va<span class="label">witnessed</span></button>
+      <button class="ev-btn ev-shi" onclick="addEv('shi')">-shi<span class="label">hearsay</span></button>
+      <button class="ev-btn ev-nu" onclick="addEv('nu')">-nu<span class="label">inferred</span></button>
+      <button class="ev-btn ev-le" onclick="addEv('le')">-le<span class="label">dreamed</span></button>
+    </div>
+
+    <!-- Suggestions -->
+    <div class="suggestions" id="suggestions"></div>
+
+    <!-- Quick phrases -->
+    <div class="phrases-row" id="phrases-row"></div>
+
+    <!-- Letter keys -->
+    <div class="kb-rows" id="kb-rows"></div>
+  </div>
+</div>
+
+<!-- Share overlay -->
+<div class="share-overlay" id="share-overlay">
+  <div class="share-canvas-wrap" id="share-card">
+    <div style="font-family:Fraunces,serif;font-style:italic;font-size:.75rem;color:#3a5040;letter-spacing:.1em;margin-bottom:.8rem;text-transform:uppercase">Sylvenka · shila ve-va</div>
+    <div id="share-glyphs" style="margin-bottom:.6rem"></div>
+    <div id="share-roman" style="font-family:Fraunces,serif;font-style:italic;font-size:clamp(14px,4vw,20px);color:#e8f0ec;line-height:1.6;margin-bottom:.6rem;word-break:break-word"></div>
+    <div id="share-ev-row" style="display:flex;gap:.3rem;flex-wrap:wrap;justify-content:center;margin-bottom:.5rem"></div>
+    <div style="font-size:.65rem;color:#3a5040;font-family:Courier New,monospace;letter-spacing:.08em">sylvenka.com</div>
+  </div>
+  <div class="share-actions">
+    <button class="sa-btn" onclick="downloadImage()">Download image</button>
+    <button class="sa-btn" onclick="shareNative()">Share →</button>
+    <button class="sa-btn ghost" onclick="closeShare()">Close</button>
+  </div>
+  <div class="share-msg" id="share-msg"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══ STATE ════════════════════════════════════════════════════
+let text='', mode='syl', evidenceUsed=new Set();
+
+// ══ WORD BANK ════════════════════════════════════════════════
+const WORDS=[
+  {r:'sela',m:'water'},{r:'lama',m:'tree'},{r:'soren',m:'light'},{r:'tovi',m:'friend'},
+  {r:'nashu',m:'go'},{r:'velo',m:'see'},{r:'shila',m:'speak'},{r:'lashu',m:'meet'},
+  {r:'lovu',m:'learn'},{r:'solo',m:'rain'},{r:'miren',m:'sky'},{r:'nolu',m:'night'},
+  {r:'sola',m:'sun'},{r:'mishi',m:'bird'},{r:'thela',m:'fire'},{r:'mela',m:'snow'},
+  {r:'venoru',m:'wind'},{r:'nasi',m:'we (incl)'},{r:'natho',m:'we (excl)'},
+  {r:'velomile',m:'we will see'},{r:'shilamo',m:'language'},{r:'vasa',m:'home'},
+  {r:'ovan',m:'big'},{r:'ithi',m:'small'},{r:'thotho',m:'they all'},{r:'sisi',m:'you all'},
+  {r:'velova',m:'I see it'},{r:'nashureVA',m:'went (witnessed)'},{r:'sorenu',m:'bright (inferred)'},
+  {r:'selaka',m:'lake'},{r:'lamaka',m:'forest'},{r:'lashuka',m:'meeting place'},
+  {r:'totovi',m:'friends (pl)'},{r:'totovi-thi',m:'dear friends'},
+];
+
+const PHRASES=[
+  {t:'Shila ve-va.',h:'the greeting'},
+  {t:'Velo-thi!',h:'welcome'},
+  {t:'Na soren noreva.',h:'I feel well'},
+  {t:'Nasi lashusa!',h:"let's meet"},
+  {t:'Totovi-thi o!',h:'dear friends!'},
+  {t:'Nasi velomile.',h:'we will see it'},
+  {t:'Velomile soren.',h:'may light come'},
+];
+
+// ══ KEYBOARDS ════════════════════════════════════════════════
+const KEYS_SYL=[
+  ['s','h','i','l','a','e','o','u'],
+  ['n','t','v','r','m','k','th','sh'],
+  ['⌫','SPACE','↵'],
+];
+const KEYS_ENG=[
+  ['q','w','e','r','t','y','u','i','o','p'],
+  ['a','s','d','f','g','h','j','k','l'],
+  ['⌫','z','x','c','v','b','n','m','↵'],
+];
+const KEYS_NUM=[
+  ['en','ru','sam','vi','lush'],
+  ['lush-en','lush-ru','lush-sam','lush-vi','rulush'],
+  ['rulush-en','rulush-ru','samlush','lushlush','⌫'],
+];
+
+// ══ GLYPH SYSTEM ═════════════════════════════════════════════
+// Simple venashi glyph generator — maps words to SVG paths
+function getGlyph(char, x, y, color='#5ecfa0'){
+  const glyphs={
+    's': `<path d="M${x+2} ${y+18} q8-14 16 0" stroke="${color}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+    'h': `<path d="M${x+2} ${y} v${y+18}" stroke="${color}" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M${x+2} ${y+10} h14" stroke="${color}" stroke-width="2.5" fill="none"/>`,
+    'i': `<line x1="${x+8}" y1="${y}" x2="${x+8}" y2="${y+20}" stroke="${color}" stroke-width="2.5" stroke-linecap="round"/>`,
+    'l': `<path d="M${x+2} ${y} v20 q0 0 14 0" stroke="${color}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+    'a': `<path d="M${x+2} ${y+20} l7-20 l7 20" stroke="${color}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`,
+    'e': `<path d="M${x+2} ${y} h14 m-14 10 h10 m-10 10 h14" stroke="${color}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+    'o': `<circle cx="${x+9}" cy="${y+11}" r="9" stroke="${color}" stroke-width="2.5" fill="none"/>`,
+    'u': `<path d="M${x+2} ${y} v14 q0 6 7 6 q7 0 7-6 v-14" stroke="${color}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+    'n': `<path d="M${x+2} ${y} v20 q0-20 14 0 v-20" stroke="${color}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+    't': `<line x1="${x+8}" y1="${y}" x2="${x+8}" y2="${y+20}" stroke="${color}" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="${x+1}" y1="${y+3}" x2="${x+15}" y2="${y+3}" stroke="${color}" stroke-width="2.5" stroke-linecap="round"/>`,
+    'v': `<path d="M${x+2} ${y} l7 20 l7-20" stroke="${color}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`,
+    'r': `<path d="M${x+2} ${y} v20 m0-20 q14 8 0 10" stroke="${color}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+    'm': `<path d="M${x+2} ${y+20} v-20 q5 14 7 0 q2 14 7 0 v20" stroke="${color}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+    'k': `<line x1="${x+2}" y1="${y}" x2="${x+2}" y2="${y+20}" stroke="${color}" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M${x+2} ${y+10} l10-10 M${x+2} ${y+10} l10 10" stroke="${color}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+    'th':`<path d="M${x+2} ${y+10} h14 m-7-10 v20" stroke="${color}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+    'sh':`<path d="M${x+2} ${y+6} q7-8 14 0 q-7 8-14 16" stroke="${color}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+  };
+  return glyphs[char] || `<circle cx="${x+8}" cy="${y+10}" r="3" fill="${color}" opacity=".4"/>`;
+}
+
+function wordToGlyphs(word, startX, y, color='#5ecfa0'){
+  // Simple character-by-character glyph rendering
+  let x=startX, paths='', charWidth=20;
+  const cleaned=word.toLowerCase().replace(/[-_]/g,'');
+  // Check for digraphs first
+  let i=0;
+  while(i<cleaned.length){
+    let ch;
+    if(i<cleaned.length-1 && (cleaned[i]+cleaned[i+1]==='th'||cleaned[i]+cleaned[i+1]==='sh')){
+      ch=cleaned[i]+cleaned[i+1];i+=2;charWidth=24;
+    } else {
+      ch=cleaned[i];i++;charWidth=20;
+    }
+    if('aeiou'.includes(ch)){
+      // Vowel mark above previous glyph
+      paths+=`<circle cx="${x-charWidth/2}" cy="${y-4}" r="2.5" fill="${color}" opacity=".7"/>`;
+    } else {
+      paths+=getGlyph(ch,x,y,color);
+      x+=charWidth+4;
+    }
+  }
+  return {paths, width: x-startX};
+}
+
+function renderGlyphs(){
+  const words=text.trim().split(/\s+/).filter(w=>w);
+  if(!words.length){
+    document.getElementById('glyph-svg').innerHTML=
+      '<text x="10" y="34" font-family="Courier New" font-size="11" fill="#3a5040" letter-spacing="1">type to see the script…</text>';
+    return;
+  }
+  let svgContent='', x=8, maxW=320;
+  // Evidence glyph at start if any
+  const evColors={va:'#5ecfa0',shi:'#7ab8f5',nu:'#f5c06a',le:'#c4a0f5'};
+  words.forEach(word=>{
+    // Check if word has evidence marker
+    const evMatch=word.match(/-(va|shi|nu|le)$/i);
+    const color=evMatch?evColors[evMatch[1]]:'#5ecfa0';
+    const {paths,width}=wordToGlyphs(word.replace(/-(va|shi|nu|le)$/i,''),x,16,color);
+    if(evMatch){
+      // Evidence marker indicator
+      svgContent+=`<rect x="${x+width+2}" y="18" width="6" height="14" rx="3" fill="${color}" opacity=".8"/>`;
+    }
+    svgContent+=paths;
+    x+=width+(evMatch?14:0)+12;
+    if(x>maxW-20)x=8; // wrap
+  });
+  const svg=document.getElementById('glyph-svg');
+  svg.innerHTML=svgContent;
+}
+
+// ══ KEYBOARD RENDERING ═══════════════════════════════════════
+function renderKeyboard(){
+  const rows=mode==='syl'?KEYS_SYL:mode==='eng'?KEYS_ENG:KEYS_NUM;
+  const container=document.getElementById('kb-rows');
+  container.innerHTML='';
+  rows.forEach(row=>{
+    const div=document.createElement('div');
+    div.className='kb-row';
+    row.forEach(key=>{
+      const btn=document.createElement('button');
+      btn.className='kb-key';
+      if(key==='SPACE'){btn.className+=' space';btn.textContent='space';}
+      else if(key==='⌫'){btn.className+=' backspace';btn.textContent='⌫';}
+      else if(key==='↵'){btn.className+=' action';btn.textContent='↵';}
+      else if(key.length>2){btn.className+=' wide';btn.textContent=key;}
+      else btn.textContent=key;
+      btn.addEventListener('click',()=>pressKey(key));
+      div.appendChild(btn);
+    });
+    container.appendChild(div);
+  });
+  // Show/hide evidence row
+  document.getElementById('ev-row').style.display=mode==='syl'?'grid':'none';
+  document.getElementById('phrases-row').style.display=mode==='syl'?'flex':'none';
+}
+
+function renderPhrases(){
+  const c=document.getElementById('phrases-row');
+  c.innerHTML=PHRASES.map(p=>`<button class="phrase-btn" onclick="insertPhrase('${p.t.replace(/'/g,"\\'")}')">${p.t}</button>`).join('');
+}
+
+function renderSuggestions(){
+  const c=document.getElementById('suggestions');
+  if(mode!=='syl'){c.innerHTML='';return;}
+  const words=text.trim().split(/\s+/);
+  const last=(words[words.length-1]||'').toLowerCase().replace(/[-]/g,'');
+  if(last.length<2){c.innerHTML='';return;}
+  const matches=WORDS.filter(w=>w.r.startsWith(last)&&w.r!==last).slice(0,6);
+  c.innerHTML=matches.map(w=>`<div class="sug" onclick="insertWord('${w.r}')">${w.r}<span class="sug-meaning">${w.m}</span></div>`).join('');
+}
+
+// ══ INPUT HANDLING ═══════════════════════════════════════════
+function pressKey(key){
+  if(key==='⌫'){
+    text=text.slice(0,-1);
+  } else if(key==='SPACE'){
+    text+=' ';
+  } else if(key==='↵'){
+    text+='\n';
+  } else {
+    text+=key;
+  }
+  updatePreview();
+}
+
+function addEv(ev){
+  const trimmed=text.trimEnd();
+  const cleaned=trimmed.replace(/-(va|shi|nu|le)\s*$/,'').trimEnd();
+  text=cleaned+(cleaned?' ':'')+'-'+ev+' ';
+  evidenceUsed.add(ev);
+  updatePreview();
+}
+
+function insertPhrase(phrase){
+  text=(text.trim()?text.trim()+' ':'')+phrase+' ';
+  updatePreview();
+}
+
+function insertWord(word){
+  const words=text.trimEnd().split(/\s+/);
+  words[words.length-1]=word;
+  text=words.join(' ')+' ';
+  document.getElementById('suggestions').innerHTML='';
+  updatePreview();
+}
+
+function clearAll(){
+  text='';evidenceUsed.clear();
+  updatePreview();
+  toast('Cleared');
+}
+
+function updatePreview(){
+  const prev=document.getElementById('preview');
+  const ph=document.getElementById('placeholder');
+  if(!text.trim()){
+    ph.style.display='';
+    prev.innerHTML='<span class="empty" id="placeholder">Start typing in Sylvenka below…</span>';
+  } else {
+    prev.innerHTML=text.replace(/\n/g,'<br>');
+  }
+  // Evidence pips
+  const evDisp=document.getElementById('ev-display');
+  const evLabels={va:'witnessed',shi:'hearsay',nu:'inferred',le:'dreamed'};
+  const evInText=[...text.matchAll(/-(va|shi|nu|le)\b/gi)].map(m=>m[1].toLowerCase());
+  const uniqueEv=[...new Set(evInText)];
+  evDisp.innerHTML=uniqueEv.map(ev=>`<span class="ev-pip pip-${ev}">-${ev} · ${evLabels[ev]}</span>`).join('');
+  renderGlyphs();
+  renderSuggestions();
+}
+
+function setMode(m){
+  mode=m;
+  ['syl','eng','num'].forEach(id=>{
+    document.getElementById('m-'+id).classList.toggle('active',id===m);
+  });
+  renderKeyboard();
+  renderSuggestions();
+}
+
+// ══ SHARE ════════════════════════════════════════════════════
+function openShare(){
+  if(!text.trim()){toast('Type something first');return;}
+  // Populate share card
+  document.getElementById('share-roman').textContent=text.trim();
+  // Share glyphs
+  const evInText=[...text.matchAll(/-(va|shi|nu|le)\b/gi)].map(m=>m[1].toLowerCase());
+  const uniqueEv=[...new Set(evInText)];
+  const evColors={va:'#5ecfa0',shi:'#7ab8f5',nu:'#f5c06a',le:'#c4a0f5'};
+  const evLabels={va:'witnessed',shi:'hearsay',nu:'inferred',le:'dreamed'};
+  document.getElementById('share-ev-row').innerHTML=uniqueEv.map(ev=>
+    `<span style="font-size:.68rem;border-radius:999px;padding:2px 8px;font-family:'Courier New',monospace;background:${ev==='va'?'#0f2a1e':ev==='shi'?'#0f1828':ev==='nu'?'#281c08':'#1e1030'};color:${evColors[ev]};border:.5px solid ${evColors[ev]}">-${ev} · ${evLabels[ev]}</span>`
+  ).join('');
+  // Simple glyph SVG for share
+  const words=text.trim().split(/\s+/).filter(w=>w).slice(0,6);
+  let gSvg='<svg width="280" height="60" viewBox="0 0 280 60" xmlns="http://www.w3.org/2000/svg" role="img"><title>Message in venashi script</title>';
+  let gx=8;
+  words.forEach(w=>{
+    const evM=w.match(/-(va|shi|nu|le)$/i);
+    const col=evM?evColors[evM[1]]:'#5ecfa0';
+    const {paths,width}=wordToGlyphs(w.replace(/-(va|shi|nu|le)$/i,''),gx,18,col);
+    gSvg+=paths;
+    gx+=width+14;
+  });
+  gSvg+='</svg>';
+  document.getElementById('share-glyphs').innerHTML=gSvg;
+  document.getElementById('share-overlay').classList.add('open');
+}
+
+function closeShare(){
+  document.getElementById('share-overlay').classList.remove('open');
+}
+
+async function shareNative(){
+  const card=document.getElementById('share-card');
+  try{
+    // Use html2canvas if available, otherwise share text
+    const shareText=`${text.trim()}\n\nSylvenka · shila ve-va\nsylvenka.com`;
+    if(navigator.share){
+      await navigator.share({title:'Sylvenka message',text:shareText,url:'https://sylvenka.com'});
+    } else {
+      await navigator.clipboard.writeText(shareText);
+      toast('Copied to clipboard!');
+    }
+  }catch(e){
+    // Fallback
+    try{await navigator.clipboard.writeText(text.trim()+'\n\nsylvenka.com');toast('Copied!');}catch(e2){}
+  }
+}
+
+function downloadImage(){
+  // Generate a clean SVG and download it
+  const evInText=[...text.matchAll(/-(va|shi|nu|le)\b/gi)].map(m=>m[1].toLowerCase());
+  const uniqueEv=[...new Set(evInText)];
+  const evColors={va:'#5ecfa0',shi:'#7ab8f5',nu:'#f5c06a',le:'#c4a0f5'};
+  const evLabels={va:'witnessed',shi:'hearsay',nu:'inferred',le:'dreamed'};
+  const words=text.trim().split(/\s+/).filter(w=>w).slice(0,8);
+  let gx=20, glyphPaths='';
+  words.forEach(w=>{
+    const evM=w.match(/-(va|shi|nu|le)$/i);
+    const col=evM?evColors[evM[1]]:'#5ecfa0';
+    const {paths,width}=wordToGlyphs(w.replace(/-(va|shi|nu|le)$/i,''),gx,30,col);
+    glyphPaths+=paths;
+    gx+=width+14;
+  });
+  // Evidence badges
+  let badgeX=20, badges='';
+  uniqueEv.forEach(ev=>{
+    const col=evColors[ev];
+    badges+=`<rect x="${badgeX}" y="106" width="${ev.length*8+24}" height="18" rx="9" fill="${ev==='va'?'#0f2a1e':ev==='shi'?'#0f1828':ev==='nu'?'#281c08':'#1e1030'}" stroke="${col}" stroke-width=".5"/>
+    <text x="${badgeX+12}" y="119" font-family="Courier New" font-size="9" fill="${col}">-${ev} · ${evLabels[ev]}</text>`;
+    badgeX+=ev.length*8+30;
+  });
+  const msgLines=text.trim().split('\n');
+  let msgY=80, msgText='';
+  msgLines.forEach(line=>{
+    msgText+=`<text x="20" y="${msgY}" font-family="Georgia,serif" font-style="italic" font-size="16" fill="#e8f0ec">${line.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</text>`;
+    msgY+=22;
+  });
+  const svgH=Math.max(160, msgY+50);
+  const svg=`<svg width="360" height="${svgH}" viewBox="0 0 360 ${svgH}" xmlns="http://www.w3.org/2000/svg">
+    <rect width="360" height="${svgH}" fill="#020507" rx="16"/>
+    <rect x="1" y="1" width="358" height="${svgH-2}" fill="none" stroke="#2F6B5A" stroke-width="1" rx="15"/>
+    <text x="20" y="20" font-family="Courier New" font-size="9" fill="#3a5040" letter-spacing="2">SYLVENKA · SHILA VE-VA</text>
+    ${glyphPaths}
+    <line x1="20" y1="64" x2="340" y2="64" stroke="#1a3020" stroke-width=".5"/>
+    ${msgText}
+    ${badges}
+    <text x="20" y="${svgH-10}" font-family="Courier New" font-size="8" fill="#3a5040" letter-spacing="1">sylvenka.com</text>
+  </svg>`;
+  const blob=new Blob([svg],{type:'image/svg+xml'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='sylvenka-message.svg';a.click();
+  URL.revokeObjectURL(url);
+  toast('Image downloaded!');
+  setTimeout(closeShare, 800);
+}
+
+function copyText(){
+  if(!text.trim()){toast('Nothing to copy');return;}
+  navigator.clipboard?.writeText(text.trim()+'\n\nSylvenka · sylvenka.com')
+    .then(()=>toast('Copied!'))
+    .catch(()=>toast('Copy failed'));
+}
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1800);
+}
+
+// ══ BOOT ═════════════════════════════════════════════════════
+renderKeyboard();
+renderPhrases();
+updatePreview();
+</script>
+</body>
+</html>
