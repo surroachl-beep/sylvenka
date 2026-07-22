@@ -105,7 +105,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
 .share-actions{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
 .sa-btn{background:var(--va);color:#fff;border:none;border-radius:8px;padding:.6rem 1.1rem;font-family:var(--sans);font-size:.88rem;font-weight:500;cursor:pointer;transition:all .15s}
 .sa-btn.ghost{background:transparent;color:var(--va-light);border:1px solid var(--va)}
-.share-msg{font-size:.78rem;color:var(--faint);font-family:var(--mono);text-align:center}
+.share-hint{font-size:.78rem;color:var(--faint);font-family:var(--mono);text-align:center}
 
 /* Toast */
 .toast{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);background:var(--va);color:#fff;padding:.5rem 1.2rem;border-radius:999px;font-size:.82rem;font-family:var(--sans);opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;z-index:200}
@@ -193,7 +193,7 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
     <div style="font-size:.65rem;color:#3a5040;font-family:Courier New,monospace;letter-spacing:.08em">sylvenka.com</div>
   </div>
   <div class="share-actions">
-    <button class="sa-btn" onclick="downloadImage()">Download image</button>
+    <button class="sa-btn" onclick="downloadImage()">Screenshot and share</button>
     <button class="sa-btn" onclick="shareNative()">Share →</button>
     <button class="sa-btn ghost" onclick="closeShare()">Close</button>
   </div>
