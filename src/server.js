@@ -542,3 +542,8 @@ app.get('/api/pricing-stats', (_req, res) => {
 app.get('/pro', (_req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'pro', 'index.html'));
 });
+
+// Serve keyboard at /keyboard
+app.get('/keyboard', (_req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'keyboard', 'index.html'));
+});
