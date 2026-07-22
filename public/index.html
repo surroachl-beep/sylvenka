@@ -25,6 +25,7 @@
   --nu:#A9761F; --nu-bg:#F3ECDD;
   --le:#6E549C; --le-bg:#EBE6F2;
   --disp:'Fraunces',serif; --body:'Spline Sans',sans-serif; --mono:'Spline Sans Mono',monospace;
+  --sidebar-bg:#0f1a14; --sidebar-border:#1a3020;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -32,14 +33,96 @@ body{font-family:var(--body);background:var(--paper);color:var(--ink);font-size:
 .syl{font-family:var(--disp);font-style:italic;letter-spacing:.02em}
 .gloss{font-family:var(--mono);font-size:.82em;color:var(--muted)}
 .layout{display:flex;min-height:100vh;max-width:1200px;margin:0 auto}
-nav.spine{width:210px;flex-shrink:0;border-right:1px solid var(--line);padding:2.2rem 0 2rem 1.4rem;position:sticky;top:0;height:100vh;overflow-y:auto}
-.wordmark{font-family:var(--disp);font-weight:600;font-size:1.45rem;letter-spacing:.01em;margin-bottom:.2rem}
-.wordmark-sub{font-size:.78rem;color:var(--muted);margin-bottom:2rem;padding-right:1rem}
-nav.spine button{display:block;width:100%;text-align:left;background:none;border:none;border-left:3px solid transparent;font-family:var(--body);font-size:.95rem;color:var(--muted);padding:.5rem 0 .5rem .9rem;cursor:pointer;transition:color .15s,border-color .15s}
-nav.spine button:hover{color:var(--ink)}
-nav.spine button.active{color:var(--ink);border-left-color:var(--va);font-weight:500}
-nav.spine button:focus-visible{outline:2px solid var(--va);outline-offset:2px}
-.nav-group{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--faint);margin:1.4rem 0 .3rem .2rem}
+
+/* ── SIDEBAR — modern dark app style ── */
+nav.spine{
+  width:230px;flex-shrink:0;
+  background:var(--sidebar-bg);
+  border-right:1px solid var(--sidebar-border);
+  padding:0;
+  position:sticky;top:0;height:100vh;
+  overflow-y:auto;
+  display:flex;flex-direction:column;
+}
+nav.spine::-webkit-scrollbar{width:3px}
+nav.spine::-webkit-scrollbar-thumb{background:var(--sidebar-border)}
+
+/* Nav buttons — icon-row style */
+nav.spine button{
+  display:flex;align-items:center;gap:.55rem;
+  width:100%;text-align:left;
+  background:none;border:none;
+  font-family:var(--body);font-size:.88rem;
+  color:#6a8870;
+  padding:.55rem 1rem .55rem 1.2rem;
+  cursor:pointer;
+  border-left:2px solid transparent;
+  transition:all .12s;
+  border-radius:0;
+  position:relative;
+}
+nav.spine button::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:currentColor;opacity:.35;flex-shrink:0;
+  transition:all .12s;
+}
+nav.spine button:hover{color:#a8c8b0;background:#ffffff08}
+nav.spine button.active{
+  color:#b8f0d0;
+  background:linear-gradient(90deg,#0f2a1e,transparent);
+  border-left-color:#2F6B5A;
+  font-weight:500;
+}
+nav.spine button.active::before{background:#5ecfa0;opacity:1;box-shadow:0 0 6px #5ecfa0}
+nav.spine button:focus-visible{outline:1px solid #2F6B5A;outline-offset:-1px}
+
+/* Nav groups */
+.nav-group{
+  font-size:.65rem;text-transform:uppercase;letter-spacing:.16em;
+  color:#3a5040;
+  padding:.9rem 1.2rem .25rem;
+  font-family:var(--mono);
+}
+
+/* Sidebar bottom user pill */
+.spine-bottom{
+  margin-top:auto;
+  padding:.8rem;
+  border-top:1px solid var(--sidebar-border);
+}
+.spine-user{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.5rem .6rem;border-radius:8px;
+  cursor:pointer;transition:background .15s;
+}
+.spine-user:hover{background:#ffffff08}
+.spine-av{
+  width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,#2F6B5A,#6E549C);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;color:#fff;font-weight:500;flex-shrink:0;
+}
+.spine-info{flex:1;min-width:0}
+.spine-name{font-size:.8rem;font-weight:500;color:#b8f0d0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spine-sub{font-size:.68rem;color:#3a5040;font-family:var(--mono)}
+.spine-dot{width:7px;height:7px;border-radius:50%;background:#5ecfa0;flex-shrink:0;box-shadow:0 0 5px #5ecfa0}
+
+/* Chat link in sidebar */
+.spine-chat-link{
+  display:flex;align-items:center;gap:.5rem;
+  margin:.6rem .8rem;
+  padding:.5rem .7rem;
+  background:linear-gradient(90deg,#0f1828,#0f1020);
+  border:.5px solid #3F72A333;
+  border-radius:8px;
+  text-decoration:none;
+  transition:all .15s;
+}
+.spine-chat-link:hover{border-color:#3F72A3;background:#0f1828}
+.spine-chat-dot{width:6px;height:6px;border-radius:50%;background:#7ab8f5;animation:pulse-dot 2s ease-in-out infinite;flex-shrink:0}
+.spine-chat-text{font-size:.75rem;color:#7ab8f5;font-family:var(--mono);letter-spacing:.04em}
+.spine-chat-arrow{font-size:.7rem;color:#3F72A3;margin-left:auto}
+
 main{flex:1;padding:2.4rem 3rem 5rem;min-width:0}
 section.page{display:none;max-width:720px}
 section.page.show{display:block;animation:rise .35s ease}
@@ -109,15 +192,59 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
 @media(prefers-reduced-motion:reduce){section.page.show{animation:none}.draw path,.draw circle{animation:none !important;stroke-dashoffset:0 !important}}
 .draw path,.draw circle{stroke-dasharray:300;stroke-dashoffset:300;animation:draw 1.4s ease forwards}
 @keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+/* ── Wordmark redesign ── */
+.wordmark-block{background:linear-gradient(135deg,#1a3a28 0%,#0f2a1e 100%);border-radius:10px;padding:1rem .9rem 1rem;margin-bottom:1rem;border:1px solid var(--va);position:relative;overflow:hidden}
+.wordmark-block::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:var(--va);opacity:.08}
+.wordmark-block::after{content:'';position:absolute;bottom:-10px;left:-10px;width:50px;height:50px;border-radius:50%;background:#6E549C;opacity:.08}
+.wordmark{font-family:var(--disp);font-weight:600;font-size:1.7rem;letter-spacing:.02em;color:#fff;margin-bottom:.15rem;position:relative}
+.wordmark-sub{font-size:.72rem;color:#5ecfa0;margin-bottom:.6rem;padding-right:1rem;font-family:var(--mono);letter-spacing:.08em;position:relative}
+.wordmark-url{font-size:.7rem;color:#ffffff55;font-family:var(--mono);letter-spacing:.06em;position:relative}
+.wordmark-url a{color:#5ecfa0;text-decoration:none}
+.wordmark-url a:hover{color:#fff}
+/* ── Hero redesign ── */
+.hero-full{background:linear-gradient(160deg,#0f2a1e 0%,#1a1030 50%,#0f1828 100%);border-radius:16px;padding:2rem 1.8rem;margin-bottom:1.8rem;position:relative;overflow:hidden;border:1px solid var(--va)}
+.hero-full::before{content:'SHILA VE-VA';position:absolute;right:-10px;top:50%;transform:translateY(-50%) rotate(90deg);font-family:var(--disp);font-style:italic;font-size:5rem;color:#ffffff04;letter-spacing:.2em;pointer-events:none;white-space:nowrap}
+.hero-title{font-family:var(--disp);font-weight:600;font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.1;color:#fff;margin-bottom:.7rem}
+.hero-title em{font-style:italic;color:#5ecfa0}
+.hero-sub{font-size:1rem;color:#ffffffaa;line-height:1.7;max-width:52ch;margin-bottom:1.2rem}
+.hero-salutation{font-family:var(--disp);font-style:italic;font-size:1.5rem;color:#5ecfa0;margin-bottom:.3rem;letter-spacing:.04em}
+.hero-sal-eng{font-size:.8rem;color:#ffffff55;font-family:var(--mono);letter-spacing:.08em;margin-bottom:1.4rem}
+.hero-glyph-strip{display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;flex-wrap:wrap}
+.ev-pill-hero{display:flex;align-items:center;gap:.4rem;padding:.3rem .7rem;border-radius:999px;font-size:.78rem;font-family:var(--mono)}
+.ph-va{background:#0f2a1e;color:#5ecfa0;border:.5px solid var(--va)}
+.ph-shi{background:#0f1828;color:#7ab8f5;border:.5px solid var(--shi)}
+.ph-nu{background:#281c08;color:#f5c06a;border:.5px solid var(--nu)}
+.ph-le{background:#1e1030;color:#c4a0f5;border:.5px solid var(--le)}
+.hero-btns{display:flex;gap:.7rem;flex-wrap:wrap}
+.hero-btn-primary{background:var(--va);color:#fff;border:none;border-radius:8px;padding:.65rem 1.4rem;font-family:var(--body);font-size:.95rem;font-weight:500;cursor:pointer;transition:all .15s}
+.hero-btn-primary:hover{background:#3d8a6e;transform:translateY(-1px)}
+.hero-btn-ghost{background:transparent;color:#5ecfa0;border:1px solid var(--va);border-radius:8px;padding:.65rem 1.4rem;font-family:var(--body);font-size:.95rem;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block}
+.hero-btn-ghost:hover{background:#0f2a1e}
+.chat-link-banner{background:#0f1828;border:1px solid var(--shi);border-radius:10px;padding:.7rem 1rem;margin-bottom:1.2rem;display:flex;align-items:center;justify-content:space-between;gap:.7rem;flex-wrap:wrap}
+.clb-text{font-size:.85rem;color:#7ab8f5}
+.clb-text strong{color:#fff}
+.clb-btn{background:var(--shi);color:#fff;border:none;border-radius:6px;padding:.4rem .9rem;font-size:.82rem;font-family:var(--body);cursor:pointer;text-decoration:none;display:inline-block;transition:opacity .15s}
+.clb-btn:hover{opacity:.85}
+
 </style>
 </head>
 <body>
 <div class="mobile-nav" id="mobileNav" role="tablist" aria-label="Site sections"></div>
 <div class="layout">
 <nav class="spine" aria-label="Site sections">
-  <div class="wordmark">Sylvenka</div>
-  <div class="wordmark-sub syl">shilamo velomo — the language of seeing</div>
-  <a href="/chat" style="display:block;margin-top:.5rem;font-size:.75rem;color:var(--va);text-decoration:none;font-family:var(--body)">→ Open Sylvenka Chat</a>
+  <div class="wordmark-block">
+    <div class="wordmark">Sylvenka</div>
+    <div class="wordmark-sub">shilamo velomo</div>
+    <div class="wordmark-url"><a href="https://sylvenka.com">sylvenka.com</a></div>
+  </div>
+
+  <a href="/chat" class="spine-chat-link">
+    <div class="spine-chat-dot"></div>
+    <span class="spine-chat-text">LIVE CHAT ROOMS</span>
+    <span class="spine-chat-arrow">→</span>
+  </a>
+
   <div class="nav-group">Begin</div>
   <button data-page="home" class="active">Welcome</button>
   <button data-page="sounds">Sounds &amp; script</button>
@@ -127,27 +254,53 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
   <button data-page="dictionary">Dictionary</button>
   <button data-page="phrases">Phrasebook</button>
   <div class="nav-group">Live it</div>
-  <button data-page="speak">Speak with a tutor</button>
+  <button data-page="speak">Speak with Mira</button>
   <button data-page="converse">Talk to speakers</button>
   <button data-page="community">Community</button>
+
+  <a href="/pro" style="display:flex;align-items:center;gap:.5rem;margin:.4rem .8rem;padding:.45rem .7rem;background:linear-gradient(90deg,#1e1030,#0f1020);border:.5px solid #6E549C33;border-radius:8px;text-decoration:none;transition:all .15s" onmouseover="this.style.borderColor='#6E549C'" onmouseout="this.style.borderColor='#6E549C33'"><span style="font-size:.7rem;font-family:var(--mono);color:#c4a0f5;letter-spacing:.06em">✦ SYLVENKA PRO</span><span style="font-size:.7rem;color:#6E549C;margin-left:auto">→</span></a>
+  <div class="spine-bottom">
+    <div class="spine-user" onclick="go('speak')">
+      <div class="spine-av">M</div>
+      <div class="spine-info">
+        <div class="spine-name">Mira</div>
+        <div class="spine-sub">tutor · online</div>
+      </div>
+      <div class="spine-dot"></div>
+    </div>
+  </div>
 </nav>
 <main>
 <!-- ============ HOME ============ -->
 <section class="page show" id="page-home">
-  <h1>Every word tells you how the speaker knows.</h1>
-  <p class="lede">Sylvenka is a constructed language built around one elegant idea: evidence is grammar. You cannot finish a verb without saying whether you saw it, heard it, deduced it — or only dreamed it.</p>
-  <div class="hero-glyph draw" aria-hidden="true">
-    <svg width="100%" viewBox="0 0 680 130" xmlns="http://www.w3.org/2000/svg" role="img"><title>The word solova in venashi script</title>
-      <g stroke="#1C2422" stroke-width="4" fill="none" stroke-linecap="round">
-        <path d="M180 90 q22 -28 44 0"/><path d="M202 44 q10 15 20 0"/>
-        <path d="M300 90 v-30 q0 21 21 21"/><path d="M310 40 q10 15 20 0"/>
-      </g>
-      <g stroke="#2F6B5A" stroke-width="5" fill="none" stroke-linecap="round">
-        <path d="M430 78 l17 27 l17 -27"/><circle cx="447" cy="46" r="8"/>
-        <path d="M560 46 v66 m-15 -66 a15 15 0 0 1 30 0"/>
-      </g>
-    </svg>
+
+  <!-- Chat banner -->
+  <div class="chat-link-banner">
+    <div class="clb-text"><strong>New —</strong> Talk to speakers in 21 languages. Real-time rooms, Sylvenka keyboard, Mira the tutor.</div>
+    <a href="/chat" class="clb-btn">Open chat →</a>
   </div>
+
+  <!-- Hero block -->
+  <div class="hero-full">
+    <div class="hero-salutation">Shila ve-va.</div>
+    <div class="hero-sal-eng">SPEAK ONLY WHAT YOU HAVE WITNESSED</div>
+    <div class="hero-title">Every word tells you<br><em>how the speaker knows.</em></div>
+    <div class="hero-sub">Sylvenka is a language built around one elegant idea: evidence is grammar. You cannot finish a verb without saying whether you saw it, heard it, deduced it — or only dreamed it.</div>
+    <div class="hero-glyph-strip">
+      <svg width="180" height="60" viewBox="0 0 180 60" role="img" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><title>Shila ve-va in venashi script</title><g stroke="#5ecfa0" stroke-width="3" fill="none" stroke-linecap="round"><path d="M12 46 q10-14 20 0"/><path d="M22 24 q7 10 14 0"/><path d="M44 18 v36 m0-36 q12 10 0 20 q-12 10 0 16"/><path d="M72 22 v34 m-10-22 l10-12 l10 12"/><line x1="96" y1="38" x2="108" y2="38" stroke="#5ecfa033"/><path d="M116 46 q10-14 20 0"/><path d="M126 26 q7 10 14 0"/><path d="M148 18 v40 m-12-40 a12 12 0 0 1 24 0"/></g></svg>
+      <span class="ev-pill-hero ph-va">-va · witnessed</span>
+      <span class="ev-pill-hero ph-shi">-shi · hearsay</span>
+      <span class="ev-pill-hero ph-nu">-nu · inferred</span>
+      <span class="ev-pill-hero ph-le">-le · dreamed</span>
+    </div>
+    <div class="hero-btns">
+      <button class="hero-btn-primary" onclick="go('sounds')">Start learning</button>
+      <button class="hero-btn-primary" onclick="go('speak')" style="background:#6E549C">Speak with Mira</button>
+      <a href="/chat" class="hero-btn-ghost">Join the community</a>
+    </div>
+  </div>
+
+  <!-- The word solova explained -->
   <div class="morph" aria-label="Word structure of solova">
     <span class="piece p1">solo</span><span class="plus">rain +</span>
     <span class="piece p3">va</span><span class="plus">I witnessed it</span>
@@ -321,34 +474,89 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
 
 <!-- ============ SPEAK / AI TUTOR ============ -->
 <section class="page" id="page-speak">
-  <h1>Speak with a tutor</h1>
-  <p class="lede">Mira is your Sylvenka tutor. She will correct your grammar, praise your evidence markers, and slowly go insane if you keep using <span class="syl">-va</span> for things you obviously only heard second-hand.</p>
-  <div class="chat" role="log" aria-label="Conversation with Mira">
-    <div class="log" id="chatLog">
-      <div class="msg tutor"><strong>Mira:</strong> <span class="syl">Shila ve-va.</span> Speak only what you have witnessed — that is our greeting, and the whole language in three syllables. I'm Mira, your Sylvenka tutor. Write to me in English or Sylvenka — I'll help either way. What would you like to practice today?</div>
-    </div>
-    <div class="bar">
-      <input type="text" id="chatInput" placeholder="Write to Mira…" aria-label="Message to Mira" onkeydown="if(event.key==='Enter')sendChat()">
-      <button class="btn" onclick="sendChat()">Send</button>
+
+  <!-- Mira hero banner -->
+  <div style="background:linear-gradient(135deg,#1e1030 0%,#0f1828 60%,#0f2a1e 100%);border-radius:16px;padding:1.6rem 1.8rem;margin-bottom:1.4rem;border:1px solid #6E549C;position:relative;overflow:hidden">
+    <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:#6E549C;opacity:.06"></div>
+    <div style="display:flex;align-items:flex-start;gap:1rem;flex-wrap:wrap">
+      <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#6E549C,#3F72A3);display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-style:italic;font-size:1.4rem;color:#fff;flex-shrink:0">M</div>
+      <div style="flex:1;min-width:200px">
+        <div style="font-family:var(--disp);font-size:1.4rem;color:#fff;margin-bottom:.2rem">Mira <span style="font-size:.75rem;font-family:var(--mono);color:#c4a0f5;font-style:normal;background:#1e1030;border:.5px solid #6E549C;border-radius:4px;padding:1px 6px;vertical-align:middle">loven · teacher</span></div>
+        <div style="font-size:.85rem;color:#c4a0f5;font-style:italic;font-family:var(--disp);margin-bottom:.4rem">"I have been speaking Sylvenka for years. I find -le the most beautiful marker. And I will absolutely notice if you use -va for something you only heard second-hand."</div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          <span style="font-size:.72rem;background:#0f2a1e;color:#5ecfa0;border:.5px solid var(--va);border-radius:999px;padding:2px 8px;font-family:var(--mono)">AI powered · Claude</span>
+          <span style="font-size:.72rem;background:#1e1030;color:#c4a0f5;border:.5px solid #6E549C;border-radius:999px;padding:2px 8px;font-family:var(--mono)">ElevenLabs voice</span>
+          <span style="font-size:.72rem;background:#0f1828;color:#7ab8f5;border:.5px solid var(--shi);border-radius:999px;padding:2px 8px;font-family:var(--mono)">21 languages</span>
+        </div>
+      </div>
     </div>
   </div>
-  <p style="font-size:.85rem;color:var(--muted);margin-top:.5rem">Mira is powered by Claude. She knows the complete Sylvenka grammar and will always respond with example sentences, audio play buttons, and gentle corrections.</p>
-  <div style="background:var(--card);border:1px solid var(--line);border-radius:8px;padding:.8rem 1rem;margin-top:.8rem;display:flex;gap:.7rem;align-items:center;flex-wrap:wrap">
-    <div style="flex:1;min-width:200px">
-      <div style="font-size:.75rem;color:var(--muted);margin-bottom:.3rem">ElevenLabs API key <span style="color:var(--faint)">(optional — gives Mira a real human voice)</span></div>
-      <input type="password" id="elKey" placeholder="sk-..." style="width:100%;font-size:.88rem" oninput="saveELKey()">
+
+  <!-- What Mira can do -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:1.2rem">
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.8rem;text-align:center">
+      <div style="font-size:1.2rem;margin-bottom:.3rem">🎯</div>
+      <div style="font-size:.8rem;font-weight:500;margin-bottom:.2rem">Corrects gently</div>
+      <div style="font-size:.72rem;color:var(--muted)">Says what you got right first</div>
     </div>
-    <div style="flex:1;min-width:160px">
-      <div style="font-size:.75rem;color:var(--muted);margin-bottom:.3rem">Voice</div>
-      <select id="elVoice" style="font-family:var(--body);font-size:.88rem;padding:.55rem .7rem;border:1px solid var(--line2);border-radius:6px;background:var(--card);color:var(--ink);width:100%" onchange="saveELKey()">
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.8rem;text-align:center">
+      <div style="font-size:1.2rem;margin-bottom:.3rem">🌿</div>
+      <div style="font-size:.8rem;font-weight:500;margin-bottom:.2rem">Speaks Sylvenka</div>
+      <div style="font-size:.72rem;color:var(--muted)">Throws in phrases naturally</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.8rem;text-align:center">
+      <div style="font-size:1.2rem;margin-bottom:.3rem">🔊</div>
+      <div style="font-size:.8rem;font-weight:500;margin-bottom:.2rem">Real voice</div>
+      <div style="font-size:.72rem;color:var(--muted)">ElevenLabs — not robotic</div>
+    </div>
+  </div>
+
+  <!-- Chat window -->
+  <div style="background:var(--card);border:2px solid #6E549C44;border-radius:14px;overflow:hidden;margin-bottom:.8rem;box-shadow:0 0 30px #6E549C11">
+    <div style="background:linear-gradient(90deg,#1e1030,#0f1828);padding:.7rem 1rem;border-bottom:1px solid #6E549C33;display:flex;align-items:center;gap:.6rem">
+      <div style="width:8px;height:8px;border-radius:50%;background:#5ecfa0;animation:pulse-dot 2s ease-in-out infinite"></div>
+      <span style="font-size:.8rem;color:#c4a0f5;font-family:var(--mono)">MIRA · ONLINE · SHILA VE-VA</span>
+    </div>
+    <div class="log" id="chatLog" role="log" aria-label="Conversation with Mira" style="min-height:340px;max-height:440px;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.8rem">
+      <div class="msg tutor"><strong>Mira:</strong> <span class="syl">Shila ve-va.</span> Speak only what you have witnessed — that is our greeting, and the whole language in three syllables. I'm Mira, your Sylvenka tutor. Write to me in English or Sylvenka — I'll help either way. What would you like to practice today?</div>
+    </div>
+    <div style="padding:.8rem;border-top:1px solid var(--line);display:flex;gap:.6rem">
+      <input type="text" id="chatInput" placeholder="Write to Mira in English or Sylvenka…" aria-label="Message to Mira" onkeydown="if(event.key==='Enter')sendChat()" style="flex:1">
+      <button class="btn" onclick="sendChat()" style="background:#6E549C;border-color:#6E549C;flex-shrink:0">Send</button>
+    </div>
+  </div>
+
+  <!-- Quick starters -->
+  <div style="margin-bottom:1rem">
+    <div style="font-size:.72rem;color:var(--muted);font-family:var(--mono);letter-spacing:.08em;margin-bottom:.4rem">TRY ASKING MIRA:</div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+      <button onclick="quickAsk('What is the difference between -va and -shi?')" style="background:var(--card);border:1px solid var(--line2);border-radius:999px;padding:.3rem .8rem;font-size:.8rem;cursor:pointer;color:var(--muted);transition:all .15s" onmouseover="this.style.borderColor='var(--va)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='var(--line2)';this.style.color='var(--muted)'">What is -va vs -shi?</button>
+      <button onclick="quickAsk('How do I say I love you in Sylvenka?')" style="background:var(--card);border:1px solid var(--line2);border-radius:999px;padding:.3rem .8rem;font-size:.8rem;cursor:pointer;color:var(--muted);transition:all .15s" onmouseover="this.style.borderColor='var(--va)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='var(--line2)';this.style.color='var(--muted)'">How do I say I love you?</button>
+      <button onclick="quickAsk('Teach me the days of the week')" style="background:var(--card);border:1px solid var(--line2);border-radius:999px;padding:.3rem .8rem;font-size:.8rem;cursor:pointer;color:var(--muted);transition:all .15s" onmouseover="this.style.borderColor='var(--va)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='var(--line2)';this.style.color='var(--muted)'">Days of the week</button>
+      <button onclick="quickAsk('Check my Sylvenka: Nasi lashusa lush-vemi!')" style="background:var(--card);border:1px solid var(--line2);border-radius:999px;padding:.3rem .8rem;font-size:.8rem;cursor:pointer;color:var(--muted);transition:all .15s" onmouseover="this.style.borderColor='var(--va)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='var(--line2)';this.style.color='var(--muted)'">Check my Sylvenka</button>
+      <button onclick="quickAsk('What is the velasin poem?')" style="background:var(--card);border:1px solid var(--line2);border-radius:999px;padding:.3rem .8rem;font-size:.8rem;cursor:pointer;color:var(--muted);transition:all .15s" onmouseover="this.style.borderColor='var(--va)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='var(--line2)';this.style.color='var(--muted)'">What is a velasin?</button>
+    </div>
+  </div>
+
+  <!-- ElevenLabs key -->
+  <div style="background:linear-gradient(90deg,#1e1030,#0f1828);border:1px solid #6E549C33;border-radius:10px;padding:.9rem 1.1rem;display:flex;gap:.7rem;align-items:center;flex-wrap:wrap">
+    <div style="font-size:1.2rem">🔊</div>
+    <div style="flex:1;min-width:200px">
+      <div style="font-size:.78rem;color:#c4a0f5;font-weight:500;margin-bottom:.3rem">Give Mira a real voice — ElevenLabs <span style="color:#ffffff44;font-weight:400">(free at elevenlabs.io)</span></div>
+      <input type="password" id="elKey" placeholder="Paste your ElevenLabs API key…" style="width:100%;font-size:.85rem;background:#0f1020;border-color:#6E549C44" oninput="saveELKey()">
+    </div>
+    <div style="min-width:160px">
+      <div style="font-size:.72rem;color:#ffffff44;margin-bottom:.3rem">Voice</div>
+      <select id="elVoice" style="font-family:var(--body);font-size:.85rem;padding:.5rem .6rem;border:1px solid #6E549C44;border-radius:6px;background:#0f1020;color:#c4a0f5;width:100%" onchange="saveELKey()">
         <option value="EXAVITQu4vr4xnSDxMaL">Matilda (warm, clear)</option>
         <option value="XB0fDUnXU5powFXDhCwa">Charlotte (British, warm)</option>
         <option value="jsCqWAovK2LkecY7zXl4">Freya (confident)</option>
         <option value="oWAxZDx7w5VEj9dCyTzz">Grace (soft, academic)</option>
       </select>
     </div>
-    <div id="elStatus" style="font-size:.8rem;color:var(--va);white-space:nowrap"></div>
+    <div id="elStatus" style="font-size:.8rem;color:#5ecfa0;white-space:nowrap;min-width:80px"></div>
   </div>
+
 </section>
 
 <!-- ============ COMMUNITY ============ -->
@@ -981,7 +1189,11 @@ async function sendChat(){
   const log=document.getElementById('chatLog');
   log.scrollTop=log.scrollHeight;
 }
-function addMsg(role,html){
+function quickAsk(text){
+  const inp=document.getElementById('chatInput');
+  if(inp){inp.value=text;sendChat();}
+}
+
   const log=document.getElementById('chatLog');
   const div=document.createElement('div');
   div.className=`msg ${role}`;
