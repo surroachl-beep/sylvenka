@@ -337,7 +337,7 @@ function renderKeyboard(){
     row.forEach(key=>{
       const btn=document.createElement('button');
       btn.className='kb-key';
-      if(key==='SPACE'){btn.className+=' space';btn.textContent='space';}
+      if(key==='SPACE'){btn.className='key space-key';btn.textContent='SPACE ';}
       else if(key==='⌫'){btn.className+=' backspace';btn.textContent='⌫';}
       else if(key==='↵'){btn.className+=' action';btn.textContent='↵';}
       else if(key.length>2){btn.className+=' wide';btn.textContent=key;}
