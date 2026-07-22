@@ -221,7 +221,7 @@ const WORDS=[
   {r:'totovi',m:'friends (pl)'},{r:'totovi-thi',m:'dear friends'},
 ];
 
-const GM={s:"ꜱ",h:"ʜ",i:"ι",l:"ʟ",a:"α",e:"ε",o:"ο",u:"υ",n:"η",t:"τ",v:"ν",r:"ρ",m:"м",k:"κ"};function toU(w){var ev=w.match(/-(va|shi|nu|le)$/i);var b=w.replace(/-(va|shi|nu|le)$/i,"").toLowerCase();var r="";for(var i=0;i<b.length;i++){r+=GM[b[i]]||b[i];}return r+(ev?" ("+ev[1]+")":"");}function textToUnicode(t){return t.trim().split(/s+/).filter(function(w){return w;}).map(toU).join("  ");}
+const GM={s:"ꜱ",h:"ʜ",i:"ι",l:"ʟ",a:"α",e:"ε",o:"ο",u:"υ",n:"η",t:"τ",v:"ν",r:"ρ",m:"м",k:"κ"};function toU(w){var ev=w.match(/-(va|shi|nu|le)$/i);var b=w.replace(/-(va|shi|nu|le)$/i,"").toLowerCase();var r="";for(var i=0;i<b.length;i++){r+=GM[b[i]]||b[i];}return r+(ev?" ("+ev[1]+")":"");}function textToUnicode(t){return t.trim().split(/\s+/).filter(function(w){return w;}).map(toU).join("  ");}
 const PHRASES=[
   {t:'Shila ve-va.',h:'the greeting'},
   {t:'Velo-thi!',h:'welcome'},
