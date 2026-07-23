@@ -193,6 +193,8 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--text);font-fam
 <div class="toast" id="toast"></div>
 
 <script>
+const GM={s:'ꜱ',h:'ʜ',i:'ι',l:'ʟ',a:'α',e:'ε',o:'ο',u:'υ',n:'η',t:'τ',v:'ν',r:'ρ',m:'м',k:'κ',th:'ϑ',sh:'ʃ'};function toU(w){var ev=w.match(/-(va|shi|nu|le)$/i);var b=w.replace(/-(va|shi|nu|le)$/i,'').toLowerCase();var r='';var i=0;while(i<b.length){if(i<b.length-1&&(b[i]+b[i+1]==='th'||b[i]+b[i+1]==='sh')){r+=GM[b[i]+b[i+1]]||b[i]+b[i+1];i+=2;}else{r+=GM[b[i]]||b[i];i++;}}return r+(ev?' ('+ev[1]+')':'');}function textToUnicode(t){return t.trim().split(/\s+/).filter(function(w){return w;}).map(toU).join('  ');}
+
 // ══ STATE ════════════════════════════════════════════════════
 let text='', mode='syl', evidenceUsed=new Set();
 
