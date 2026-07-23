@@ -566,3 +566,30 @@ app.get('/sitemap.xml', (_req, res) => {
 app.get('/get-clean', (_req, res) => {
   res.sendFile(require('path').join(__dirname, '..', 'public', 'index-clean.html'));
 });
+
+app.post('/api/chat', async (req, res) => {
+  const { messages } = req.body;
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return res.status(503).json({ error: 'Mira is offline' });
+  }
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1024,
+        system: 'You are Mira, a warm tutor for Sylvenka language. Evidence markers: -va witnessed, -shi hearsay, -nu inferred, -le dreamed. Salutation: Shila ve-va. Be warm and concise.',
+        messages: messages
+      })
+    });
+    const data = await response.json();
+    res.json({ content: data.content[0].text });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
