@@ -551,3 +551,14 @@ app.get('/keyboard', (_req, res) => {
 app.get('/keyboard',(_req,res)=>{res.setHeader('Cache-Control','no-cache,no-store');res.sendFile(require('path').join(__dirname,'..','public','keyboard','index.html'));});
 
 app.get('/kb',(_req,res)=>{res.setHeader('Cache-Control','no-cache');res.sendFile(require('path').join(__dirname,'..','public','keyboard','app.html'));});
+
+app.get('/sitemap.xml', (_req, res) => {
+  res.setHeader('Content-Type', 'application/xml');
+  res.send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://sylvenka.com/</loc><priority>1.0</priority></url>
+  <url><loc>https://sylvenka.com/chat</loc><priority>0.9</priority></url>
+  <url><loc>https://sylvenka.com/pro</loc><priority>0.8</priority></url>
+  <url><loc>https://sylvenka.com/kb</loc><priority>0.8</priority></url>
+</urlset>`);
+});
