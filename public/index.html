@@ -709,9 +709,9 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
 // ── Navigation ──────────────────────────────────────────────
 const pages=['home','sounds','grammar','lessons','dictionary','phrases','speak','converse','community'];
 function go(id){
-  document.querySelectorAll('section.page').forEach(s=>s.classList.remove('show'));
+  document.querySelectorAll('section.page').forEach(s=>{s.classList.remove('show');s.style.display='none';});
   const p=document.getElementById('page-'+id);
-  if(p)p.classList.add('show');
+  if(p){p.classList.add('show');p.style.display='block';}
   document.querySelectorAll('nav.spine button,[data-page]').forEach(b=>{
     b.classList.toggle('active',b.dataset.page===id);
   });
