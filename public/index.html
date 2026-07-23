@@ -29,7 +29,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:var(--body);background:var(--paper);color:var(--ink);font-size:16px;line-height:1.7}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);font-size:16px;line-height:1.7;overflow-x:hidden;overflow-y:auto;height:auto}
 .syl{font-family:var(--disp);font-style:italic;letter-spacing:.02em}
 .gloss{font-family:var(--mono);font-size:.82em;color:var(--muted)}
 .layout{display:flex;min-height:100vh;max-width:1200px;margin:0 auto}
@@ -183,7 +183,7 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
 @media(max-width:900px){
   .layout{flex-direction:column}
   nav.spine{display:none}
-  .mobile-nav{display:flex;gap:.3rem;overflow-x:auto;position:sticky;top:0;background:var(--paper);border-bottom:1px solid var(--line);padding:.7rem .9rem;z-index:5}
+  .mobile-nav{display:flex;gap:.3rem;overflow-x:auto;position:sticky;top:0;background:var(--paper);border-bottom:1px solid var(--line);padding:.7rem .9rem;z-index:9999;pointer-events:auto}
   .mobile-nav button{flex-shrink:0;background:var(--card);border:1px solid var(--line2);border-radius:999px;padding:.4rem .9rem;font-family:var(--body);font-size:.85rem;color:var(--muted);cursor:pointer}
   .mobile-nav button.active{background:var(--va);border-color:var(--va);color:#fff}
   main{padding:1.6rem 1.2rem 4rem}
