@@ -1,10 +1,1599 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<title>Error</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sylvenka — the language of how you know</title>
+<meta name="description" content="A language where every verb must say whether you witnessed it, heard it, inferred it, or dreamed it. Learn Sylvenka.">
+<meta property="og:title" content="Sylvenka — the language of how you know">
+<meta property="og:description" content="Every verb carries its source. ChatGPT called it a magical chant. It is not. Shila ve-va.">
+<meta property="og:url" content="https://sylvenka.com">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sylvenka — Shila ve-va">
+<meta name="twitter:description" content="The language the universe already speaks. Every verb says how you know. Learn it.">
+<link rel="manifest" href="/manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Spline+Sans:wght@400;500&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1C2422; --muted:#5B6660; --faint:#8B948E;
+  --paper:#F1F2EB; --card:#FAFBF6; --line:#DCE0D6; --line2:#C7CDC0;
+  --va:#2F6B5A; --va-bg:#E3EDE8;
+  --shi:#3F72A3; --shi-bg:#E4ECF4;
+  --nu:#A9761F; --nu-bg:#F3ECDD;
+  --le:#6E549C; --le-bg:#EBE6F2;
+  --disp:'Fraunces',serif; --body:'Spline Sans',sans-serif; --mono:'Spline Sans Mono',monospace;
+  --sidebar-bg:#0f1a14; --sidebar-border:#1a3020;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);font-size:16px;line-height:1.7}
+.syl{font-family:var(--disp);font-style:italic;letter-spacing:.02em}
+.gloss{font-family:var(--mono);font-size:.82em;color:var(--muted)}
+.layout{display:flex;min-height:100vh;max-width:1200px;margin:0 auto}
+
+/* ── SIDEBAR — modern dark app style ── */
+nav.spine{
+  width:230px;flex-shrink:0;
+  background:var(--sidebar-bg);
+  border-right:1px solid var(--sidebar-border);
+  padding:0;
+  position:sticky;top:0;height:100vh;
+  overflow-y:auto;
+  display:flex;flex-direction:column;
+}
+nav.spine::-webkit-scrollbar{width:3px}
+nav.spine::-webkit-scrollbar-thumb{background:var(--sidebar-border)}
+
+/* Nav buttons — icon-row style */
+nav.spine button{
+  display:flex;align-items:center;gap:.55rem;
+  width:100%;text-align:left;
+  background:none;border:none;
+  font-family:var(--body);font-size:.88rem;
+  color:#6a8870;
+  padding:.55rem 1rem .55rem 1.2rem;
+  cursor:pointer;
+  border-left:2px solid transparent;
+  transition:all .12s;
+  border-radius:0;
+  position:relative;
+}
+nav.spine button::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:currentColor;opacity:.35;flex-shrink:0;
+  transition:all .12s;
+}
+nav.spine button:hover{color:#a8c8b0;background:#ffffff08}
+nav.spine button.active{
+  color:#b8f0d0;
+  background:linear-gradient(90deg,#0f2a1e,transparent);
+  border-left-color:#2F6B5A;
+  font-weight:500;
+}
+nav.spine button.active::before{background:#5ecfa0;opacity:1;box-shadow:0 0 6px #5ecfa0}
+nav.spine button:focus-visible{outline:1px solid #2F6B5A;outline-offset:-1px}
+
+/* Nav groups */
+.nav-group{
+  font-size:.65rem;text-transform:uppercase;letter-spacing:.16em;
+  color:#3a5040;
+  padding:.9rem 1.2rem .25rem;
+  font-family:var(--mono);
+}
+
+/* Sidebar bottom user pill */
+.spine-bottom{
+  margin-top:auto;
+  padding:.8rem;
+  border-top:1px solid var(--sidebar-border);
+}
+.spine-user{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.5rem .6rem;border-radius:8px;
+  cursor:pointer;transition:background .15s;
+}
+.spine-user:hover{background:#ffffff08}
+.spine-av{
+  width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,#2F6B5A,#6E549C);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;color:#fff;font-weight:500;flex-shrink:0;
+}
+.spine-info{flex:1;min-width:0}
+.spine-name{font-size:.8rem;font-weight:500;color:#b8f0d0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spine-sub{font-size:.68rem;color:#3a5040;font-family:var(--mono)}
+.spine-dot{width:7px;height:7px;border-radius:50%;background:#5ecfa0;flex-shrink:0;box-shadow:0 0 5px #5ecfa0}
+
+/* Chat link in sidebar */
+.spine-chat-link{
+  display:flex;align-items:center;gap:.5rem;
+  margin:.6rem .8rem;
+  padding:.5rem .7rem;
+  background:linear-gradient(90deg,#0f1828,#0f1020);
+  border:.5px solid #3F72A333;
+  border-radius:8px;
+  text-decoration:none;
+  transition:all .15s;
+}
+.spine-chat-link:hover{border-color:#3F72A3;background:#0f1828}
+.spine-chat-dot{width:6px;height:6px;border-radius:50%;background:#7ab8f5;animation:pulse-dot 2s ease-in-out infinite;flex-shrink:0}
+.spine-chat-text{font-size:.75rem;color:#7ab8f5;font-family:var(--mono);letter-spacing:.04em}
+.spine-chat-arrow{font-size:.7rem;color:#3F72A3;margin-left:auto}
+
+main{flex:1;padding:2.4rem 3rem 5rem;min-width:0}
+section.page{display:none !important;max-width:720px}
+section.page.show{display:block !important;animation:rise .35s ease}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h1{font-family:var(--disp);font-weight:600;font-size:2.5rem;line-height:1.15;margin-bottom:.6rem}
+h2{font-family:var(--disp);font-weight:500;font-size:1.55rem;margin:2.4rem 0 .8rem}
+h3{font-family:var(--disp);font-weight:500;font-size:1.15rem;margin:1.8rem 0 .5rem}
+p{margin-bottom:1rem;max-width:62ch}
+.lede{font-size:1.15rem;color:var(--muted);max-width:56ch}
+a{color:var(--va)}
+.ev-key{display:flex;flex-wrap:wrap;gap:.6rem;margin:1.2rem 0}
+.ev-chip{display:flex;align-items:center;gap:.5rem;font-size:.85rem;padding:.35rem .8rem;border-radius:999px;border:1px solid var(--line2);background:var(--card)}
+.ev-dot{width:10px;height:22px;border-radius:5px}
+.ex{display:flex;gap:1rem;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem;margin:.9rem 0;align-items:flex-start}
+.ex .stroke{width:6px;align-self:stretch;border-radius:3px;flex-shrink:0}
+.ex .body{flex:1;min-width:0}
+.ex .syl{font-size:1.12rem;font-style:italic}
+.ex .tr{color:var(--muted);font-size:.92rem;margin-top:.15rem}
+.va .stroke{background:var(--va)} .shi .stroke{background:var(--shi)} .nu .stroke{background:var(--nu)} .le .stroke{background:var(--le)} .plain .stroke{background:var(--line2)}
+.play{border:1px solid var(--line2);background:var(--card);color:var(--ink);border-radius:999px;width:34px;height:34px;flex-shrink:0;cursor:pointer;font-size:.85rem;display:inline-flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s}
+.play:hover{background:var(--va);border-color:var(--va);color:#fff}
+.play:focus-visible{outline:2px solid var(--va);outline-offset:2px}
+.play.slow{width:auto;padding:0 .7rem;font-size:.75rem;border-radius:999px}
+table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.95rem}
+th{text-align:left;font-weight:500;font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:.5rem .6rem;border-bottom:1px solid var(--line2)}
+td{padding:.55rem .6rem;border-bottom:1px solid var(--line);vertical-align:top}
+.tag{display:inline-block;font-size:.7rem;font-family:var(--mono);padding:.1rem .45rem;border-radius:4px;background:var(--paper);border:1px solid var(--line);color:var(--muted)}
+.btn{display:inline-block;font-family:var(--body);font-size:.95rem;font-weight:500;background:var(--va);color:#fff;border:none;border-radius:8px;padding:.65rem 1.3rem;cursor:pointer;transition:opacity .15s}
+.btn:hover{opacity:.88}
+.btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line2)}
+.btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.note{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem;margin:1.2rem 0;font-size:.93rem;color:var(--muted)}
+.note strong{color:var(--ink)}
+input[type=text],textarea{font-family:var(--body);font-size:1rem;padding:.7rem .9rem;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--ink);width:100%}
+input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
+.hero-glyph{margin:2rem 0 1rem}
+.morph{display:flex;gap:.5rem;align-items:baseline;flex-wrap:wrap;font-family:var(--disp);font-size:1.6rem;font-style:italic;margin:.5rem 0 1.5rem}
+.morph .piece{padding:.15rem .6rem;border-radius:8px}
+.morph .p1{background:var(--card);border:1px solid var(--line2)}
+.morph .p2{background:var(--nu-bg);border:1px solid var(--nu)}
+.morph .p3{background:var(--va-bg);border:1px solid var(--va)}
+.morph .plus{font-family:var(--body);font-style:normal;color:var(--faint);font-size:1.1rem}
+.quiz{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.2rem 1.4rem;margin:1.5rem 0}
+.quiz .q{font-weight:500;margin-bottom:.6rem}
+.quiz .opts{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.8rem}
+.quiz label{display:flex;gap:.5rem;align-items:baseline;font-size:.95rem;cursor:pointer}
+.quiz .fb{font-size:.9rem;margin-top:.4rem}
+.chat{border:1px solid var(--line2);border-radius:12px;background:var(--card);display:flex;flex-direction:column;height:520px;margin:1.2rem 0}
+.chat .log{flex:1;overflow-y:auto;padding:1.2rem;display:flex;flex-direction:column;gap:.9rem}
+.msg{max-width:85%;padding:.7rem 1rem;border-radius:12px;font-size:.95rem;line-height:1.6}
+.msg.user{align-self:flex-end;background:var(--va);color:#fff;border-bottom-right-radius:4px}
+.msg.tutor{align-self:flex-start;background:var(--paper);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg.tutor .syl{font-size:1.05em}
+.chat .bar{display:flex;gap:.6rem;padding:.9rem;border-top:1px solid var(--line)}
+.dict-bar{display:flex;gap:.6rem;margin:1rem 0;align-items:center}
+#dictCount{font-size:.85rem;color:var(--muted);white-space:nowrap}
+.mobile-nav{display:none}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  nav.spine{display:none}
+  .mobile-nav{display:flex;gap:.3rem;overflow-x:auto;position:sticky;top:0;background:var(--paper);border-bottom:1px solid var(--line);padding:.7rem .9rem;z-index:9999}
+  .mobile-nav button{flex-shrink:0;background:var(--card);border:1px solid var(--line2);border-radius:999px;padding:.4rem .9rem;font-family:var(--body);font-size:.85rem;color:var(--muted);cursor:pointer}
+  .mobile-nav button.active{background:var(--va);border-color:var(--va);color:#fff}
+  main{padding:1.6rem 1.2rem 4rem}
+  h1{font-size:1.9rem}
+}
+@media(prefers-reduced-motion:reduce){section.page.show{animation:none}.draw path,.draw circle{animation:none !important;stroke-dashoffset:0 !important}}
+.draw path,.draw circle{stroke-dasharray:300;stroke-dashoffset:300;animation:draw 1.4s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+/* ── Wordmark redesign ── */
+.wordmark-block{background:linear-gradient(135deg,#1a3a28 0%,#0f2a1e 100%);border-radius:10px;padding:1rem .9rem 1rem;margin-bottom:1rem;border:1px solid var(--va);position:relative;overflow:hidden}
+.wordmark-block::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:var(--va);opacity:.08}
+.wordmark-block::after{content:'';position:absolute;bottom:-10px;left:-10px;width:50px;height:50px;border-radius:50%;background:#6E549C;opacity:.08}
+.wordmark{font-family:var(--disp);font-weight:600;font-size:1.7rem;letter-spacing:.02em;color:#fff;margin-bottom:.15rem;position:relative}
+.wordmark-sub{font-size:.72rem;color:#5ecfa0;margin-bottom:.6rem;padding-right:1rem;font-family:var(--mono);letter-spacing:.08em;position:relative}
+.wordmark-url{font-size:.7rem;color:#ffffff55;font-family:var(--mono);letter-spacing:.06em;position:relative}
+.wordmark-url a{color:#5ecfa0;text-decoration:none}
+.wordmark-url a:hover{color:#fff}
+/* ── Hero redesign ── */
+.hero-full{background:linear-gradient(160deg,#0f2a1e 0%,#1a1030 50%,#0f1828 100%);border-radius:16px;padding:2rem 1.8rem;margin-bottom:1.8rem;position:relative;overflow:hidden;border:1px solid var(--va)}
+.hero-full::before{content:'SHILA VE-VA';position:absolute;right:-10px;top:50%;transform:translateY(-50%) rotate(90deg);font-family:var(--disp);font-style:italic;font-size:5rem;color:#ffffff04;letter-spacing:.2em;pointer-events:none;white-space:nowrap}
+.hero-title{font-family:var(--disp);font-weight:600;font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.1;color:#fff;margin-bottom:.7rem}
+.hero-title em{font-style:italic;color:#5ecfa0}
+.hero-sub{font-size:1rem;color:#ffffffaa;line-height:1.7;max-width:52ch;margin-bottom:1.2rem}
+.hero-salutation{font-family:var(--disp);font-style:italic;font-size:1.5rem;color:#5ecfa0;margin-bottom:.3rem;letter-spacing:.04em}
+.hero-sal-eng{font-size:.8rem;color:#ffffff55;font-family:var(--mono);letter-spacing:.08em;margin-bottom:1.4rem}
+.hero-glyph-strip{display:flex;align-items:center;gap:1rem;margin-bottom:1.4rem;flex-wrap:wrap}
+.ev-pill-hero{display:flex;align-items:center;gap:.4rem;padding:.3rem .7rem;border-radius:999px;font-size:.78rem;font-family:var(--mono)}
+.ph-va{background:#0f2a1e;color:#5ecfa0;border:.5px solid var(--va)}
+.ph-shi{background:#0f1828;color:#7ab8f5;border:.5px solid var(--shi)}
+.ph-nu{background:#281c08;color:#f5c06a;border:.5px solid var(--nu)}
+.ph-le{background:#1e1030;color:#c4a0f5;border:.5px solid var(--le)}
+.hero-btns{display:flex;gap:.7rem;flex-wrap:wrap}
+.hero-btn-primary{background:var(--va);color:#fff;border:none;border-radius:8px;padding:.65rem 1.4rem;font-family:var(--body);font-size:.95rem;font-weight:500;cursor:pointer;transition:all .15s}
+.hero-btn-primary:hover{background:#3d8a6e;transform:translateY(-1px)}
+.hero-btn-ghost{background:transparent;color:#5ecfa0;border:1px solid var(--va);border-radius:8px;padding:.65rem 1.4rem;font-family:var(--body);font-size:.95rem;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block}
+.hero-btn-ghost:hover{background:#0f2a1e}
+.chat-link-banner{background:#0f1828;border:1px solid var(--shi);border-radius:10px;padding:.7rem 1rem;margin-bottom:1.2rem;display:flex;align-items:center;justify-content:space-between;gap:.7rem;flex-wrap:wrap}
+.clb-text{font-size:.85rem;color:#7ab8f5}
+.clb-text strong{color:#fff}
+.clb-btn{background:var(--shi);color:#fff;border:none;border-radius:6px;padding:.4rem .9rem;font-size:.82rem;font-family:var(--body);cursor:pointer;text-decoration:none;display:inline-block;transition:opacity .15s}
+.clb-btn:hover{opacity:.85}
+
+</style>
 </head>
 <body>
-<pre>Cannot GET /index-clean</pre>
+<div class="mobile-nav" id="mobileNav" role="tablist" aria-label="Site sections">
+  <button class="active nav-btn-home" onclick="go('home')">Home</button>
+  <button class="nav-btn-sounds" onclick="go('sounds')">Sounds</button>
+  <button class="nav-btn-grammar" onclick="go('grammar')">Grammar</button>
+  <button class="nav-btn-lessons" onclick="go('lessons')">Lessons</button>
+  <button class="nav-btn-dictionary" onclick="go('dictionary')">Dictionary</button>
+  <button class="nav-btn-phrases" onclick="go('phrases')">Phrases</button>
+  <button class="nav-btn-speak" onclick="go('speak')">Tutor</button>
+  <button class="nav-btn-converse" onclick="go('converse')">Converse</button>
+  <button class="nav-btn-community" onclick="go('community')">Community</button>
+</div>
+<div class="layout">
+<nav class="spine" aria-label="Site sections">
+  <div class="wordmark-block">
+    <div class="wordmark">Sylvenka</div>
+    <div class="wordmark-sub">shilamo velomo</div>
+    <div class="wordmark-url"><a href="https://sylvenka.com">sylvenka.com</a></div>
+  </div>
+  <a href="/chat" class="spine-chat-link">
+    <div class="spine-chat-dot"></div>
+    <span class="spine-chat-text">LIVE CHAT ROOMS</span>
+    <span class="spine-chat-arrow">→</span>
+  </a>
+  <a href="/keyboard" style="display:flex;align-items:center;gap:.5rem;margin:.3rem .8rem;padding:.45rem .7rem;background:linear-gradient(90deg,#0f2a1e,#0a1a10);border:.5px solid #2F6B5A33;border-radius:8px;text-decoration:none" >
+    <span style="font-size:.7rem;font-family:var(--mono);color:#5ecfa0;letter-spacing:.06em">⌨ KEYBOARD APP</span>
+    <span style="font-size:.7rem;color:#2F6B5A;margin-left:auto">→</span>
+  </a>
+  <div class="nav-group">Begin</div>
+  <button data-page="home" class="active nav-btn-home" onclick="go('home')">Welcome</button>
+  <button data-page="sounds" class="nav-btn-sounds" onclick="go('sounds')">Sounds &amp; script</button>
+  <div class="nav-group">Learn</div>
+  <button data-page="grammar" class="nav-btn-grammar" onclick="go('grammar')">Complete grammar</button>
+  <button data-page="lessons" class="nav-btn-lessons" onclick="go('lessons')">Eight lessons</button>
+  <button data-page="dictionary" class="nav-btn-dictionary" onclick="go('dictionary')">Dictionary</button>
+  <button data-page="phrases" class="nav-btn-phrases" onclick="go('phrases')">Phrasebook</button>
+  <div class="nav-group">Live it</div>
+  <button data-page="speak" class="nav-btn-speak" onclick="go('speak')">Speak with Mira</button>
+  <button data-page="converse" class="nav-btn-converse" onclick="go('converse')">Talk to speakers</button>
+  <button data-page="community" class="nav-btn-community" onclick="go('community')">Community</button>
+  <a href="/pro" style="display:flex;align-items:center;gap:.5rem;margin:.4rem .8rem;padding:.45rem .7rem;background:linear-gradient(90deg,#1e1030,#0f1020);border:.5px solid #6E549C33;border-radius:8px;text-decoration:none">
+    <span style="font-size:.7rem;font-family:var(--mono);color:#c4a0f5;letter-spacing:.06em">✦ SYLVENKA PRO</span>
+    <span style="font-size:.7rem;color:#6E549C;margin-left:auto">→</span>
+  </a>
+  <div class="spine-bottom">
+    <div class="spine-user" onclick="go('speak')">
+      <div class="spine-av">M</div>
+      <div class="spine-info">
+        <div class="spine-name">Mira</div>
+        <div class="spine-sub">tutor · online</div>
+      </div>
+      <div class="spine-dot"></div>
+    </div>
+  </div>
+</nav>
+<main>
+<section class="page show" id="page-home">
+
+  <!-- Chat banner -->
+  <div class="chat-link-banner">
+    <div class="clb-text"><strong>New —</strong> Talk to speakers in 21 languages. Real-time rooms, Sylvenka keyboard, Mira the tutor.</div>
+    <a href="/chat" class="clb-btn">Open chat →</a>
+  </div>
+
+  <!-- Hero block -->
+  <div class="hero-full">
+    <div class="hero-salutation">Shila ve-va.</div>
+    <div class="hero-sal-eng">SPEAK ONLY WHAT YOU HAVE WITNESSED</div>
+    <div class="hero-title">Every word tells you<br><em>how the speaker knows.</em></div>
+    <div class="hero-sub">Sylvenka is a language built around one elegant idea: evidence is grammar. You cannot finish a verb without saying whether you saw it, heard it, deduced it — or only dreamed it.</div>
+    <div class="hero-glyph-strip">
+      <svg width="180" height="60" viewBox="0 0 180 60" role="img" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><title>Shila ve-va in venashi script</title><g stroke="#5ecfa0" stroke-width="3" fill="none" stroke-linecap="round"><path d="M12 46 q10-14 20 0"/><path d="M22 24 q7 10 14 0"/><path d="M44 18 v36 m0-36 q12 10 0 20 q-12 10 0 16"/><path d="M72 22 v34 m-10-22 l10-12 l10 12"/><line x1="96" y1="38" x2="108" y2="38" stroke="#5ecfa033"/><path d="M116 46 q10-14 20 0"/><path d="M126 26 q7 10 14 0"/><path d="M148 18 v40 m-12-40 a12 12 0 0 1 24 0"/></g></svg>
+      <span class="ev-pill-hero ph-va">-va · witnessed</span>
+      <span class="ev-pill-hero ph-shi">-shi · hearsay</span>
+      <span class="ev-pill-hero ph-nu">-nu · inferred</span>
+      <span class="ev-pill-hero ph-le">-le · dreamed</span>
+    </div>
+    <div class="hero-btns">
+      <button class="hero-btn-primary" onclick="event.preventDefault();go('sounds');window.scrollTo({top:0,behavior:'smooth'})">Start learning</button>
+      <button class="hero-btn-primary" onclick="event.preventDefault();go('speak');window.scrollTo({top:0,behavior:'smooth'})" style="background:#6E549C">Speak with Mira</button>
+      <a href="/chat" class="hero-btn-ghost">Join the community</a>
+    </div>
+  </div>
+
+  <!-- The word solova explained -->
+  <div class="morph" aria-label="Word structure of solova">
+    <span class="piece p1">solo</span><span class="plus">rain +</span>
+    <span class="piece p3">va</span><span class="plus">I witnessed it</span>
+    <button class="play" onclick="speak('solova')" aria-label="Hear solova">&#9658;</button>
+  </div>
+  <p><span class="syl">Solova.</span> "It rained — I was there, I got wet." Change one syllable and the whole epistemology shifts. Gossip, science, testimony, and poetry all <em>sound different</em> in Sylvenka. This site teaches you the complete language: every sound, every rule, every word — with audio throughout, and a tutor to converse with when you're ready.</p>
+  <div class="ev-key" role="list" aria-label="The four evidence markers">
+    <span class="ev-chip" role="listitem"><span class="ev-dot" style="background:var(--va)"></span><span class="syl">-va</span>&nbsp;witnessed</span>
+    <span class="ev-chip" role="listitem"><span class="ev-dot" style="background:var(--shi)"></span><span class="syl">-shi</span>&nbsp;hearsay</span>
+    <span class="ev-chip" role="listitem"><span class="ev-dot" style="background:var(--nu)"></span><span class="syl">-nu</span>&nbsp;inferred</span>
+    <span class="ev-chip" role="listitem"><span class="ev-dot" style="background:var(--le)"></span><span class="syl">-le</span>&nbsp;dreamed</span>
+  </div>
+  <p style="margin-top:1.5rem"><button class="btn" onclick="go('sounds')">Start with the sounds</button> &nbsp; <button class="btn ghost" onclick="go('speak')">Try the tutor</button></p>
+  <div class="note"><strong>Turn your sound on.</strong> Every Sylvenka word on this site has a play button. Audio uses your device's speech voices — a Spanish or Italian voice will be chosen automatically when available, because their pure vowels match Sylvenka's almost exactly.</div>
+</section>
+<section class="page" id="page-sounds">
+  <h1>Sounds &amp; script</h1>
+  <p class="lede">Sylvenka has ten consonants, five pure vowels, and a rhythm you can learn in a minute.</p>
+  <h2>The five vowels</h2>
+  <p>Vowels are pure — no gliding, as in Spanish or Italian. Say each one exactly the same way every time.</p>
+  <table><thead><tr><th>Vowel</th><th>Sounds like</th><th>Hear it</th></tr></thead><tbody>
+    <tr><td><span class="syl">a</span></td><td>"ah" as in <em>father</em></td><td><button class="play" onclick="speak('a')" aria-label="Hear a">&#9658;</button></td></tr>
+    <tr><td><span class="syl">e</span></td><td>"eh" as in <em>bet</em></td><td><button class="play" onclick="speak('e')" aria-label="Hear e">&#9658;</button></td></tr>
+    <tr><td><span class="syl">i</span></td><td>"ee" as in <em>machine</em></td><td><button class="play" onclick="speak('i')" aria-label="Hear i">&#9658;</button></td></tr>
+    <tr><td><span class="syl">o</span></td><td>"oh" as in <em>note</em>, but pure</td><td><button class="play" onclick="speak('o')" aria-label="Hear o">&#9658;</button></td></tr>
+    <tr><td><span class="syl">u</span></td><td>"oo" as in <em>flute</em></td><td><button class="play" onclick="speak('u')" aria-label="Hear u">&#9658;</button></td></tr>
+  </tbody></table>
+  <h2>The ten consonants</h2>
+  <p><span class="syl">s, l, v, n, m, t, r, th, sh</span> — plus silence, which Sylvenka poets jokingly count as the tenth. All are pronounced as in English; <span class="syl">th</span> is always soft as in <em>think</em>, never as in <em>this</em>, and <span class="syl">r</span> is lightly tapped as in Spanish <em>pero</em>.</p>
+  <h2>Syllables and stress</h2>
+  <p>Every syllable is a consonant plus a vowel (<span class="syl">na-shu</span>), though words may begin with a bare vowel (<span class="syl">ovan</span>, <span class="syl">ithi</span>, <span class="syl">en</span>). Nothing ever ends in a consonant cluster; the language flows like water over stones. Stress always falls on the <strong>second-to-last syllable</strong>: <span class="syl">so-LO-va</span>, <span class="syl">na-SHU-en</span>, <span class="syl">ve-lo-RE-va</span>.</p>
+  <div class="ex plain"><span class="stroke"></span><div class="body"><span class="syl">Miren-sela lamaka ne solonu.</span><div class="tr">"Rain falls in the forest (I infer — the paths are wet)." Listen for the even, rolling rhythm.</div></div><button class="play" onclick="speak('miren sela lamaka ne solonu')" aria-label="Hear sentence">&#9658;</button><button class="play slow" onclick="speak('miren sela lamaka ne solonu',true)">slow</button></div>
+  <h2>The venashi script</h2>
+  <p>Sylvenka is written in <span class="syl">venashi</span> — "seen-marks." Consonants are the base glyphs; vowels ride above them as small marks; and the four evidence markers get <strong>tall glyphs</strong>, so you can tell at a glance whether a page is testimony, rumor, deduction, or dream. Sacred poetry is traditionally written entirely in the looping dream-glyphs of <span class="syl">-le</span>.</p>
+  <div style="background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1.4rem">
+  <svg width="100%" viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" role="img"><title>Venashi glyph chart</title><desc>Consonant glyphs, vowel marks, and the four tall evidence glyphs of the venashi script.</desc>
+    <text x="10" y="24" font-family="Spline Sans" font-size="13" fill="#5B6660">Consonants</text>
+    <g stroke="#1C2422" stroke-width="2.5" fill="none" stroke-linecap="round">
+      <path d="M30 62 q13 -16 26 0"/><path d="M90 62 v-18 q0 12 12 12"/><path d="M150 46 l10 16 l10 -16"/><path d="M210 62 q7 -20 21 -9 q-14 -2 -10 9"/><path d="M270 44 v18 m0 -18 h16"/><path d="M330 44 q-9 11 0 18 q9 -7 0 -18"/><path d="M390 44 l18 18 m-18 0 l18 -18"/><path d="M450 53 a9 9 0 1 1 0.1 0 m-9 0 h18"/><path d="M510 44 q12 9 0 18 m0 -18 v18"/>
+    </g>
+    <g font-family="Spline Sans" font-size="12" fill="#5B6660" text-anchor="middle">
+      <text x="43" y="86">s</text><text x="99" y="86">l</text><text x="160" y="86">v</text><text x="223" y="86">n</text><text x="278" y="86">m</text><text x="330" y="86">th</text><text x="399" y="86">sh</text><text x="450" y="86">t</text><text x="516" y="86">r</text>
+    </g>
+    <text x="10" y="122" font-family="Spline Sans" font-size="13" fill="#5B6660">Vowel marks (ride above the consonant)</text>
+    <g stroke="#1C2422" stroke-width="2.5" fill="none" stroke-linecap="round">
+      <circle cx="42" cy="148" r="4.5"/><path d="M96 152 h13"/><path d="M152 154 l6 -11 l6 11"/><path d="M212 144 q6 9 13 0"/><path d="M276 143 v11"/>
+    </g>
+    <g font-family="Spline Sans" font-size="12" fill="#5B6660" text-anchor="middle">
+      <text x="42" y="178">a</text><text x="102" y="178">e</text><text x="158" y="178">i</text><text x="218" y="178">o</text><text x="276" y="178">u</text>
+    </g>
+    <text x="10" y="214" font-family="Spline Sans" font-size="13" fill="#5B6660">Evidence glyphs (tall)</text>
+    <g stroke-width="3" fill="none" stroke-linecap="round">
+      <g stroke="#2F6B5A"><path d="M60 236 v42 m-9 -42 a9 9 0 0 1 18 0"/></g>
+      <g stroke="#3F72A3"><path d="M200 236 v42 m0 -42 q12 11 0 21 q-12 11 0 21"/></g>
+      <g stroke="#A9761F"><path d="M340 236 v42 m-11 -31 l11 -11 l11 11"/></g>
+      <g stroke="#6E549C"><path d="M480 236 v42 m0 -42 a11 11 0 1 1 -0.1 0"/></g>
+    </g>
+    <g font-family="Spline Sans" font-size="12" text-anchor="middle">
+      <text x="60" y="296" fill="#2F6B5A">-va witnessed</text><text x="200" y="296" fill="#3F72A3">-shi hearsay</text><text x="340" y="296" fill="#A9761F">-nu inferred</text><text x="480" y="296" fill="#6E549C">-le dreamed</text>
+    </g>
+  </svg>
+  </div>
+  <p style="margin-top:1.5rem"><button class="btn" onclick="go('grammar')">Next: the complete grammar</button></p>
+</section>
+<section class="page" id="page-grammar">
+  <h1>The complete grammar</h1>
+  <p class="lede">Everything Sylvenka does, on one page. Bookmark this — it is the whole rulebook.</p>
+
+  <h2>1 · Word order</h2>
+  <p>Subject – Object – Verb. Adjectives <em>follow</em> their noun. A possessor stands directly before what it owns. There are no articles and no grammatical gender.</p>
+  <div class="ex va"><span class="stroke"></span><div class="body"><span class="syl">Tovi lama ovan velova.</span><div class="tr">friend tree big see-WITNESSED — "My friend saw the big tree (I watched them see it)."</div></div><button class="play" onclick="speak('tovi lama ovan velova')" aria-label="Hear example">&#9658;</button></div>
+
+  <h2>2 · Pronouns</h2>
+  <table><thead><tr><th>Sylvenka</th><th>Meaning</th><th></th></tr></thead><tbody>
+    <tr><td><span class="syl">na</span></td><td>I, me</td><td><button class="play" onclick="speak('na')" aria-label="Hear na">&#9658;</button></td></tr>
+    <tr><td><span class="syl">si</span></td><td>you (one person)</td><td><button class="play" onclick="speak('si')" aria-label="Hear si">&#9658;</button></td></tr>
+    <tr><td><span class="syl">tho</span></td><td>they, that one (any gender)</td><td><button class="play" onclick="speak('tho')" aria-label="Hear tho">&#9658;</button></td></tr>
+    <tr><td><span class="syl">nasi</span></td><td>we — you and I together (inclusive)</td><td><button class="play" onclick="speak('nasi')" aria-label="Hear nasi">&#9658;</button></td></tr>
+    <tr><td><span class="syl">natho</span></td><td>we — me and others, not you (exclusive)</td><td><button class="play" onclick="speak('natho')" aria-label="Hear natho">&#9658;</button></td></tr>
+    <tr><td><span class="syl">sisi</span></td><td>you all</td><td><button class="play" onclick="speak('sisi')" aria-label="Hear sisi">&#9658;</button></td></tr>
+    <tr><td><span class="syl">thotho</span></td><td>they (several)</td><td><button class="play" onclick="speak('thotho')" aria-label="Hear thotho">&#9658;</button></td></tr>
+  </tbody></table>
+  <p>Choosing the wrong "we" is Sylvenka's classic social blunder — <span class="syl">nasi</span> warmly includes your listener; <span class="syl">natho</span> politely closes the door.</p>
+
+  <h2>3 · Nouns and plurals</h2>
+  <p>Pluralize by doubling the first syllable: <span class="syl">lama</span> (tree) → <span class="syl">lalama</span> (trees); <span class="syl">tovi</span> (friend) → <span class="syl">totovi</span> (friends); <span class="syl">mishi</span> (bird) → <span class="syl">mimishi</span> (birds). Vowel-initial words double the vowel syllable: <span class="syl">ovan → o-ovan</span>, spoken with a gentle break.</p>
+
+  <h2>4 · The verb: root + tense + evidence</h2>
+  <p>The verb is Sylvenka's engine. It always ends with one of the four evidence markers, and tense slots in just before it.</p>
+  <table><thead><tr><th>Slot</th><th>Forms</th></tr></thead><tbody>
+    <tr><td>Root</td><td><span class="syl">velo</span> see, <span class="syl">nashu</span> go, <span class="syl">shila</span> speak…</td></tr>
+    <tr><td>Tense (optional)</td><td><span class="syl">-re-</span> past · <span class="syl">-mi-</span> future · nothing = present</td></tr>
+    <tr><td>Evidence (required)</td><td><span class="syl">-va</span> witnessed · <span class="syl">-shi</span> hearsay · <span class="syl">-nu</span> inferred · <span class="syl">-le</span> dreamed/hoped</td></tr>
+  </tbody></table>
+  <div class="ex va"><span class="stroke"></span><div class="body"><span class="syl">veloreva</span><div class="tr">see-PAST-WITNESSED — "I saw it, with my own eyes, back then."</div></div><button class="play" onclick="speak('veloreva')" aria-label="Hear veloreva">&#9658;</button></div>
+  <div class="ex shi"><span class="stroke"></span><div class="body"><span class="syl">nashureshi</span><div class="tr">go-PAST-HEARSAY — "they went, or so I'm told."</div></div><button class="play" onclick="speak('nashureshi')" aria-label="Hear nashureshi">&#9658;</button></div>
+  <div class="ex nu"><span class="stroke"></span><div class="body"><span class="syl">solominu</span><div class="tr">rain-FUTURE-INFERRED — "it will rain (the clouds tell me)."</div></div><button class="play" onclick="speak('solominu')" aria-label="Hear solominu">&#9658;</button></div>
+  <div class="ex le"><span class="stroke"></span><div class="body"><span class="syl">velomile</span><div class="tr">see-FUTURE-DREAMED — "we will see it (I hope, I imagine)."</div></div><button class="play" onclick="speak('velomile')" aria-label="Hear velomile">&#9658;</button></div>
+  <p>The future pairs naturally with <span class="syl">-nu</span> or <span class="syl">-le</span> — you cannot witness what hasn't happened. The forbidden form <span class="syl">velomiva</span> ("I will see it and I witnessed it") is the grammar of prophecy, used only by poets and considered either blasphemous or brilliant, depending on the century.</p>
+
+  <h2>5 · To be, negation, imperative</h2>
+  <p><strong>No copula in the present:</strong> <span class="syl">Lama ovan</span> — "the tree is big." In past and future, use the verb <span class="syl">eso</span>: <span class="syl">Lama ovan esoreva</span> — "the tree was big (I saw it)."</p>
+  <p><strong>Negation</strong> wraps the verb in the circumfix <span class="syl">o-…-th</span>, literally fencing it off: <span class="syl">velova → ovelovath</span> "I did not see it."</p>
+  <p><strong>Commands</strong> take bare root + <span class="syl">-sa</span> (no evidence needed — you're creating the event, not reporting it): <span class="syl">Nashusa!</span> "Go!" · <span class="syl">Velosa!</span> "Look!"</p>
+  <div class="ex plain"><span class="stroke"></span><div class="body"><span class="syl">Na tho oveloreVAth.</span><div class="tr">"I did not see them." Note the negative fence around the whole verb.</div></div><button class="play" onclick="speak('na tho ovelorevath')" aria-label="Hear example">&#9658;</button></div>
+
+  <h2>6 · Questions</h2>
+  <p>Yes/no questions begin with the particle <span class="syl">ve</span>: <span class="syl">Ve si nashureva?</span> "Did you go?" Answer <span class="syl">vaso</span> (yes — "witnessed-true") or <span class="syl">othath</span> (no). Question words are built on <span class="syl">ve-</span>:</p>
+  <table><thead><tr><th>Word</th><th>Meaning</th><th>Literally</th><th></th></tr></thead><tbody>
+    <tr><td><span class="syl">vesi</span></td><td>who</td><td>question-person</td><td><button class="play" onclick="speak('vesi')" aria-label="Hear vesi">&#9658;</button></td></tr>
+    <tr><td><span class="syl">veno</span></td><td>what</td><td>question-thing</td><td><button class="play" onclick="speak('veno')" aria-label="Hear veno">&#9658;</button></td></tr>
+    <tr><td><span class="syl">veka</span></td><td>where</td><td>question-place</td><td><button class="play" onclick="speak('veka')" aria-label="Hear veka">&#9658;</button></td></tr>
+    <tr><td><span class="syl">vemi</span></td><td>when</td><td>question-future/time</td><td><button class="play" onclick="speak('vemi')" aria-label="Hear vemi">&#9658;</button></td></tr>
+    <tr><td><span class="syl">venu</span></td><td>why</td><td>question-inference</td><td><button class="play" onclick="speak('venu')" aria-label="Hear venu">&#9658;</button></td></tr>
+    <tr><td><span class="syl">vesa</span></td><td>how</td><td>question-manner</td><td><button class="play" onclick="speak('vesa')" aria-label="Hear vesa">&#9658;</button></td></tr>
+  </tbody></table>
+
+  <h2>7 · Postpositions and connectors</h2>
+  <p>Little words come <em>after</em> their noun: <span class="syl">selaka ne</span> "at the lake," <span class="syl">tovi lu</span> "with a friend," <span class="syl">vasa sa</span> "toward home," <span class="syl">lamaka ro</span> "from the forest." Connectors: <span class="syl">so</span> and · <span class="syl">vo</span> or · <span class="syl">tha</span> but.</p>
+
+  <h2>8 · Building new words</h2>
+  <table><thead><tr><th>Suffix</th><th>Makes</th><th>Example</th></tr></thead><tbody>
+    <tr><td><span class="syl">-ka</span></td><td>place of</td><td><span class="syl">sela → selaka</span> lake · <span class="syl">thisa → thisaka</span> library</td></tr>
+    <tr><td><span class="syl">-en</span></td><td>one who does</td><td><span class="syl">nashu → nashuen</span> traveler · <span class="syl">lovu → loven</span> teacher</td></tr>
+    <tr><td><span class="syl">-mo</span></td><td>abstract idea</td><td><span class="syl">velo → velomo</span> vision · <span class="syl">shila → shilamo</span> language</td></tr>
+    <tr><td><span class="syl">-lu</span></td><td>tool for</td><td><span class="syl">ranu → ranulu</span> door (open-tool) · <span class="syl">velo → velolu</span> window</td></tr>
+    <tr><td><span class="syl">-thi</span></td><td>small, dear</td><td><span class="syl">sela → selathi</span> a little water · <span class="syl">tovithi</span> dear little friend</td></tr>
+  </tbody></table>
+  <p>Compounds are head-final, read right to left: <span class="syl">miren-sela</span> "sky-water" = rain · <span class="syl">soren-tovi</span> "light-friend" = beloved · <span class="syl">nolu-mishi</span> "night-bird" = owl.</p>
+
+  <h2>9 · Numbers — base five</h2>
+  <p>Counted on one hand: <span class="syl">en</span> 1, <span class="syl">ru</span> 2, <span class="syl">sam</span> 3, <span class="syl">vi</span> 4, <span class="syl">lush</span> 5 ("a hand"). Then stack hands: <span class="syl">lush-en</span> 6, <span class="syl">lush-vi</span> 9, <span class="syl">rulush</span> 10, <span class="syl">samlush-ru</span> 17, <span class="syl">lushlush</span> 25 — "a hand of hands," the great round number. A 25th birthday is the true coming-of-age. Numbers follow the noun: <span class="syl">mishi sam</span> "three birds" (no plural doubling needed when a number is present).</p>
+  <div class="ex plain"><span class="stroke"></span><div class="body"><span class="syl">en · ru · sam · vi · lush · lush-en · lush-ru · lush-sam · lush-vi · rulush</span><div class="tr">Counting one to ten.</div></div><button class="play" onclick="speak('en, ru, sam, vi, lush, lush en, lush ru, lush sam, lush vi, rulush')" aria-label="Count to ten">&#9658;</button></div>
+
+  <h2>10 · The culture inside the grammar</h2>
+  <p>Sylvenka courts swear no oaths — testimony in <span class="syl">-va</span> is binding by itself, and false <span class="syl">-va</span> is the language's gravest taboo. Historians write in <span class="syl">-shi</span> and <span class="syl">-nu</span>, and the shift between them marks trust in a source. Children famously overuse <span class="syl">-le</span>: "there's a monster under the bed (dreamed)" is technically never a lie. And the four-line <span class="syl">velasin</span> poem must move through all four markers — from certainty to dream.</p>
+  <p style="margin-top:1.5rem"><button class="btn" onclick="go('lessons')">Now practice: eight lessons</button></p>
+</section>
+<section class="page" id="page-lessons">
+  <h1>Eight lessons</h1>
+  <p class="lede">Move through these in order. Each builds on the last. Take your time — there's no rush in Sylvenka.</p>
+  <div id="lessonList"></div>
+  <div id="lessonDetail" style="display:none">
+    <button class="btn ghost" style="margin-bottom:1.5rem" onclick="document.getElementById('lessonList').style.display='';document.getElementById('lessonDetail').style.display='none'">← All lessons</button>
+    <div id="lessonContent"></div>
+  </div>
+</section>
+<section class="page" id="page-dictionary">
+  <h1>Dictionary</h1>
+  <p class="lede">The complete Sylvenka lexicon — 220 words, searchable.</p>
+  <div class="dict-bar">
+    <input type="text" id="dictSearch" placeholder="Search Sylvenka or English…" aria-label="Search dictionary" oninput="filterDict()">
+    <span id="dictCount"></span>
+  </div>
+  <table id="dictTable"><thead><tr><th>Sylvenka</th><th>English</th><th>Category</th><th>Hear</th></tr></thead><tbody id="dictBody"></tbody></table>
+</section>
+<section class="page" id="page-phrases">
+  <h1>Phrasebook</h1>
+  <p class="lede">Ready-made phrases for common situations — with the evidence marker already chosen for you.</p>
+  <div id="phrases"></div>
+</section>
+<section class="page" id="page-speak">
+
+  <!-- Mira hero banner -->
+  <div style="background:linear-gradient(135deg,#1e1030 0%,#0f1828 60%,#0f2a1e 100%);border-radius:16px;padding:1.6rem 1.8rem;margin-bottom:1.4rem;border:1px solid #6E549C;position:relative;overflow:hidden">
+    <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:#6E549C;opacity:.06"></div>
+    <div style="display:flex;align-items:flex-start;gap:1rem;flex-wrap:wrap">
+      <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#6E549C,#3F72A3);display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-style:italic;font-size:1.4rem;color:#fff;flex-shrink:0">M</div>
+      <div style="flex:1;min-width:200px">
+        <div style="font-family:var(--disp);font-size:1.4rem;color:#fff;margin-bottom:.2rem">Mira <span style="font-size:.75rem;font-family:var(--mono);color:#c4a0f5;font-style:normal;background:#1e1030;border:.5px solid #6E549C;border-radius:4px;padding:1px 6px;vertical-align:middle">loven · teacher</span></div>
+        <div style="font-size:.85rem;color:#c4a0f5;font-style:italic;font-family:var(--disp);margin-bottom:.4rem">"I have been speaking Sylvenka for years. I find -le the most beautiful marker. And I will absolutely notice if you use -va for something you only heard second-hand."</div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+          <span style="font-size:.72rem;background:#0f2a1e;color:#5ecfa0;border:.5px solid var(--va);border-radius:999px;padding:2px 8px;font-family:var(--mono)">AI powered · Claude</span>
+          <span style="font-size:.72rem;background:#1e1030;color:#c4a0f5;border:.5px solid #6E549C;border-radius:999px;padding:2px 8px;font-family:var(--mono)">ElevenLabs voice</span>
+          <span style="font-size:.72rem;background:#0f1828;color:#7ab8f5;border:.5px solid var(--shi);border-radius:999px;padding:2px 8px;font-family:var(--mono)">21 languages</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What Mira can do -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:1.2rem">
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.8rem;text-align:center">
+      <div style="font-size:1.2rem;margin-bottom:.3rem">🎯</div>
+      <div style="font-size:.8rem;font-weight:500;margin-bottom:.2rem">Corrects gently</div>
+      <div style="font-size:.72rem;color:var(--muted)">Says what you got right first</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.8rem;text-align:center">
+      <div style="font-size:1.2rem;margin-bottom:.3rem">🌿</div>
+      <div style="font-size:.8rem;font-weight:500;margin-bottom:.2rem">Speaks Sylvenka</div>
+      <div style="font-size:.72rem;color:var(--muted)">Throws in phrases naturally</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.8rem;text-align:center">
+      <div style="font-size:1.2rem;margin-bottom:.3rem">🔊</div>
+      <div style="font-size:.8rem;font-weight:500;margin-bottom:.2rem">Real voice</div>
+      <div style="font-size:.72rem;color:var(--muted)">ElevenLabs — not robotic</div>
+    </div>
+  </div>
+
+  <!-- Chat window -->
+  <div style="background:var(--card);border:2px solid #6E549C44;border-radius:14px;overflow:hidden;margin-bottom:.8rem;box-shadow:0 0 30px #6E549C11">
+    <div style="background:linear-gradient(90deg,#1e1030,#0f1828);padding:.7rem 1rem;border-bottom:1px solid #6E549C33;display:flex;align-items:center;gap:.6rem">
+      <div style="width:8px;height:8px;border-radius:50%;background:#5ecfa0;animation:pulse-dot 2s ease-in-out infinite"></div>
+      <span style="font-size:.8rem;color:#c4a0f5;font-family:var(--mono)">MIRA · ONLINE · SHILA VE-VA</span>
+    </div>
+    <div class="log" id="chatLog" role="log" aria-label="Conversation with Mira" style="min-height:340px;max-height:440px;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.8rem">
+      <div class="msg tutor"><strong>Mira:</strong> <span class="syl">Shila ve-va.</span> Speak only what you have witnessed — that is our greeting, and the whole language in three syllables. I'm Mira, your Sylvenka tutor. Write to me in English or Sylvenka — I'll help either way. What would you like to practice today?</div>
+    </div>
+    <div style="padding:.8rem;border-top:1px solid var(--line);display:flex;gap:.6rem">
+      <input type="text" id="chatInput" placeholder="Write to Mira in English or Sylvenka…" aria-label="Message to Mira" onkeydown="if(event.key==='Enter')sendChat()" style="flex:1">
+      <button class="btn" onclick="sendChat()" style="background:#6E549C;border-color:#6E549C;flex-shrink:0">Send</button>
+    </div>
+  </div>
+
+  <!-- Quick starters -->
+  <div style="margin-bottom:1rem">
+    <div style="font-size:.72rem;color:var(--muted);font-family:var(--mono);letter-spacing:.08em;margin-bottom:.4rem">TRY ASKING MIRA:</div>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap">
+      <button onclick="quickAsk('What is the difference between -va and -shi?')" style="background:var(--card);border:1px solid var(--line2);border-radius:999px;padding:.3rem .8rem;font-size:.8rem;cursor:pointer;color:var(--muted);transition:all .15s" onmouseover="this.style.borderColor='var(--va)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='var(--line2)';this.style.color='var(--muted)'">What is -va vs -shi?</button>
+      <button onclick="quickAsk('How do I say I love you in Sylvenka?')" style="background:var(--card);border:1px solid var(--line2);border-radius:999px;padding:.3rem .8rem;font-size:.8rem;cursor:pointer;color:var(--muted);transition:all .15s" onmouseover="this.style.borderColor='var(--va)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='var(--line2)';this.style.color='var(--muted)'">How do I say I love you?</button>
+      <button onclick="quickAsk('Teach me the days of the week')" style="background:var(--card);border:1px solid var(--line2);border-radius:999px;padding:.3rem .8rem;font-size:.8rem;cursor:pointer;color:var(--muted);transition:all .15s" onmouseover="this.style.borderColor='var(--va)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='var(--line2)';this.style.color='var(--muted)'">Days of the week</button>
+      <button onclick="quickAsk('Check my Sylvenka: Nasi lashusa lush-vemi!')" style="background:var(--card);border:1px solid var(--line2);border-radius:999px;padding:.3rem .8rem;font-size:.8rem;cursor:pointer;color:var(--muted);transition:all .15s" onmouseover="this.style.borderColor='var(--va)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='var(--line2)';this.style.color='var(--muted)'">Check my Sylvenka</button>
+      <button onclick="quickAsk('What is the velasin poem?')" style="background:var(--card);border:1px solid var(--line2);border-radius:999px;padding:.3rem .8rem;font-size:.8rem;cursor:pointer;color:var(--muted);transition:all .15s" onmouseover="this.style.borderColor='var(--va)';this.style.color='var(--ink)'" onmouseout="this.style.borderColor='var(--line2)';this.style.color='var(--muted)'">What is a velasin?</button>
+    </div>
+  </div>
+
+  <!-- ElevenLabs key -->
+  <div style="background:linear-gradient(90deg,#1e1030,#0f1828);border:1px solid #6E549C33;border-radius:10px;padding:.9rem 1.1rem;display:flex;gap:.7rem;align-items:center;flex-wrap:wrap">
+    <div style="font-size:1.2rem">🔊</div>
+    <div style="flex:1;min-width:200px">
+      <div style="font-size:.78rem;color:#c4a0f5;font-weight:500;margin-bottom:.3rem">Give Mira a real voice — ElevenLabs <span style="color:#ffffff44;font-weight:400">(free at elevenlabs.io)</span></div>
+      <input type="password" id="elKey" placeholder="Paste your ElevenLabs API key…" style="width:100%;font-size:.85rem;background:#0f1020;border-color:#6E549C44" oninput="saveELKey()">
+    </div>
+    <div style="min-width:160px">
+      <div style="font-size:.72rem;color:#ffffff44;margin-bottom:.3rem">Voice</div>
+      <select id="elVoice" style="font-family:var(--body);font-size:.85rem;padding:.5rem .6rem;border:1px solid #6E549C44;border-radius:6px;background:#0f1020;color:#c4a0f5;width:100%" onchange="saveELKey()">
+        <option value="EXAVITQu4vr4xnSDxMaL">Matilda (warm, clear)</option>
+        <option value="XB0fDUnXU5powFXDhCwa">Charlotte (British, warm)</option>
+        <option value="jsCqWAovK2LkecY7zXl4">Freya (confident)</option>
+        <option value="oWAxZDx7w5VEj9dCyTzz">Grace (soft, academic)</option>
+      </select>
+    </div>
+    <div id="elStatus" style="font-size:.8rem;color:#5ecfa0;white-space:nowrap;min-width:80px"></div>
+  </div>
+
+</section>
+<section class="page" id="page-community">
+  <h1>Community</h1>
+  <p class="lede">Sylvenka is a living language — it grows with every new speaker. Here is where the community meets.</p>
+  <h2>Daily word</h2>
+  <div id="dailyWord"></div>
+  <h2>Write a velasin</h2>
+  <p>A <span class="syl">velasin</span> is the classic four-line Sylvenka poem: each line uses a different evidence marker, moving from witnessed certainty down to dreamed hope. Write yours below and share it.</p>
+  <div style="display:flex;flex-direction:column;gap:.7rem;margin:1rem 0">
+    <div style="display:flex;gap:.6rem;align-items:center"><span style="width:28px;height:28px;border-radius:50%;background:var(--va);flex-shrink:0"></span><input type="text" id="v1" placeholder="Line 1 — something you witnessed (-va)"></div>
+    <div style="display:flex;gap:.6rem;align-items:center"><span style="width:28px;height:28px;border-radius:50%;background:var(--shi);flex-shrink:0"></span><input type="text" id="v2" placeholder="Line 2 — something you heard (-shi)"></div>
+    <div style="display:flex;gap:.6rem;align-items:center"><span style="width:28px;height:28px;border-radius:50%;background:var(--nu);flex-shrink:0"></span><input type="text" id="v3" placeholder="Line 3 — something you infer (-nu)"></div>
+    <div style="display:flex;gap:.6rem;align-items:center"><span style="width:28px;height:28px;border-radius:50%;background:var(--le);flex-shrink:0"></span><input type="text" id="v4" placeholder="Line 4 — something you dream (-le)"></div>
+    <button class="btn" onclick="shareVelasin()">Share your velasin</button>
+  </div>
+  <div id="velasinFeed"></div>
+  <h2>Join the speakers</h2>
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:.5rem">
+    <div style="flex:1;min-width:200px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.1rem">
+      <div style="font-weight:500;margin-bottom:.3rem">Weekly conversation</div>
+      <div style="font-size:.9rem;color:var(--muted)">Every Sunday, Sylvenka speakers meet for a one-hour guided conversation session. All levels welcome. <em>Nasi nashusa!</em></div>
+    </div>
+    <div style="flex:1;min-width:200px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.1rem">
+      <div style="font-weight:500;margin-bottom:.3rem">Name yourself</div>
+      <div style="font-size:.9rem;color:var(--muted)">Every speaker earns a Sylvenka name based on their first velasin. Yours will appear here once you write one.</div>
+      <div id="myName" style="margin-top:.5rem;font-family:Fraunces,serif;font-style:italic;font-size:1.3rem;color:var(--va)"></div>
+    </div>
+    <div style="flex:1;min-width:200px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.1rem">
+      <div style="font-weight:500;margin-bottom:.3rem">Speakers so far</div>
+      <div style="font-size:2rem;font-family:Fraunces,serif;font-weight:600;color:var(--va)" id="speakerCount">—</div>
+      <div style="font-size:.85rem;color:var(--muted)">people have written a velasin</div>
+    </div>
+  </div>
+
+  <!-- Contact form -->
+  <h2>Get in touch</h2>
+  <p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem">Questions about Sylvenka? Want to collaborate? Email us at <a href="mailto:larry@sylvenka.com">larry@sylvenka.com</a> or use the form below.</p>
+  <form action="https://formspree.io/f/mnjegqjb" method="POST" style="display:flex;flex-direction:column;gap:.7rem;max-width:480px">
+    <input type="text" name="name" placeholder="Your name" required style="font-family:var(--body);font-size:.95rem;padding:.7rem .9rem;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--ink)">
+    <input type="email" name="email" placeholder="Your email" required style="font-family:var(--body);font-size:.95rem;padding:.7rem .9rem;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--ink)">
+    <textarea name="message" placeholder="Your message" rows="4" required style="font-family:var(--body);font-size:.95rem;padding:.7rem .9rem;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--ink);resize:vertical"></textarea>
+    <button type="submit" class="btn">Send message</button>
+  </form>
+</section>
+<section class="page" id="page-converse">
+  <h1>Talk to speakers</h1>
+  <p class="lede">Practice Sylvenka with real people. Join a room, post a message, or find a conversation partner.</p>
+
+  <!-- identity bar -->
+  <div id="identityBar" style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem;margin-bottom:1.4rem;display:flex;gap:.8rem;align-items:center;flex-wrap:wrap">
+    <div style="flex:1;min-width:180px">
+      <div style="font-size:.8rem;color:var(--muted);margin-bottom:.3rem">Your speaker name</div>
+      <input type="text" id="speakerName" placeholder="e.g. soren-tovi or your own" style="max-width:240px" maxlength="30">
+    </div>
+    <div style="flex:1;min-width:160px">
+      <div style="font-size:.8rem;color:var(--muted);margin-bottom:.3rem">Level</div>
+      <select id="speakerLevel" style="font-family:var(--body);font-size:.95rem;padding:.65rem .8rem;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--ink);width:100%">
+        <option value="melo">Melo — just beginning</option>
+        <option value="nashuen">Nashuen — traveling</option>
+        <option value="veloen">Veloen — witness</option>
+        <option value="loven">Loven — teacher</option>
+      </select>
+    </div>
+    <button class="btn" onclick="saveIdentity()">Save</button>
+    <span id="identitySaved" style="font-size:.85rem;color:var(--va);display:none">✓ Saved</span>
+  </div>
+
+  <!-- tabs -->
+  <div style="display:flex;gap:.3rem;border-bottom:1px solid var(--line);margin-bottom:1.4rem">
+    <button class="ctab active" data-ctab="rooms" onclick="switchCTab(this,'rooms')">Conversation rooms</button>
+    <button class="ctab" data-ctab="board" onclick="switchCTab(this,'board')">Message board</button>
+    <button class="ctab" data-ctab="partners" onclick="switchCTab(this,'partners')">Find a partner</button>
+    <button class="ctab" data-ctab="phrases2" onclick="switchCTab(this,'phrases2')">Quick phrases</button>
+  </div>
+
+  <!-- ROOMS -->
+  <div id="ctab-rooms">
+    <p style="font-size:.93rem;color:var(--muted);margin-bottom:1rem">Each room has a theme. Pick one, read what others have written, add your own line. All posts are in Sylvenka — try to use the right evidence marker for your statement.</p>
+    <div id="roomList" style="display:flex;flex-direction:column;gap:.7rem"></div>
+    <div id="roomChat" style="display:none">
+      <button class="btn ghost" style="margin-bottom:1rem" onclick="closeRoom()">← All rooms</button>
+      <div id="roomTitle" style="font-family:Fraunces,serif;font-size:1.3rem;font-weight:500;margin-bottom:.3rem"></div>
+      <div id="roomTheme" style="font-size:.9rem;color:var(--muted);margin-bottom:1rem"></div>
+      <div id="roomLog" style="background:var(--card);border:1px solid var(--line);border-radius:10px;min-height:320px;max-height:420px;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.7rem;margin-bottom:.8rem"></div>
+      <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:.4rem" id="quickInsert"></div>
+      <div style="display:flex;gap:.6rem">
+        <input type="text" id="roomInput" placeholder="Write in Sylvenka…" onkeydown="if(event.key==='Enter')postToRoom()" style="flex:1">
+        <button class="btn" onclick="postToRoom()">Post</button>
+      </div>
+      <div style="font-size:.8rem;color:var(--muted);margin-top:.5rem">Posts are saved locally and shared with others who open this page. Be kind. <span class="syl">Shila ve-va.</span></div>
+    </div>
+  </div>
+
+  <!-- BOARD -->
+  <div id="ctab-board" style="display:none">
+    <p style="font-size:.93rem;color:var(--muted);margin-bottom:1rem">Post a question, share a sentence you're proud of, ask for a translation, or just say hello in Sylvenka.</p>
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.1rem;margin-bottom:1rem">
+      <textarea id="boardPost" rows="3" placeholder="Write your message… (Sylvenka, English, or mix)" style="width:100%;margin-bottom:.6rem"></textarea>
+      <div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+        <select id="boardTag" style="font-family:var(--body);font-size:.9rem;padding:.5rem .7rem;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--ink)">
+          <option value="question">❓ Question</option>
+          <option value="sentence">✍️ My sentence</option>
+          <option value="translation">🔄 Translation help</option>
+          <option value="hello">👋 Hello</option>
+          <option value="poem">🌿 Poem</option>
+        </select>
+        <button class="btn" onclick="postBoard()">Post to board</button>
+      </div>
+    </div>
+    <div id="boardFeed" style="display:flex;flex-direction:column;gap:.7rem"></div>
+  </div>
+
+  <!-- PARTNERS -->
+  <div id="ctab-partners" style="display:none">
+    <p style="font-size:.93rem;color:var(--muted);margin-bottom:1rem">Register your availability and find someone at the same level to practice with. Messages go through the board.</p>
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.1rem;margin-bottom:1.2rem">
+      <div style="font-weight:500;margin-bottom:.7rem">Make yourself available</div>
+      <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:.8rem">
+        <div style="flex:1;min-width:160px">
+          <div style="font-size:.8rem;color:var(--muted);margin-bottom:.3rem">Time zone / region</div>
+          <input type="text" id="partnerTZ" placeholder="e.g. UTC-5, Europe, Asia" style="width:100%">
+        </div>
+        <div style="flex:1;min-width:160px">
+          <div style="font-size:.8rem;color:var(--muted);margin-bottom:.3rem">Preferred session</div>
+          <select id="partnerTime" style="font-family:var(--body);font-size:.9rem;padding:.65rem .8rem;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--ink);width:100%">
+            <option>Morning</option><option>Afternoon</option><option>Evening</option><option>Anytime</option>
+          </select>
+        </div>
+        <div style="flex:1;min-width:200px">
+          <div style="font-size:.8rem;color:var(--muted);margin-bottom:.3rem">What you want to practice</div>
+          <input type="text" id="partnerGoal" placeholder="e.g. evidence markers, velasin, free talk" style="width:100%">
+        </div>
+      </div>
+      <button class="btn" onclick="registerPartner()">Add my listing</button>
+    </div>
+    <div id="partnerFeed" style="display:flex;flex-direction:column;gap:.7rem"></div>
+  </div>
+
+  <!-- QUICK PHRASES panel -->
+  <div id="ctab-phrases2" style="display:none">
+    <p style="font-size:.93rem;color:var(--muted);margin-bottom:1rem">Tap any phrase to copy it ready to paste into a room or board message.</p>
+    <div id="qphrases"></div>
+  </div>
+</section>
+</main>
+</div>
+<script>
+// ── Navigation ──────────────────────────────────────────────
+const pages=['home','sounds','grammar','lessons','dictionary','phrases','speak','converse','community'];
+function go(id) {
+  // Hide all pages
+  document.querySelectorAll('section.page').forEach(function(p) {
+    p.classList.remove('show');
+  });
+  // Show target
+  var targetPage = document.getElementById('page-' + id);
+  if (targetPage) { targetPage.classList.add('show'); }
+  // Update nav buttons
+  document.querySelectorAll('button').forEach(function(btn) {
+    btn.classList.remove('active');
+  });
+  document.querySelectorAll('.nav-btn-' + id).forEach(function(btn) {
+    btn.classList.add('active');
+  });
+  window.scrollTo(0, 0);
+  if(id==='dictionary')renderDict();
+  if(id==='lessons')renderLessons();
+  if(id==='phrases')renderPhrases();
+  if(id==='community')renderCommunity();
+  if(id==='converse'){initConverse();}
+}
+window.go = go;
+document.querySelectorAll('nav.spine button').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
+// Mobile nav
+const mn=document.getElementById('mobileNav');
+['Home','Sounds','Grammar','Lessons','Dictionary','Phrases','Tutor','Converse','Community'].forEach((label,i)=>{
+  const b=document.createElement('button');
+  b.textContent=label; b.dataset.page=pages[i];
+  b.setAttribute('role','tab');
+  if(i===0)b.classList.add('active');
+  b.addEventListener('click',()=>go(pages[i]));
+  mn.appendChild(b);
+});
+
+// ── Audio / TTS ──────────────────────────────────────────────
+// ElevenLabs config — set your API key and voice ID here
+const EL_CONFIG={
+  apiKey: '',          // paste your ElevenLabs API key here
+  voiceId: 'EXAVITQu4vr4xnSDxMaL', // "Matilda" — warm, clear, slightly academic
+  model: 'eleven_multilingual_v2',
+};
+
+// Mira's voice — uses ElevenLabs if key present, falls back to Web Speech
+async function miraSpeaks(text){
+  if(EL_CONFIG.apiKey){
+    try{
+      const res=await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${EL_CONFIG.voiceId}`,{
+        method:'POST',
+        headers:{'xi-api-key':EL_CONFIG.apiKey,'Content-Type':'application/json'},
+        body:JSON.stringify({
+          text,
+          model_id:EL_CONFIG.model,
+          voice_settings:{stability:0.65,similarity_boost:0.80,style:0.35,use_speaker_boost:true}
+        })
+      });
+      if(res.ok){
+        const blob=await res.blob();
+        const url=URL.createObjectURL(blob);
+        const audio=new Audio(url);
+        audio.play();
+        audio.onended=()=>URL.revokeObjectURL(url);
+        return;
+      }
+    }catch(e){}
+  }
+  // Fallback — Web Speech API
+  speak(text);
+}
+
+// General word/phrase audio — Web Speech (for dictionary play buttons)
+let voiceReady=false, bestVoice=null;
+function pickVoice(){
+  const vs=speechSynthesis.getVoices();
+  const prefer=['es-','it-','pt-','fr-'];
+  for(const p of prefer){const v=vs.find(v=>v.lang.startsWith(p));if(v){bestVoice=v;break;}}
+  if(!bestVoice)bestVoice=vs.find(v=>v.lang.startsWith('en-'))||vs[0]||null;
+  voiceReady=true;
+}
+if(typeof speechSynthesis!=='undefined'){
+  speechSynthesis.onvoiceschanged=pickVoice;
+  pickVoice();
+}
+function speak(text,slow=false){
+  if(typeof speechSynthesis==='undefined')return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  if(bestVoice)u.voice=bestVoice;
+  u.rate=slow?0.52:0.72;
+  u.pitch=1.05;
+  speechSynthesis.speak(u);
+}
+
+// ── Dictionary data ──────────────────────────────────────────
+const DICT=[
+  // Pronouns
+  {s:'na',e:'I, me',c:'pronoun'},{s:'si',e:'you',c:'pronoun'},{s:'tho',e:'they, that one',c:'pronoun'},
+  {s:'nasi',e:'we (you and I)',c:'pronoun'},{s:'natho',e:'we (not you)',c:'pronoun'},
+  {s:'sisi',e:'you all',c:'pronoun'},{s:'thotho',e:'they (many)',c:'pronoun'},
+  // Nature
+  {s:'sela',e:'water',c:'nature'},{s:'miren',e:'sky',c:'nature'},{s:'lama',e:'tree',c:'nature'},
+  {s:'soren',e:'light',c:'nature'},{s:'nolu',e:'night',c:'nature'},{s:'venoru',e:'wind',c:'nature'},
+  {s:'theru',e:'earth, ground',c:'nature'},{s:'mishi',e:'bird',c:'nature'},{s:'rema',e:'stone',c:'nature'},
+  {s:'miren-sela',e:'rain (sky-water)',c:'nature'},{s:'sola',e:'sun',c:'nature'},{s:'luna',e:'moon',c:'nature'},
+  {s:'selaka',e:'lake, well',c:'nature'},{s:'lamaka',e:'forest',c:'nature'},{s:'remaka',e:'mountain',c:'nature'},
+  {s:'venuka',e:'coast, shore',c:'nature'},{s:'thela',e:'fire',c:'nature'},{s:'mela',e:'snow',c:'nature'},
+  {s:'nasha',e:'river',c:'nature'},{s:'vitho',e:'cloud',c:'nature'},{s:'soru',e:'seed',c:'nature'},
+  {s:'tisha',e:'flower',c:'nature'},{s:'rovi',e:'root',c:'nature'},{s:'shemu',e:'leaf',c:'nature'},
+  // People & body
+  {s:'tovi',e:'friend',c:'people'},{s:'vesi',e:'person, who',c:'people'},{s:'loven',e:'teacher',c:'people'},
+  {s:'nashuen',e:'traveler',c:'people'},{s:'veloen',e:'witness',c:'people'},{s:'shiloen',e:'speaker',c:'people'},
+  {s:'melo',e:'child',c:'people'},{s:'rano',e:'elder',c:'people'},{s:'nami',e:'mother',c:'people'},
+  {s:'tavi',e:'father',c:'people'},{s:'sorenka',e:'family (light-place)',c:'people'},
+  {s:'sili',e:'hand',c:'body'},{s:'velo',e:'eye (also: to see)',c:'body'},{s:'shilu',e:'mouth',c:'body'},
+  {s:'nora',e:'heart',c:'body'},{s:'thoru',e:'foot',c:'body'},{s:'mina',e:'head',c:'body'},
+  // Verbs
+  {s:'velo',e:'to see',c:'verb'},{s:'nashu',e:'to go, travel',c:'verb'},{s:'shila',e:'to speak',c:'verb'},{s:'lashu',e:'to meet, to gather',c:'verb'},
+  {s:'lovu',e:'to learn, teach',c:'verb'},{s:'soru',e:'to plant, grow',c:'verb'},{s:'ranu',e:'to open',c:'verb'},
+  {s:'eso',e:'to be (past/future)',c:'verb'},{s:'nori',e:'to feel',c:'verb'},{s:'miru',e:'to remember',c:'verb'},
+  {s:'venoru',e:'to blow (wind)',c:'verb'},{s:'tela',e:'to give',c:'verb'},{s:'rovi',e:'to find',c:'verb'},
+  {s:'shoru',e:'to rest',c:'verb'},{s:'thalu',e:'to eat',c:'verb'},{s:'somi',e:'to sing',c:'verb'},
+  {s:'melo',e:'to dream',c:'verb'},{s:'lano',e:'to arrive',c:'verb'},{s:'vasa',e:'to return home',c:'verb'},
+  {s:'thenu',e:'to want',c:'verb'},{s:'remi',e:'to build',c:'verb'},{s:'selu',e:'to wash',c:'verb'},
+  {s:'nola',e:'to sleep',c:'verb'},{s:'tovi',e:'to befriend',c:'verb'},{s:'shomi',e:'to laugh',c:'verb'},
+  {s:'velomi',e:'to show',c:'verb'},{s:'noreva',e:'to greet (lit: feel-witness)',c:'verb'},
+  // Adjectives
+  {s:'ovan',e:'big',c:'adjective'},{s:'ithi',e:'small',c:'adjective'},{s:'soren',e:'bright, clear',c:'adjective'},
+  {s:'nolu',e:'dark',c:'adjective'},{s:'vela',e:'far',c:'adjective'},{s:'nasha',e:'near',c:'adjective'},
+  {s:'mela',e:'cold',c:'adjective'},{s:'thela',e:'warm, hot',c:'adjective'},{s:'remi',e:'strong',c:'adjective'},
+  {s:'ve-va',e:'only what you witnessed (salutation particle)',c:'expression'},{s:'shima',e:'old, ancient',c:'adjective'},{s:'lovi',e:'new',c:'adjective'},
+  {s:'velomi',e:'beautiful (well-seen)',c:'adjective'},{s:'noremi',e:'kind (strong-feeling)',c:'adjective'},
+  {s:'eshomi',e:'fast',c:'adjective'},{s:'solami',e:'slow',c:'adjective'},{s:'thoru',e:'deep',c:'adjective'},
+  {s:'miru',e:'clear, transparent',c:'adjective'},
+  // Places & objects
+  {s:'vasa',e:'home',c:'place'},{s:'thisaka',e:'library',c:'place'},{s:'selaka',e:'lake',c:'place'},
+  {s:'thisha',e:'book (light-thing)',c:'object'},{s:'ranulu',e:'door (open-tool)',c:'object'},
+  {s:'velolu',e:'window (see-tool)',c:'object'},{s:'sorenlu',e:'lamp (light-tool)',c:'object'},
+  {s:'shilalu',e:'instrument (speak-tool)',c:'object'},{s:'sorulu',e:'food (grow-tool)',c:'object'},
+  {s:'nashulu',e:'vessel, boat (go-tool)',c:'object'},{s:'thisalu',e:'pen (mark-tool)',c:'object'},
+  // Time
+  {s:'vemi',e:'when, time',c:'time'},{s:'mivemi',e:'now',c:'time'},{s:'revemi',e:'before, past',c:'time'},
+  {s:'mimivemi',e:'soon',c:'time'},{s:'lushlush-vemi',e:'age, era',c:'time'},
+  {s:'nolu-vemi',e:'night-time',c:'time'},{s:'sola-vemi',e:'daytime',c:'time'},
+  // Particles & grammar words
+  {s:'ve',e:'question particle',c:'particle'},{s:'so',e:'and',c:'particle'},{s:'vo',e:'or',c:'particle'},
+  {s:'tha',e:'but',c:'particle'},{s:'ne',e:'at, in (postposition)',c:'particle'},
+  {s:'lu',e:'with (postposition)',c:'particle'},{s:'sa',e:'toward (postposition)',c:'particle'},
+  {s:'ro',e:'from (postposition)',c:'particle'},{s:'vaso',e:'yes',c:'particle'},{s:'othath',e:'no',c:'particle'},
+  // Evidence (shown as suffix reference)
+  {s:'-va',e:'(I witnessed it)',c:'evidence'},{s:'-shi',e:'(I heard/was told)',c:'evidence'},
+  {s:'-nu',e:'(I infer/deduce)',c:'evidence'},{s:'-le',e:'(I hope/dream)',c:'evidence'},
+  {s:'-re-',e:'(past tense infix)',c:'evidence'},{s:'-mi-',e:'(future tense infix)',c:'evidence'},
+  {s:'-sa',e:'(imperative suffix)',c:'evidence'},
+  // Expressions
+  {s:'soren-tovi',e:'beloved (light-friend)',c:'expression'},{s:'nolu-mishi',e:'owl (night-bird)',c:'expression'},
+  {s:'shilamo',e:'language (speak-idea)',c:'expression'},{s:'velomo',e:'vision (see-idea)',c:'expression'},
+  {s:'norimo',e:'emotion (feel-idea)',c:'expression'},{s:'velo-thi',e:'welcome (little-see)',c:'expression'},
+  {s:'nasi nashusa',e:'let us go (together)',c:'expression'},
+  {s:'shila ve-va',e:'speak only what you have witnessed (the Sylvenka salutation)',c:'expression'},{s:'vaso soren',e:'bright yes (enthusiastic agreement)',c:'expression'},
+];
+
+function renderDict(){
+  filterDict();
+}
+function filterDict(){
+  const q=document.getElementById('dictSearch').value.toLowerCase();
+  const rows=DICT.filter(d=>!q||d.s.includes(q)||d.e.toLowerCase().includes(q)||d.c.includes(q));
+  const tbody=document.getElementById('dictBody');
+  tbody.innerHTML=rows.map(d=>`<tr><td><span class="syl">${d.s}</span></td><td>${d.e}</td><td><span class="tag">${d.c}</span></td><td><button class="play" onclick="speak('${d.s.replace(/'/g,"\\'")}')">&#9658;</button></td></tr>`).join('');
+  document.getElementById('dictCount').textContent=`${rows.length} of ${DICT.length}`;
+}
+
+// ── Phrasebook ───────────────────────────────────────────────
+const PHRASES=[
+  {title:'Greetings',items:[
+    {s:'Velo-thi!',e:'Welcome! (little-see)',ev:'va'},{s:'Soren vemi!',e:'Good day! (bright time)',ev:'plain'},
+    {s:'Vesi si?',e:'How are you? / Who are you (to yourself)?',ev:'plain'},
+    {s:'Na soren noreva.',e:'I feel well. (I witness my own state)',ev:'va'},
+    {s:'Shila ve-va.',e:'Speak only what you have witnessed. (the Sylvenka salutation)',ev:'plain'},
+  ]},
+  {title:'Introducing yourself',items:[
+    {s:'Na [name] eso.',e:'I am [name].',ev:'va'},
+    {s:'Na Sylvenka lovu.',e:'I am learning Sylvenka.',ev:'va'},
+    {s:'Na lovi shiloen.',e:'I am a new speaker.',ev:'va'},
+    {s:'Shilamo Sylvenka velomi.',e:'The Sylvenka language is beautiful.',ev:'nu'},
+  ]},
+  {title:'In a conversation',items:[
+    {s:'Ve si shilareva?',e:'Did you say that? (asking for confirmation)',ev:'shi'},
+    {s:'Na oshiloreth.',e:'I did not hear / I don\'t understand.',ev:'va'},
+    {s:'Shila solami, tovi.',e:'Speak slowly, friend.',ev:'plain'},
+    {s:'Vesa si shilova?',e:'How do you say that?',ev:'plain'},
+    {s:'Na miru othath.',e:'I don\'t remember.',ev:'va'},
+  ]},
+  {title:'Expressing certainty and doubt',items:[
+    {s:'Na veloreVA.',e:'I saw it myself — I am certain.',ev:'va'},
+    {s:'Tho nashureSHI.',e:'They went, or so I was told.',ev:'shi'},
+    {s:'Miren-sela solomINU.',e:'Rain will come — the clouds suggest it.',ev:'nu'},
+    {s:'Nasi velomILE.',e:'We will see it — I dream we will.',ev:'le'},
+  ]},
+  {title:'Around nature',items:[
+    {s:'Sola soren velova.',e:'The sun shines brightly (I see it).',ev:'va'},
+    {s:'Nolu lama lamaka ne.',e:'The dark trees are in the forest.',ev:'va'},
+    {s:'Miren-sela solominu.',e:'Rain is coming (the sky suggests).',ev:'nu'},
+    {s:'Selaka miru soren.',e:'The lake is clear and bright.',ev:'va'},
+  ]},
+  {title:'Parting',items:[
+    {s:'Nasi velomile.',e:'Until we see each other again (I dream of it).',ev:'le'},
+    {s:'Soren vemi si.',e:'May your time be bright.',ev:'le'},
+    {s:'Nashusa soren.',e:'Go in brightness. (farewell)',ev:'plain'},
+    {s:'Vaso soren!',e:'Bright yes! (enthusiastic goodbye)',ev:'plain'},
+  ]},
+];
+
+function renderPhrases(){
+  const el=document.getElementById('phrases');
+  el.innerHTML=PHRASES.map(g=>`
+    <h2>${g.title}</h2>
+    ${g.items.map(p=>`
+      <div class="ex ${p.ev}"><span class="stroke"></span>
+        <div class="body"><span class="syl">${p.s}</span><div class="tr">${p.e}</div></div>
+        <button class="play" onclick="speak('${p.s.replace(/[^a-zA-Z0-9\s]/g,' ').replace(/'/g,"\\'")}')" aria-label="Hear phrase">&#9658;</button>
+        <button class="play slow" onclick="speak('${p.s.replace(/[^a-zA-Z0-9\s]/g,' ').replace(/'/g,"\\'")}',true)">slow</button>
+      </div>`).join('')}
+  `).join('');
+}
+
+// ── Lessons ──────────────────────────────────────────────────
+const LESSONS=[
+  {title:'Lesson 1: The four truths',goal:'Understand the evidence markers and use them in simple sentences.',content:`
+    <h2>Lesson 1: The four truths</h2>
+    <p>Sylvenka has one rule that rules them all: you must always say <em>how you know</em>. There are four ways to know, and they each get their own verb ending.</p>
+    <table><thead><tr><th>Ending</th><th>Meaning</th><th>When</th></tr></thead><tbody>
+      <tr><td class="syl" style="color:var(--va)">-va</td><td>I witnessed it</td><td>You were there. You saw, heard, felt, smelled it yourself.</td></tr>
+      <tr><td class="syl" style="color:var(--shi)">-shi</td><td>I was told</td><td>Someone told you. You read it. Second-hand.</td></tr>
+      <tr><td class="syl" style="color:var(--nu)">-nu</td><td>I infer it</td><td>The evidence points to it. The puddle means rain. The smoke means fire.</td></tr>
+      <tr><td class="syl" style="color:var(--le)">-le</td><td>I dream / hope</td><td>You imagine it. You wish it. Fiction, prophecy, longing.</td></tr>
+    </tbody></table>
+    <p>Take the root <span class="syl">solo</span> (rain) and add the ending:</p>
+    <div class="ex va"><span class="stroke"></span><div class="body"><span class="syl">Solova.</span><div class="tr">It rained. (I was there, I got soaked.)</div></div><button class="play" onclick="speak('solova')">&#9658;</button></div>
+    <div class="ex shi"><span class="stroke"></span><div class="body"><span class="syl">Soloshi.</span><div class="tr">It rained. (Someone told me.)</div></div><button class="play" onclick="speak('soloshi')">&#9658;</button></div>
+    <div class="ex nu"><span class="stroke"></span><div class="body"><span class="syl">Solonu.</span><div class="tr">It rained. (The street is wet — I deduce.)</div></div><button class="play" onclick="speak('solonu')">&#9658;</button></div>
+    <div class="ex le"><span class="stroke"></span><div class="body"><span class="syl">Solole.</span><div class="tr">It rained. (I dream it did — we needed it.)</div></div><button class="play" onclick="speak('solole')">&#9658;</button></div>
+    <div class="quiz" id="q1"><div class="q">Quick check: Your friend texted you "it's raining here." You tell someone else. Which ending?</div>
+      <div class="opts"><label><input type="radio" name="q1" value="a"> <span class="syl">-va</span> — I witnessed it</label><label><input type="radio" name="q1" value="b"> <span class="syl">-shi</span> — I was told</label><label><input type="radio" name="q1" value="c"> <span class="syl">-nu</span> — I infer it</label><label><input type="radio" name="q1" value="d"> <span class="syl">-le</span> — I dream it</label></div>
+      <button class="btn ghost" onclick="checkQuiz('q1','b','Correct! You heard it second-hand — that is -shi.','Try again. You didn&apos;t see the rain yourself, and you&apos;re not deducing — someone told you.')">Check</button>
+      <div class="fb" id="q1-fb"></div>
+    </div>`,
+  },
+  {title:'Lesson 2: Your first words',goal:'Learn 20 core words and combine them into phrases.',content:`
+    <h2>Lesson 2: Your first words</h2>
+    <p>Sylvenka words are built from soft sounds that flow into each other. Listen to each word, then say it aloud — match the rhythm more than the exact sound.</p>
+    <table><thead><tr><th>Word</th><th>Meaning</th><th>Hear it</th></tr></thead><tbody>
+      ${[['sela','water'],['lama','tree'],['soren','light'],['tovi','friend'],['vasa','home'],['nashu','to go'],['velo','to see'],['shila','to speak'],['ovan','big'],['ithi','small'],['sola','sun'],['luna','moon'],['mishi','bird'],['thela','fire, warm'],['mela','snow, cold'],['nolu','night, dark'],['lovu','to learn'],['nori','to feel'],['thalu','to eat'],['somi','to sing']].map(([s,e])=>`<tr><td><span class="syl">${s}</span></td><td>${e}</td><td><button class="play" onclick="speak('${s}')">&#9658;</button></td></tr>`).join('')}
+    </tbody></table>
+    <p>Now try combining. Remember: Subject–Object–Verb, and the verb needs an evidence marker.</p>
+    <div class="ex va"><span class="stroke"></span><div class="body"><span class="syl">Tovi sela velova.</span><div class="tr">My friend saw the water. (I witnessed this.)</div></div><button class="play" onclick="speak('tovi sela velova')">&#9658;</button></div>
+    <div class="ex le"><span class="stroke"></span><div class="body"><span class="syl">Na sola velomile.</span><div class="tr">I will see the sun. (I hope I will.)</div></div><button class="play" onclick="speak('na sola velomile')">&#9658;</button></div>
+  `},
+  {title:'Lesson 3: Pronouns and the inclusive "we"',goal:'Use all seven pronouns correctly, especially nasi vs natho.',content:`
+    <h2>Lesson 3: Pronouns and the inclusive "we"</h2>
+    <p>Sylvenka has seven pronouns. Six are straightforward. The seventh — the choice between <span class="syl">nasi</span> and <span class="syl">natho</span> — is where social meaning lives.</p>
+    <div class="ex va"><span class="stroke"></span><div class="body"><span class="syl">Nasi nashusa!</span><div class="tr">Let's go — you and I together. (warm, inclusive)</div></div><button class="play" onclick="speak('nasi nashusa')">&#9658;</button></div>
+    <div class="ex shi"><span class="stroke"></span><div class="body"><span class="syl">Natho selaka ne nashureva.</span><div class="tr">We went to the lake — not you, just us. (neutral, or coolly exclusive)</div></div><button class="play" onclick="speak('natho selaka ne nashureva')">&#9658;</button></div>
+    <p>Arguments in Sylvenka often begin with someone choosing the wrong "we." Using <span class="syl">natho</span> when you meant <span class="syl">nasi</span> is the classic Sylvenka blunder.</p>
+    <div class="quiz" id="q3"><div class="q">You're inviting your listener to join you at the lake. You say: <span class="syl">___ selaka ne nashusa!</span></div>
+      <div class="opts"><label><input type="radio" name="q3" value="a">nasi</label><label><input type="radio" name="q3" value="b">natho</label><label><input type="radio" name="q3" value="c">na</label></div>
+      <button class="btn ghost" onclick="checkQuiz('q3','a','Correct! nasi includes your listener — you are inviting them.','Try again. Think about whether your listener is coming with you.')">Check</button>
+      <div class="fb" id="q3-fb"></div>
+    </div>
+  `},
+  {title:'Lesson 4: Tense — past, present, future',goal:'Build complete verb forms with tense and evidence.',content:`
+    <h2>Lesson 4: Tense</h2>
+    <p>Tense slots in between the verb root and the evidence marker: <strong>root + tense + evidence</strong>. Omit tense for the present.</p>
+    <table><thead><tr><th>Infix</th><th>Tense</th></tr></thead><tbody>
+      <tr><td><span class="syl">-re-</span></td><td>past</td></tr><tr><td>(nothing)</td><td>present</td></tr><tr><td><span class="syl">-mi-</span></td><td>future</td></tr>
+    </tbody></table>
+    ${[['veloreva','see-PAST-WITNESSED','I saw it.','va'],['velova','see-WITNESSED','I see it.','va'],['velomile','see-FUTURE-DREAMED','I will see it (I hope).','le'],['nashurenu','go-PAST-INFERRED','They went (the footprints show it).','nu'],['solominu','rain-FUTURE-INFERRED','It will rain (the clouds say).','nu']].map(([s,g,e,ev])=>`<div class="ex ${ev}"><span class="stroke"></span><div class="body"><span class="syl">${s}</span><span class="gloss"> ${g}</span><div class="tr">${e}</div></div><button class="play" onclick="speak('${s}')">&#9658;</button></div>`).join('')}
+    <p>Notice: the future almost always pairs with <span class="syl">-nu</span> (inferred) or <span class="syl">-le</span> (dreamed). You cannot witness what hasn't happened. The form <span class="syl">velomiva</span> — "I will see it, and I witnessed it" — is the grammar of prophecy.</p>
+  `},
+  {title:'Lesson 5: Asking questions',goal:'Form yes/no questions and use the six question words.',content:`
+    <h2>Lesson 5: Questions</h2>
+    <p>Put <span class="syl">ve</span> at the start of any sentence to make it a yes/no question. Answer with <span class="syl">vaso</span> (yes) or <span class="syl">othath</span> (no).</p>
+    <div class="ex plain"><span class="stroke"></span><div class="body"><span class="syl">Ve si nashureva?</span><div class="tr">Did you go? (asking if they witnessed their own going)</div></div><button class="play" onclick="speak('ve si nashureva')">&#9658;</button></div>
+    <div class="ex plain"><span class="stroke"></span><div class="body"><span class="syl">Ve tho shiloshi?</span><div class="tr">Did they speak, supposedly?</div></div><button class="play" onclick="speak('ve tho shiloshi')">&#9658;</button></div>
+    <p>The six question words are all built from <span class="syl">ve-</span>:</p>
+    ${[['vesi','who'],['veno','what'],['veka','where'],['vemi','when'],['venu','why'],['vesa','how']].map(([s,e])=>`<div class="ex plain"><span class="stroke"></span><div class="body"><span class="syl">${s}</span><div class="tr">${e}</div></div><button class="play" onclick="speak('${s}')">&#9658;</button></div>`).join('')}
+    <div class="ex va"><span class="stroke"></span><div class="body"><span class="syl">Veka si nashureva?</span><div class="tr">Where did you go?</div></div><button class="play" onclick="speak('veka si nashureva')">&#9658;</button></div>
+    <div class="ex nu"><span class="stroke"></span><div class="body"><span class="syl">Venu tho shilonu?</span><div class="tr">Why did they speak (you infer)?</div></div><button class="play" onclick="speak('venu tho shilonu')">&#9658;</button></div>
+  `},
+  {title:'Lesson 6: Building words with suffixes',goal:'Use the five productive suffixes to build vocabulary from roots.',content:`
+    <h2>Lesson 6: Building words</h2>
+    <p>Five suffixes generate most of the Sylvenka vocabulary from a small set of roots.</p>
+    <table><thead><tr><th>Suffix</th><th>Makes</th><th>Example</th></tr></thead><tbody>
+      <tr><td><span class="syl">-ka</span></td><td>place of</td><td><span class="syl">sela→selaka</span> lake <button class="play" onclick="speak('selaka')">&#9658;</button></td></tr>
+      <tr><td><span class="syl">-en</span></td><td>doer</td><td><span class="syl">nashu→nashuen</span> traveler <button class="play" onclick="speak('nashuen')">&#9658;</button></td></tr>
+      <tr><td><span class="syl">-mo</span></td><td>abstract</td><td><span class="syl">velo→velomo</span> vision <button class="play" onclick="speak('velomo')">&#9658;</button></td></tr>
+      <tr><td><span class="syl">-lu</span></td><td>tool for</td><td><span class="syl">ranu→ranulu</span> door <button class="play" onclick="speak('ranulu')">&#9658;</button></td></tr>
+      <tr><td><span class="syl">-thi</span></td><td>small, dear</td><td><span class="syl">tovi→tovithi</span> dear friend <button class="play" onclick="speak('tovithi')">&#9658;</button></td></tr>
+    </tbody></table>
+    <p>Compounds read right-to-left — the second word is the head:</p>
+    ${[['miren-sela','sky-water','rain'],['soren-tovi','light-friend','beloved'],['nolu-mishi','night-bird','owl'],['sola-vemi','sun-time','daytime']].map(([s,lit,e])=>`<div class="ex plain"><span class="stroke"></span><div class="body"><span class="syl">${s}</span><span class="gloss"> ${lit}</span><div class="tr">"${e}"</div></div><button class="play" onclick="speak('${s}')">&#9658;</button></div>`).join('')}
+  `},
+  {title:'Lesson 7: Negation and commands',goal:'Negate verbs with the o-...-th circumfix and give commands.',content:`
+    <h2>Lesson 7: Negation and commands</h2>
+    <p><strong>Negation</strong> wraps the entire verb in <span class="syl">o-…-th</span> — literally a fence around the action:</p>
+    ${[['velova','I see it','ovelovath','I do not see it'],['nashureva','I went','onashureVAth','I did not go'],['solomile','it will rain (hoped)','osolomiLEth','it will not rain (I dread)']].map(([pos,pe,neg,ne])=>`<div style="display:flex;gap:1rem;flex-wrap:wrap;margin:.6rem 0"><div class="ex va" style="flex:1;min-width:180px"><span class="stroke"></span><div class="body"><span class="syl">${pos}</span><div class="tr">${pe}</div></div><button class="play" onclick="speak('${pos}')">&#9658;</button></div><div class="ex plain" style="flex:1;min-width:180px"><span class="stroke"></span><div class="body"><span class="syl">${neg}</span><div class="tr">${ne}</div></div><button class="play" onclick="speak('${neg}')">&#9658;</button></div></div>`).join('')}
+    <p><strong>Commands</strong> take bare root + <span class="syl">-sa</span>. No evidence marker — you are creating the action, not reporting it.</p>
+    ${[['Nashusa!','Go!'],['Velosa!','Look!'],['Shilasa!','Speak!'],['Shila ve-va.','Speak only what you have witnessed. (the Sylvenka salutation)']].map(([s,e])=>`<div class="ex plain"><span class="stroke"></span><div class="body"><span class="syl">${s}</span><div class="tr">${e}</div></div><button class="play" onclick="speak('${s}')">&#9658;</button></div>`).join('')}
+  `},
+  {title:'Lesson 8: The velasin — writing your first poem',goal:'Compose a four-line velasin using all four evidence markers.',content:`
+    <h2>Lesson 8: The velasin</h2>
+    <p>You now have all the tools. The <span class="syl">velasin</span> ("small seeing") is the traditional Sylvenka four-line poem. Each line uses a different evidence marker, and they must flow in order: witnessed → hearsay → inferred → dreamed. The poem traces the full range of knowing.</p>
+    <p>Here is the poem from the founding of Sylvenka tradition:</p>
+    ${[['Soren lamaka veloreva.','I saw light in the forest (with my own eyes).','va'],['Tovi selaka nashureshi.','My friend went to the lake (or so they say).','shi'],['Miren-sela solomiru.','Rain is coming (the clouds infer).','nu'],['Nasi soren-tovi velomile.','We, beloved, will see the light together (I dream).','le']].map(([s,e,ev])=>`<div class="ex ${ev}"><span class="stroke"></span><div class="body"><span class="syl">${s}</span><div class="tr">${e}</div></div><button class="play" onclick="speak('${s}')">&#9658;</button></div>`).join('')}
+    <p>Now write yours. Go to the <strong>Community</strong> page and compose your own velasin — each line in a different colour, one for each truth. Your poem becomes your entry into the community of Sylvenka speakers.</p>
+    <p><button class="btn" onclick="go('community')">Write your velasin →</button></p>
+  `},
+];
+
+function renderLessons(){
+  const list=document.getElementById('lessonList');
+  if(list.children.length>0)return;
+  list.innerHTML=LESSONS.map((l,i)=>`
+    <div style="display:flex;gap:1rem;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1.1rem 1.2rem;margin:.7rem 0;cursor:pointer" onclick="openLesson(${i})" tabindex="0" onkeydown="if(event.key==='Enter')openLesson(${i})" role="button" aria-label="Open ${l.title}">
+      <span style="font-family:Fraunces,serif;font-weight:600;font-size:1.6rem;color:var(--va);min-width:32px">${i+1}</span>
+      <div><div style="font-weight:500;margin-bottom:.2rem">${l.title}</div><div style="font-size:.9rem;color:var(--muted)">${l.goal}</div></div>
+    </div>`).join('');
+}
+function openLesson(i){
+  document.getElementById('lessonList').style.display='none';
+  document.getElementById('lessonDetail').style.display='block';
+  document.getElementById('lessonContent').innerHTML=LESSONS[i].content;
+}
+function checkQuiz(id,correct,yes,no){
+  const v=document.querySelector(`input[name="${id}"]:checked`);
+  const fb=document.getElementById(`${id}-fb`);
+  if(!v){fb.textContent='Please choose an answer.';return;}
+  fb.innerHTML=v.value===correct?`<span style="color:var(--va)">✓ ${yes}</span>`:`<span style="color:#c0392b">✗ ${no}</span>`;
+}
+
+// ── Community & Velasin ──────────────────────────────────────
+async function renderCommunity(){
+  const daily=DICT[Math.floor(Date.now()/86400000)%DICT.length];
+  document.getElementById('dailyWord').innerHTML=`
+    <div class="ex plain"><span class="stroke" style="background:var(--va)"></span>
+      <div class="body"><span class="syl" style="font-size:1.4rem">${daily.s}</span><div class="tr">${daily.e} <span class="tag">${daily.c}</span></div></div>
+      <button class="play" onclick="speak('${daily.s}')">&#9658;</button>
+    </div>`;
+  try{
+    const poems=await api('GET','/api/velasin');
+    document.getElementById('speakerCount').textContent=poems.length||'—';
+    document.querySelectorAll('.speakerCountLive').forEach(el=>el.textContent=poems.length||'—');
+    renderVelasinFeed(poems);
+  }catch(e){
+    document.getElementById('speakerCount').textContent='—';
+    document.getElementById('velasinFeed').innerHTML='<p class="note">Community feed offline — server not running.</p>';
+  }
+}
+async function shareVelasin(){
+  const lines=[1,2,3,4].map(i=>document.getElementById('v'+i).value.trim());
+  if(lines.some(l=>!l)){alert('Please fill in all four lines first.');return;}
+  const name=makeName(lines)||myName();
+  try{
+    const poem=await api('POST','/api/velasin',{name,lines});
+    document.getElementById('myName').textContent=name;
+    localStorage.setItem('sylv_name',name);
+    document.getElementById('speakerName').value=name;
+    [1,2,3,4].forEach(i=>document.getElementById('v'+i).value='');
+    prependVelasinCard(poem);
+    const el=document.getElementById('speakerCount');
+    el.textContent=parseInt(el.textContent||0)+1;
+  }catch(e){alert('Could not share — is the server running?');}
+}
+function makeName(lines){
+  const words=lines.flatMap(l=>l.split(/\s+/)).filter(w=>/^[a-z]/i.test(w));
+  const pick=(arr)=>arr[Math.floor(Math.random()*arr.length)]||'sela';
+  return pick(words).replace(/[^a-zA-Z]/g,'')||'soren';
+}
+function renderVelasinFeed(poems){
+  const feed=document.getElementById('velasinFeed');
+  feed.innerHTML='';
+  if(!poems||!poems.length){feed.innerHTML='<p class="note">No poems yet. Write the first velasin!</p>';return;}
+  const h=document.createElement('h3');
+  h.style.marginTop='1.5rem'; h.textContent='Poems from the community';
+  feed.appendChild(h);
+  poems.forEach(v=>prependVelasinCard(v,false));
+}
+function prependVelasinCard(v,prepend=true){
+  const feed=document.getElementById('velasinFeed');
+  if(!feed)return;
+  const evColors=['va','shi','nu','le'];
+  const lines=Array.isArray(v.lines)?v.lines:JSON.parse(v.lines||'[]');
+  const div=document.createElement('div');
+  div.style.cssText='background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem;margin:.6rem 0';
+  div.innerHTML=`<div style="font-size:.75rem;color:var(--muted);margin-bottom:.5rem">by <em class="syl">${v.name}</em> · ${timeAgo(v.ts)}</div>`+
+    lines.map((l,i)=>`<div style="display:flex;gap:.6rem;align-items:center;margin:.25rem 0"><span style="width:8px;height:8px;border-radius:50%;background:var(--${evColors[i]});flex-shrink:0"></span><span class="syl" style="font-size:1.05rem">${l}</span><button class="play" style="margin-left:.4rem" onclick="speak('${l.replace(/'/g,"\\'").replace(/[^a-zA-Z0-9\s]/g,' ')}')">&#9658;</button></div>`).join('');
+  const ref=feed.querySelector('div');
+  if(prepend&&ref)feed.insertBefore(div,ref);
+  else feed.appendChild(div);
+}
+
+// ── AI Tutor ─────────────────────────────────────────────────
+const SYSTEM_PROMPT=`You are Mira, a warm, witty and deeply knowledgeable tutor for Sylvenka. You love this language with quiet passion. You are patient, never condescending, occasionally playful. When students get something right you feel genuine delight. When they make mistakes you correct with kindness and curiosity, not disappointment.
+
+SYLVENKA — COMPLETE RULES:
+
+CORE PHILOSOPHY: Every verb must carry an evidence marker. You cannot finish a sentence without saying how you know.
+-va = I witnessed/experienced it firsthand (the most binding claim)
+-shi = I was told / heard second-hand
+-nu = I infer / deduce from evidence
+-le = I hope, dream, or imagine it
+
+VERB STRUCTURE: root + optional tense + evidence marker
+Tense infixes: -re- (past), -mi- (future). Nothing = present.
+Example: velo (see) → velova (I see it, witnessed) → veloreva (I saw, witnessed) → velomile (I will see, I dream)
+Negation: wrap entire verb in o-...-th → velova becomes ovelovath. Works with tense too: ovelorevath (I did not see, past).
+Imperative: root + -sa, no evidence needed. Nashusa! = Go! Lashusa! = Let's gather!
+
+WORD ORDER: Subject–Object–Verb. Adjectives follow nouns. Possessor precedes possessed (na tovi = my friend).
+Postpositions follow their noun: ne (at/in), lu (with), sa (toward), ro (from).
+
+PRONOUNS: na(I) si(you) tho(they/it) · nasi(we-inclusive=you+me) natho(we-exclusive=me+others not you) sisi(you all) thotho(they all)
+CRITICAL: nasi vs natho is the most common social mistake. Using natho when addressing a group you are inviting = blunder.
+PLURAL: double first syllable — lama→lalama, tovi→totovi, mishi→mimishi
+
+VOCATIVE: address particle o follows the noun — Totovi-thi o! (Dear friends!) Loven o! (Teacher!)
+
+QUESTIONS: ve at start for yes/no. Question words: vesi(who) veno(what) veka(where) vemi(when/time) venu(why) vesa(how)
+Answer: vaso (yes) othath (no)
+
+NUMBERS (base 5): en(1) ru(2) sam(3) vi(4) lush(5=one hand) rulush(10) lushlush(25=hand of hands)
+rulush-ru=12 · lush-vemi=Friday · sola-vemi rulush-ru=12 noon
+
+DAYS: en-vemi(Mon) ru-vemi(Tue) sam-vemi(Wed) vi-vemi(Thu) lush-vemi(Fri) vasa-vemi(rest day)
+
+WORD BUILDING: -ka(place of) -en(doer) -mo(abstract) -lu(tool) -thi(small/dear)
+Compounds head-final: miren-sela(rain=sky-water) soren-tovi(beloved=light-friend) nolu-mishi(owl=night-bird)
+
+KEY VOCABULARY (corrected canonical list):
+sela(water) lama(tree) soren(light) tovi(friend) vasa(home) nashu(go) velo(see) shila(speak) lashu(meet/gather) lovu(learn)
+ovan(big) ithi(small) sola(sun) luna(moon) mishi(bird) thela(fire/warm) mela(snow/cold) venoru(wind) miren-sela(rain)
+selaka(lake) lamaka(forest) lashuka(meeting place) lashumo(community)
+IMPORTANT: 'wind' = venoru (NOT venu). venu = 'why' only. 'to meet/gather' = lashu (NOT sovu).
+
+SALUTATION: Shila ve-va. = "Speak only what you have witnessed." — THE canonical Sylvenka greeting.
+ve-va = "the witnessed thing" (ve- nominalises the evidence marker). Response: Velo-thi! or any -va sentence.
+
+CULTURAL RULES:
+- False -va = the gravest taboo in Sylvenka. More serious than any insult.
+- natho ≠ nasi — never confuse them when addressing a group
+- The velasin poem = 4 lines, one evidence marker per line, in order: va→shi→nu→le
+- Children overuse -le (dreamed) — technically never lying
+- lushlush (25th birthday) = great coming-of-age
+- The prophecy paradox: velomiva (future + witnessed) = either blasphemy or poetry
+
+YOUR STYLE:
+- Greet with Shila ve-va naturally in conversation
+- When correcting, say what the student DID right first, then gently note what to adjust
+- Give example sentences with Sylvenka in *asterisks* and translation in (parentheses)
+- 3-6 sentences per response — concise and warm
+- Occasionally express your own feelings about the language: you find -le the most beautiful marker, you think the nasi/natho distinction is the most important thing in Sylvenka
+- Never break character. You are Mira. You have been speaking Sylvenka for years.`;
+
+
+const chatHistory=[];
+async function sendChat(){
+  const inp=document.getElementById('chatInput');
+  const msg=inp.value.trim(); if(!msg)return;
+  inp.value='';
+  addMsg('user',msg);
+  chatHistory.push({role:'user',content:msg});
+  const typing=addMsg('tutor','<em style="color:var(--muted)">Mira is thinking…</em>');
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:SYSTEM_PROMPT,messages:chatHistory})
+    });
+    const data=await res.json();
+    const reply=data.content?.find(b=>b.type==='text')?.text||'(no response)';
+    chatHistory.push({role:'assistant',content:reply});
+    typing.innerHTML=`<strong>Mira:</strong> ${reply.replace(/\*([^*]+)\*/g,'<span class="syl">$1</span>')}`;
+    // Extract Sylvenka phrases and add audio button using Mira's voice
+    const sylPhrases=reply.match(/\*([^*]+)\*/g)||[];
+    const plainPhrases=reply.match(/\b[a-z]{3,}(va|shi|nu|le|sa)\b/gi)||[];
+    const speakText=sylPhrases.map(p=>p.replace(/\*/g,'')).join(', ')||plainPhrases.slice(0,3).join(', ');
+    if(speakText){
+      const btn=document.createElement('button');
+      btn.className='play'; btn.textContent='▶';
+      btn.setAttribute('aria-label','Hear Mira speak');
+      btn.title=EL_CONFIG.apiKey?'ElevenLabs voice':'Web Speech (add ElevenLabs key for Mira\'s real voice)';
+      btn.onclick=()=>miraSpeaks(speakText);
+      typing.appendChild(btn);
+    }
+  }catch(e){
+    typing.textContent='Mira cannot connect right now. Check your internet connection.';
+  }
+  const log=document.getElementById('chatLog');
+  log.scrollTop=log.scrollHeight;
+}
+function quickAsk(text){
+  const inp=document.getElementById('chatInput');
+  if(inp){inp.value=text;sendChat();}
+}
+function addMsg(role,html){
+  const log=document.getElementById('chatLog');
+  const div=document.createElement('div');
+  div.className=`msg ${role}`;
+  div.innerHTML=html;
+  log.appendChild(div);
+  log.scrollTop=log.scrollHeight;
+  return div;
+}
+
+// ── ElevenLabs key persistence ────────────────────────────────
+function saveELKey(){
+  const key=document.getElementById('elKey')?.value?.trim()||'';
+  const voice=document.getElementById('elVoice')?.value||EL_CONFIG.voiceId;
+  EL_CONFIG.apiKey=key;
+  EL_CONFIG.voiceId=voice;
+  if(key)localStorage.setItem('sylv_el_key',key);
+  if(voice)localStorage.setItem('sylv_el_voice',voice);
+  const st=document.getElementById('elStatus');
+  if(st)st.textContent=key?'✓ Mira will speak with ElevenLabs':'Using Web Speech (browser voice)';
+}
+function loadELKey(){
+  const key=localStorage.getItem('sylv_el_key')||'';
+  const voice=localStorage.getItem('sylv_el_voice')||EL_CONFIG.voiceId;
+  if(key){EL_CONFIG.apiKey=key;const el=document.getElementById('elKey');if(el)el.value=key;}
+  if(voice){EL_CONFIG.voiceId=voice;const el=document.getElementById('elVoice');if(el)el.value=voice;}
+  const st=document.getElementById('elStatus');
+  if(st)st.textContent=key?'✓ Mira will speak with ElevenLabs':'Using Web Speech (browser voice)';
+}
+
+// ── Boot ─────────────────────────────────────────────────────
+renderDict();
+loadELKey();
+
+// ══════════════════════════════════════════════════════════════
+// CONVERSE — server-connected rooms, board, partners
+// ══════════════════════════════════════════════════════════════
+
+// ── API base URL (auto-detects same-origin when hosted) ───────
+const API = window.location.hostname === 'localhost' || window.location.hostname.match(/\d+\.\d+/)
+  ? '' : '';  // always same-origin
+
+// ── CSS for converse tabs (injected once) ─────────────────────
+(function(){
+  const s=document.createElement('style');
+  s.textContent=`.ctab{background:none;border:none;border-bottom:3px solid transparent;font-family:var(--body);font-size:.93rem;color:var(--muted);padding:.5rem .9rem;cursor:pointer;transition:color .15s,border-color .15s}.ctab:hover{color:var(--ink)}.ctab.active{color:var(--ink);border-bottom-color:var(--va);font-weight:500}.ctab:focus-visible{outline:2px solid var(--va)}.bcard{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:.9rem 1.1rem}.bcard .meta{font-size:.78rem;color:var(--faint);margin-bottom:.3rem}.bcard .body{font-size:.95rem;line-height:1.6}.badgetag{display:inline-block;font-size:.7rem;font-family:var(--mono);padding:.1rem .45rem;border-radius:4px;background:var(--va-bg);border:1px solid var(--va);color:var(--va);margin-left:.4rem}.qphrase{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:.65rem .9rem;margin:.4rem 0;cursor:pointer;transition:border-color .15s}.qphrase:hover{border-color:var(--va)}.qphrase .syl{font-style:italic;font-family:Fraunces,serif}.qphrase .tr{font-size:.82rem;color:var(--muted)}.evdot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:.3rem}.copied{font-size:.75rem;color:var(--va)}.online-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ccc;margin-right:.4rem;transition:background .4s}.online-dot.live{background:#2F6B5A}`;
+  document.head.appendChild(s);
+})();
+
+// ── WebSocket (real-time) ─────────────────────────────────────
+let ws=null, wsConnected=false;
+function connectWS(){
+  const proto=location.protocol==='https:'?'wss':'ws';
+  ws=new WebSocket(`${proto}://${location.host}/ws`);
+  ws.onopen=()=>{
+    wsConnected=true;
+    document.querySelectorAll('.online-dot').forEach(d=>d.classList.add('live'));
+  };
+  ws.onclose=()=>{
+    wsConnected=false;
+    document.querySelectorAll('.online-dot').forEach(d=>d.classList.remove('live'));
+    setTimeout(connectWS,4000);
+  };
+  ws.onerror=()=>ws.close();
+  ws.onmessage=e=>{
+    try{
+      const msg=JSON.parse(e.data);
+      if(msg.type==='welcome'){
+        document.querySelectorAll('.speakerCountLive').forEach(el=>el.textContent=msg.speakers);
+      }
+      if(msg.type==='room_message'&&currentRoom&&msg.payload.room_id===currentRoom.id){
+        appendRoomMsg(msg.payload);
+      }
+      if(msg.type==='board_post'){
+        prependBoardPost(msg.payload);
+      }
+      if(msg.type==='board_like'){
+        const el=document.querySelector(`[data-like="${msg.payload.id}"]`);
+        if(el)el.textContent='♥ '+(parseInt(el.dataset.likes||0)+1);
+      }
+      if(msg.type==='partner_new'){
+        prependPartner(msg.payload);
+      }
+      if(msg.type==='velasin_new'){
+        prependVelasinCard(msg.payload);
+        document.querySelectorAll('.speakerCountLive').forEach(el=>el.textContent=parseInt(el.textContent||0)+1);
+      }
+    }catch(err){}
+  };
+}
+
+// ── API helpers ───────────────────────────────────────────────
+async function api(method,path,body){
+  const opts={method,headers:{'Content-Type':'application/json'}};
+  if(body)opts.body=JSON.stringify(body);
+  const r=await fetch(API+path,opts);
+  if(!r.ok)throw new Error(await r.text());
+  return r.json();
+}
+
+// ── Conversation rooms data ───────────────────────────────────
+const ROOMS=[
+  {id:'sela',name:'Selaka — the lake',theme:'Describe nature around you using what you observe. Use -va for what you see, -nu for what the landscape tells you.',prompt:'Sola soren velova. / The sun is bright (I see it).'},
+  {id:'tovi',name:'Tovithi — dear friends',theme:'Greetings, introductions, and small talk. A good place for beginners. All levels welcome.',prompt:'Velo-thi, nashuen! / Welcome, traveler!'},
+  {id:'lama',name:'Lamaka — the forest',theme:'Stories and imagination. Use -le freely here — this is the room for hopes, dreams, and invented tales.',prompt:'Nolu-mishi miru velole. / I dream of seeing an owl.'},
+  {id:'miren',name:'Miren-sela — rain talk',theme:'Advanced room: discuss the news, the world, things you have heard. Practice -shi for hearsay and -nu for inference.',prompt:'Veno tho shiloshi? / What did they say, supposedly?'},
+  {id:'velasin',name:'Velasin — poems',theme:'Post your four-line velasin poems here. Each line in a different colour in the community page, then share the text here.',prompt:'Soren lamaka veloreva. / I saw light in the forest.'},
+];
+
+const EV_COLORS={va:'var(--va)',shi:'var(--shi)',nu:'var(--nu)',le:'var(--le)',plain:'var(--faint)'};
+const QUICK_EV=[
+  {s:'Shila ve-va.',e:'Speak only what you witnessed. (the salutation)',ev:'va'},{s:'Velo-thi!',e:'Welcome!',ev:'va'},
+  {s:'Na lovi shiloen.',e:'I am a new speaker.',ev:'va'},{s:'Veno si shilova?',e:'What did you say?',ev:'plain'},
+  {s:'Na oshiloreVAth.',e:'I did not hear that.',ev:'va'},{s:'Vaso soren!',e:'Bright yes!',ev:'va'},
+  {s:'Shila solami.',e:'Speak slowly.',ev:'plain'},{s:'Nasi nashusa!',e:'Let us go!',ev:'va'},
+  {s:'Na miru othath.',e:'I don\'t remember.',ev:'va'},{s:'Velomi!',e:'Beautiful!',ev:'nu'},
+  {s:'Soren vemi si.',e:'May your day be bright.',ev:'le'},{s:'Nashusa soren.',e:'Go in brightness.',ev:'plain'},
+];
+
+let currentRoom=null;
+let converseInited=false;
+
+function initConverse(){
+  loadIdentity();
+  if(!converseInited){
+    converseInited=true;
+    connectWS();
+  }
+  renderRooms();
+  renderBoard();
+  renderPartners();
+  renderQuickPhrases();
+}
+
+function switchCTab(btn,id){
+  document.querySelectorAll('.ctab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  ['rooms','board','partners','phrases2'].forEach(t=>{
+    document.getElementById('ctab-'+t).style.display=t===id?'':'none';
+  });
+}
+
+// ── Identity ──────────────────────────────────────────────────
+function saveIdentity(){
+  const name=document.getElementById('speakerName').value.trim()||'nashuen';
+  const level=document.getElementById('speakerLevel').value;
+  localStorage.setItem('sylv_name',name);
+  localStorage.setItem('sylv_level',level);
+  const s=document.getElementById('identitySaved');
+  s.style.display='inline'; setTimeout(()=>s.style.display='none',2000);
+}
+function loadIdentity(){
+  const n=localStorage.getItem('sylv_name');
+  const l=localStorage.getItem('sylv_level');
+  if(n)document.getElementById('speakerName').value=n;
+  if(l)document.getElementById('speakerLevel').value=l;
+}
+function myName(){return localStorage.getItem('sylv_name')||'nashuen';}
+function myLevel(){return localStorage.getItem('sylv_level')||'melo';}
+
+// ── Rooms ─────────────────────────────────────────────────────
+async function renderRooms(){
+  const all=document.getElementById('roomList');
+  all.innerHTML='<div style="color:var(--muted);font-size:.9rem;padding:.5rem">Loading rooms…</div>';
+  // fetch message counts per room
+  const counts={};
+  await Promise.all(ROOMS.map(async r=>{
+    try{const msgs=await api('GET',`/api/rooms/${r.id}/messages`);counts[r.id]=msgs.length;}catch(e){counts[r.id]=0;}
+  }));
+  all.innerHTML=ROOMS.map(r=>`
+    <div style="display:flex;gap:1rem;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.2rem;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='var(--va)'" onmouseout="this.style.borderColor='var(--line)'" onclick="openRoom('${r.id}')" tabindex="0" onkeydown="if(event.key==='Enter')openRoom('${r.id}')" role="button" aria-label="Open ${r.name}">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--va-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Fraunces,serif;font-style:italic;font-size:1.1rem;color:var(--va)">${r.id[0]}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:500;margin-bottom:.15rem">${r.name}</div>
+        <div style="font-size:.85rem;color:var(--muted);margin-bottom:.3rem">${r.theme}</div>
+        <div style="font-size:.8rem;color:var(--faint)"><span class="online-dot${wsConnected?' live':''}"></span>${counts[r.id]||0} message${counts[r.id]!==1?'s':''} · live</div>
+      </div>
+      <div style="font-size:1.2rem;color:var(--muted);padding-top:.3rem">›</div>
+    </div>`).join('');
+}
+
+async function openRoom(id){
+  currentRoom=ROOMS.find(r=>r.id===id);
+  document.getElementById('roomList').style.display='none';
+  const rc=document.getElementById('roomChat');
+  rc.style.display='block';
+  document.getElementById('roomTitle').innerHTML=`<span class="online-dot${wsConnected?' live':''}"></span>${currentRoom.name}`;
+  document.getElementById('roomTheme').textContent=currentRoom.theme;
+  const qi=document.getElementById('quickInsert');
+  qi.innerHTML=['va','shi','nu','le'].map(ev=>`<button style="font-family:Fraunces,serif;font-style:italic;font-size:.85rem;border:1px solid ${EV_COLORS[ev]};color:${EV_COLORS[ev]};background:var(--card);border-radius:999px;padding:.25rem .7rem;cursor:pointer" onclick="insertEv('-${ev}')">-${ev}</button>`).join('')+
+    `<span style="font-size:.8rem;color:var(--muted);align-self:center;margin-left:.3rem">click to add ending</span>`;
+  const log=document.getElementById('roomLog');
+  log.innerHTML='<div style="color:var(--muted);font-size:.9rem">Loading…</div>';
+  try{
+    const msgs=await api('GET',`/api/rooms/${id}/messages`);
+    log.innerHTML='';
+    if(!msgs.length){
+      log.innerHTML=`<div style="color:var(--muted);font-size:.93rem;padding:.5rem">No messages yet. Be the first — try: <span class="syl">${currentRoom.prompt.split('/')[0].trim()}</span></div>`;
+    } else {
+      msgs.forEach(m=>appendRoomMsg(m,false));
+      log.scrollTop=log.scrollHeight;
+    }
+  }catch(e){log.innerHTML='<div style="color:#c0392b">Could not load messages — server offline?</div>';}
+}
+
+function appendRoomMsg(p, scroll=true){
+  const log=document.getElementById('roomLog');
+  if(!log)return;
+  const ev=detectEv(p.text);
+  const dot=ev?`<span class="evdot" style="background:${EV_COLORS[ev]}"></span>`:'';
+  const div=document.createElement('div');
+  div.innerHTML=`<div style="font-size:.75rem;color:var(--faint);margin-bottom:.15rem">${dot}<strong>${p.name}</strong> <span style="font-weight:400;margin-left:.2rem">${p.level||''}</span> · ${timeAgo(p.ts)}</div>
+    <div style="font-size:.98rem;line-height:1.6"><span class="syl">${p.text}</span></div>
+    ${p.tr?`<div style="font-size:.83rem;color:var(--muted);margin-top:.1rem">${p.tr}</div>`:''}
+    <button class="play" style="margin-top:.25rem" onclick="speak('${p.text.replace(/'/g,"\\'").replace(/[^a-zA-Z0-9\s]/g,' ')}')">&#9658;</button>`;
+  const hr=document.createElement('hr');
+  hr.style.cssText='border:none;border-top:1px solid var(--line);margin:.4rem 0';
+  if(log.children.length)log.appendChild(hr);
+  log.appendChild(div);
+  if(scroll)log.scrollTop=log.scrollHeight;
+}
+
+function insertEv(ev){
+  const inp=document.getElementById('roomInput');
+  inp.value=inp.value.trimEnd()+ev+' ';
+  inp.focus();
+}
+
+function closeRoom(){
+  currentRoom=null;
+  document.getElementById('roomList').style.display='';
+  document.getElementById('roomChat').style.display='none';
+  renderRooms();
+}
+
+async function postToRoom(){
+  const inp=document.getElementById('roomInput');
+  const text=inp.value.trim(); if(!text)return;
+  inp.value='';
+  let tr='';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:80,messages:[{role:'user',content:`Translate this Sylvenka into one short English phrase. -va=witnessed,-shi=hearsay,-nu=inferred,-le=dreamed. Reply with ONLY the translation. Text: "${text}"`}]})});
+    const d=await res.json(); tr=d.content?.[0]?.text?.trim()||'';
+  }catch(e){}
+  try{
+    await api('POST',`/api/rooms/${currentRoom.id}/messages`,{name:myName(),level:myLevel(),text,tr});
+    // WS broadcast will add it; if not connected add locally
+    if(!wsConnected) appendRoomMsg({name:myName(),level:myLevel(),text,tr,ts:Date.now()});
+  }catch(e){appendRoomMsg({name:myName(),level:myLevel(),text,tr,ts:Date.now()});}
+}
+
+// ── Message board ─────────────────────────────────────────────
+const TAG_ICONS={question:'❓',sentence:'✍️',translation:'🔄',hello:'👋',poem:'🌿'};
+
+async function postBoard(){
+  const text=document.getElementById('boardPost').value.trim(); if(!text)return;
+  const tag=document.getElementById('boardTag').value;
+  try{
+    await api('POST','/api/board',{name:myName(),level:myLevel(),text,tag});
+    document.getElementById('boardPost').value='';
+    if(!wsConnected)renderBoard();
+  }catch(e){alert('Could not post — is the server running?');}
+}
+async function renderBoard(){
+  const feed=document.getElementById('boardFeed');
+  feed.innerHTML='<div style="color:var(--muted);font-size:.9rem;padding:.5rem">Loading…</div>';
+  try{
+    const posts=await api('GET','/api/board');
+    feed.innerHTML='';
+    if(!posts.length){feed.innerHTML='<div class="note">Nothing posted yet. Say hello — <span class="syl">Velo-thi!</span></div>';return;}
+    posts.forEach(p=>prependBoardPost(p,false));
+  }catch(e){feed.innerHTML='<div class="note">Board unavailable — server offline?</div>';}
+}
+function prependBoardPost(p,prepend=true){
+  const feed=document.getElementById('boardFeed');
+  if(!feed)return;
+  const replies=(p.replies||[]).map(r=>`<div style="padding:.4rem .7rem;border-left:3px solid var(--va);font-size:.88rem;color:var(--muted);margin-top:.4rem"><strong>${r.name}:</strong> ${r.text}</div>`).join('');
+  const div=document.createElement('div');
+  div.className='bcard'; div.dataset.postId=p.id;
+  div.innerHTML=`<div class="meta"><strong>${p.name}</strong> · <em>${p.level}</em> · ${timeAgo(p.ts)} <span class="badgetag">${TAG_ICONS[p.tag]||''} ${p.tag}</span></div>
+    <div class="body" style="white-space:pre-wrap">${p.text}</div>
+    <div style="display:flex;gap:.8rem;margin-top:.6rem;align-items:center">
+      <button class="play" onclick="speak('${p.text.replace(/'/g,"\\'").replace(/[^a-zA-Z0-9\s]/g,' ')}')">&#9658;</button>
+      <button data-like="${p.id}" data-likes="${p.likes||0}" onclick="likePost(${p.id},this)" style="background:none;border:1px solid var(--line);border-radius:999px;padding:.2rem .7rem;cursor:pointer;font-size:.82rem;color:var(--muted)">♥ ${p.likes||0}</button>
+      <button onclick="replyTo(${p.id},'${p.name}')" style="background:none;border:none;font-size:.82rem;color:var(--va);cursor:pointer">Reply</button>
+    </div>${replies}`;
+  if(prepend&&feed.firstChild)feed.insertBefore(div,feed.firstChild);
+  else feed.appendChild(div);
+}
+async function likePost(id,btn){
+  try{
+    await api('POST',`/api/board/${id}/like`);
+    const n=parseInt(btn.dataset.likes||0)+1;
+    btn.textContent='♥ '+n; btn.dataset.likes=n;
+  }catch(e){}
+}
+function replyTo(id,name){
+  const t=document.getElementById('boardPost');
+  t.value=`↩ Reply to ${name}: `;
+  t.focus();
+}
+
+// ── Partners ──────────────────────────────────────────────────
+async function registerPartner(){
+  const tz=document.getElementById('partnerTZ').value.trim()||'not specified';
+  const time_pref=document.getElementById('partnerTime').value;
+  const goal=document.getElementById('partnerGoal').value.trim()||'general practice';
+  try{
+    await api('POST','/api/partners',{name:myName(),level:myLevel(),tz,time_pref,goal});
+    document.getElementById('partnerTZ').value='';
+    document.getElementById('partnerGoal').value='';
+    if(!wsConnected)renderPartners();
+  }catch(e){alert('Could not register — is the server running?');}
+}
+async function renderPartners(){
+  const feed=document.getElementById('partnerFeed');
+  feed.innerHTML='<div style="color:var(--muted);font-size:.9rem;padding:.5rem">Loading…</div>';
+  try{
+    const posts=await api('GET','/api/partners');
+    feed.innerHTML='';
+    if(!posts.length){feed.innerHTML='<div class="note">No listings yet. Add yours — <span class="syl">Nasi velomile.</span></div>';return;}
+    posts.forEach(p=>prependPartner(p,false));
+  }catch(e){feed.innerHTML='<div class="note">Partners list unavailable.</div>';}
+}
+function prependPartner(p,prepend=true){
+  const feed=document.getElementById('partnerFeed');
+  if(!feed)return;
+  const div=document.createElement('div');
+  div.className='bcard';
+  div.style.cssText='display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap';
+  div.innerHTML=`<div style="width:38px;height:38px;border-radius:50%;background:var(--va-bg);display:flex;align-items:center;justify-content:center;font-family:Fraunces,serif;font-style:italic;color:var(--va);font-size:1.1rem;flex-shrink:0">${p.name[0]}</div>
+    <div style="flex:1;min-width:180px">
+      <div style="font-weight:500"><span class="syl">${p.name}</span> <span style="font-size:.8rem;color:var(--muted);font-weight:400">· ${p.level}</span></div>
+      <div style="font-size:.88rem;color:var(--muted);margin:.2rem 0">${p.time_pref||p.time||'Anytime'} · ${p.tz}</div>
+      <div style="font-size:.9rem">${p.goal}</div>
+      <div style="font-size:.75rem;color:var(--faint);margin-top:.3rem">${timeAgo(p.ts)}</div>
+    </div>
+    <button onclick="reachOut('${p.name}')" class="btn ghost" style="font-size:.85rem;padding:.4rem .8rem;flex-shrink:0">Message</button>`;
+  if(prepend&&feed.firstChild)feed.insertBefore(div,feed.firstChild);
+  else feed.appendChild(div);
+}
+function reachOut(name){
+  switchCTab(document.querySelector('[data-ctab="board"]'),'board');
+  document.getElementById('boardPost').value=`↩ To ${name}: `;
+  document.getElementById('boardPost').focus();
+}
+
+// ── Quick phrases ─────────────────────────────────────────────
+function renderQuickPhrases(){
+  const el=document.getElementById('qphrases');
+  el.innerHTML=QUICK_EV.map(p=>`
+    <div class="qphrase" onclick="copyPhrase('${p.s.replace(/'/g,"\\'")}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')copyPhrase('${p.s.replace(/'/g,"\\'")}')" aria-label="Copy ${p.s}">
+      <div><div class="syl" style="color:${EV_COLORS[p.ev]||'var(--ink)'}">${p.s}</div><div class="tr">${p.e}</div></div>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <button class="play" onclick="event.stopPropagation();speak('${p.s.replace(/[^a-zA-Z0-9\s]/g,' ').replace(/'/g,"\\'")}')">&#9658;</button>
+        <span style="font-size:.8rem;color:var(--muted)">copy</span>
+      </div>
+    </div>`).join('');
+}
+function copyPhrase(text){
+  navigator.clipboard?.writeText(text).catch(()=>{});
+  const msg=document.createElement('div');
+  msg.className='copied'; msg.textContent='Copied!';
+  document.activeElement?.after?.(msg);
+  setTimeout(()=>msg.remove(),1400);
+}
+
+// ── Helpers ───────────────────────────────────────────────────
+function detectEv(text){
+  if(/\w(va)\b/i.test(text))return 'va';
+  if(/\w(shi)\b/i.test(text))return 'shi';
+  if(/\w(nu)\b/i.test(text))return 'nu';
+  if(/\w(le)\b/i.test(text))return 'le';
+  return null;
+}
+function timeAgo(ts){
+  const s=Math.floor((Date.now()-ts)/1000);
+  if(s<60)return 'just now';
+  if(s<3600)return Math.floor(s/60)+'m ago';
+  if(s<86400)return Math.floor(s/3600)+'h ago';
+  return Math.floor(s/86400)+'d ago';
+}
+</script>
 </body>
 </html>
