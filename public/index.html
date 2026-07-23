@@ -294,8 +294,8 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
       <span class="ev-pill-hero ph-le">-le · dreamed</span>
     </div>
     <div class="hero-btns">
-      <button class="hero-btn-primary" onclick="event.preventDefault();go('sounds');window.scrollTo({top:0,behavior:'smooth'})">Start learning</button>
-      <button class="hero-btn-primary" onclick="event.preventDefault();go('speak');window.scrollTo({top:0,behavior:'smooth'})" style="background:#6E549C">Speak with Mira</button>
+      <a href="#" onclick="go('sounds');return false;" class="hero-btn-primary" style="text-decoration:none;display:inline-block">Start learning</a>
+      <a href="#" onclick="go('speak');return false;" class="hero-btn-primary" style="text-decoration:none;display:inline-block;background:#6E549C">Speak with Mira</a>
       <a href="/chat" class="hero-btn-ghost">Join the community</a>
     </div>
   </div>
