@@ -1186,7 +1186,7 @@ async function sendChat(){
       body:JSON.stringify({messages:chatHistory,system:SYSTEM_PROMPT})
     });
     const data=await res.json();
-    const reply=data.content?.find(b=>b.type==='text')?.text||'(no response)';
+    const reply=data.content||data.content?.[0]?.text||'(no response)';
     chatHistory.push({role:'assistant',content:reply});
     typing.innerHTML=`<strong>Mira:</strong> ${reply.replace(/\*([^*]+)\*/g,'<span class="syl">$1</span>')}`;
     // Extract Sylvenka phrases and add audio button using Mira's voice
