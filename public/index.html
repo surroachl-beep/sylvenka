@@ -124,8 +124,8 @@ nav.spine button:focus-visible{outline:1px solid #2F6B5A;outline-offset:-1px}
 .spine-chat-arrow{font-size:.7rem;color:#3F72A3;margin-left:auto}
 
 main{flex:1;padding:2.4rem 3rem 5rem;min-width:0}
-section.page{display:none !important;max-width:720px}
-section.page.show{display:block !important;animation:rise .35s ease}
+section.page{display:none !important;max-width:720px;}
+section.page.show{display:block !important;animation:rise .35s ease;}
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 h1{font-family:var(--disp);font-weight:600;font-size:2.5rem;line-height:1.15;margin-bottom:.6rem}
 h2{font-family:var(--disp);font-weight:500;font-size:1.55rem;margin:2.4rem 0 .8rem}
@@ -230,7 +230,7 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
 </style>
 </head>
 <body>
-<div class="mobile-nav" id="mobileNav" role="tablist" aria-label="Site sections"><button onclick="go('home')" class="active">Home</button><button onclick="go('sounds')">Sounds</button><button onclick="go('grammar')">Grammar</button><button onclick="go('lessons')">Lessons</button><button onclick="go('dictionary')">Dictionary</button><button onclick="go('speak')">Tutor</button><button onclick="go('community')">Community</button></div>
+<div class="mobile-nav" id="mobileNav" role="tablist" aria-label="Site sections"><button onclick="go('home')" class="nav-btn-home" class="active">Home</button><button onclick="go('sounds')" class="nav-btn-sounds">Sounds</button><button onclick="go('grammar')" class="nav-btn-grammar">Grammar</button><button onclick="go('lessons')" class="nav-btn-lessons">Lessons</button><button onclick="go('dictionary')" class="nav-btn-dictionary">Dictionary</button><button onclick="go('speak')" class="nav-btn-speak">Tutor</button><button onclick="go('community')" class="nav-btn-community">Community</button></div>
 <div class="layout">
 <nav class="spine" aria-label="Site sections">
   <div class="wordmark-block">
@@ -260,7 +260,7 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
 
   <a href="/pro" style="display:flex;align-items:center;gap:.5rem;margin:.4rem .8rem;padding:.45rem .7rem;background:linear-gradient(90deg,#1e1030,#0f1020);border:.5px solid #6E549C33;border-radius:8px;text-decoration:none;transition:all .15s" onmouseover="this.style.borderColor='#6E549C'" onmouseout="this.style.borderColor='#6E549C33'"><span style="font-size:.7rem;font-family:var(--mono);color:#c4a0f5;letter-spacing:.06em">✦ SYLVENKA PRO</span><span style="font-size:.7rem;color:#6E549C;margin-left:auto">→</span></a>
   <div class="spine-bottom">
-    <div class="spine-user" onclick="go('speak')">
+    <div class="spine-user" onclick="go('speak')" class="nav-btn-speak">
       <div class="spine-av">M</div>
       <div class="spine-info">
         <div class="spine-name">Mira</div>
@@ -313,7 +313,7 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
     <span class="ev-chip" role="listitem"><span class="ev-dot" style="background:var(--nu)"></span><span class="syl">-nu</span>&nbsp;inferred</span>
     <span class="ev-chip" role="listitem"><span class="ev-dot" style="background:var(--le)"></span><span class="syl">-le</span>&nbsp;dreamed</span>
   </div>
-  <p style="margin-top:1.5rem"><button class="btn" onclick="go('sounds')">Start with the sounds</button> &nbsp; <button class="btn ghost" onclick="go('speak')">Try the tutor</button></p>
+  <p style="margin-top:1.5rem"><button class="btn" onclick="go('sounds')" class="nav-btn-sounds">Start with the sounds</button> &nbsp; <button class="btn ghost" onclick="go('speak')">Try the tutor</button></p>
   <div class="note"><strong>Turn your sound on.</strong> Every Sylvenka word on this site has a play button. Audio uses your device's speech voices — a Spanish or Italian voice will be chosen automatically when available, because their pure vowels match Sylvenka's almost exactly.</div>
 </section>
 
@@ -365,7 +365,7 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
     </g>
   </svg>
   </div>
-  <p style="margin-top:1.5rem"><button class="btn" onclick="go('grammar')">Next: the complete grammar</button></p>
+  <p style="margin-top:1.5rem"><button class="btn" onclick="go('grammar')" class="nav-btn-grammar">Next: the complete grammar</button></p>
 </section>
 
 <!-- ============ GRAMMAR ============ -->
@@ -441,7 +441,7 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
 
   <h2>10 · The culture inside the grammar</h2>
   <p>Sylvenka courts swear no oaths — testimony in <span class="syl">-va</span> is binding by itself, and false <span class="syl">-va</span> is the language's gravest taboo. Historians write in <span class="syl">-shi</span> and <span class="syl">-nu</span>, and the shift between them marks trust in a source. Children famously overuse <span class="syl">-le</span>: "there's a monster under the bed (dreamed)" is technically never a lie. And the four-line <span class="syl">velasin</span> poem must move through all four markers — from certainty to dream.</p>
-  <p style="margin-top:1.5rem"><button class="btn" onclick="go('lessons')">Now practice: eight lessons</button></p>
+  <p style="margin-top:1.5rem"><button class="btn" onclick="go('lessons')" class="nav-btn-lessons">Now practice: eight lessons</button></p>
 </section>
 <!-- ============ LESSONS ============ -->
 <section class="page" id="page-lessons">
@@ -708,19 +708,23 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
 <script>
 // ── Navigation ──────────────────────────────────────────────
 const pages=['home','sounds','grammar','lessons','dictionary','phrases','speak','converse','community'];
-function go(id){
-  document.querySelectorAll('section.page').forEach(function(p){p.classList.remove('show');});
-  var targetPage=document.getElementById('page-'+id);
-  if(targetPage){targetPage.classList.add('show');}
-  document.querySelectorAll('nav button,.mobile-nav button').forEach(function(btn){btn.classList.remove('active');if(btn.getAttribute('onclick')&&btn.getAttribute('onclick').includes("'"+id+"'")){btn.classList.add('active');}});
-  window.scrollTo(0,0);
+function go(id) {
+  var pages = document.querySelectorAll('section.page');
+  pages.forEach(function(p) { p.classList.remove('show'); });
+  var targetPage = document.getElementById('page-' + id);
+  if (targetPage) { targetPage.classList.add('show'); }
+  var allBtns = document.querySelectorAll('button');
+  allBtns.forEach(function(btn) { btn.classList.remove('active'); });
+  var activeBtns = document.querySelectorAll('.nav-btn-' + id);
+  activeBtns.forEach(function(btn) { btn.classList.add('active'); });
+  window.scrollTo(0, 0);
   if(id==='dictionary')renderDict();
   if(id==='lessons')renderLessons();
   if(id==='phrases')renderPhrases();
   if(id==='community')renderCommunity();
   if(id==='converse'){initConverse();}
 }
-window.go=go;b=>{
+window.go = go;b=>{
     b.classList.toggle('active',b.dataset.page===id);
   });
   window.scrollTo(0,0);
@@ -1022,7 +1026,7 @@ const LESSONS=[
     <p>Here is the poem from the founding of Sylvenka tradition:</p>
     ${[['Soren lamaka veloreva.','I saw light in the forest (with my own eyes).','va'],['Tovi selaka nashureshi.','My friend went to the lake (or so they say).','shi'],['Miren-sela solomiru.','Rain is coming (the clouds infer).','nu'],['Nasi soren-tovi velomile.','We, beloved, will see the light together (I dream).','le']].map(([s,e,ev])=>`<div class="ex ${ev}"><span class="stroke"></span><div class="body"><span class="syl">${s}</span><div class="tr">${e}</div></div><button class="play" onclick="speak('${s}')">&#9658;</button></div>`).join('')}
     <p>Now write yours. Go to the <strong>Community</strong> page and compose your own velasin — each line in a different colour, one for each truth. Your poem becomes your entry into the community of Sylvenka speakers.</p>
-    <p><button class="btn" onclick="go('community')">Write your velasin →</button></p>
+    <p><button class="btn" onclick="go('community')" class="nav-btn-community">Write your velasin →</button></p>
   `},
 ];
 
