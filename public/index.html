@@ -29,7 +29,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:var(--body);background:var(--paper);color:var(--ink);font-size:16px;line-height:1.7;overflow-x:hidden;overflow-y:auto;height:auto}
+body{font-family:var(--body);background:var(--paper);color:var(--ink);font-size:16px;line-height:1.7}
 .syl{font-family:var(--disp);font-style:italic;letter-spacing:.02em}
 .gloss{font-family:var(--mono);font-size:.82em;color:var(--muted)}
 .layout{display:flex;min-height:100vh;max-width:1200px;margin:0 auto}
@@ -124,8 +124,8 @@ nav.spine button:focus-visible{outline:1px solid #2F6B5A;outline-offset:-1px}
 .spine-chat-arrow{font-size:.7rem;color:#3F72A3;margin-left:auto}
 
 main{flex:1;padding:2.4rem 3rem 5rem;min-width:0}
-section.page{display:none;max-width:720px}
-section.page.show{display:block;animation:rise .35s ease}
+section.page{display:none !important;max-width:720px}
+section.page.show{display:block !important;animation:rise .35s ease}
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 h1{font-family:var(--disp);font-weight:600;font-size:2.5rem;line-height:1.15;margin-bottom:.6rem}
 h2{font-family:var(--disp);font-weight:500;font-size:1.55rem;margin:2.4rem 0 .8rem}
@@ -183,7 +183,7 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
 @media(max-width:900px){
   .layout{flex-direction:column}
   nav.spine{display:none}
-  .mobile-nav{display:flex;gap:.3rem;overflow-x:auto;position:sticky;top:0;background:var(--paper);border-bottom:1px solid var(--line);padding:.7rem .9rem;z-index:9999;pointer-events:auto}
+  .mobile-nav{display:flex;gap:.3rem;overflow-x:auto;position:sticky;top:0;background:var(--paper);border-bottom:1px solid var(--line);padding:.7rem .9rem;z-index:9999}
   .mobile-nav button{flex-shrink:0;background:var(--card);border:1px solid var(--line2);border-radius:999px;padding:.4rem .9rem;font-family:var(--body);font-size:.85rem;color:var(--muted);cursor:pointer}
   .mobile-nav button.active{background:var(--va);border-color:var(--va);color:#fff}
   main{padding:1.6rem 1.2rem 4rem}
@@ -203,7 +203,7 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
 .wordmark-url a{color:#5ecfa0;text-decoration:none}
 .wordmark-url a:hover{color:#fff}
 /* ── Hero redesign ── */
-.hero-full{background:linear-gradient(160deg,#0f2a1e 0%,#1a1030 50%,#0f1828 100%);border-radius:16px;padding:2rem 1.8rem;margin-bottom:1.8rem;position:relative;border:1px solid var(--va)}
+.hero-full{background:linear-gradient(160deg,#0f2a1e 0%,#1a1030 50%,#0f1828 100%);border-radius:16px;padding:2rem 1.8rem;margin-bottom:1.8rem;position:relative;overflow:hidden;border:1px solid var(--va)}
 .hero-full::before{content:'SHILA VE-VA';position:absolute;right:-10px;top:50%;transform:translateY(-50%) rotate(90deg);font-family:var(--disp);font-style:italic;font-size:5rem;color:#ffffff04;letter-spacing:.2em;pointer-events:none;white-space:nowrap}
 .hero-title{font-family:var(--disp);font-weight:600;font-size:clamp(1.8rem,4vw,2.8rem);line-height:1.1;color:#fff;margin-bottom:.7rem}
 .hero-title em{font-style:italic;color:#5ecfa0}
@@ -230,7 +230,17 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
 </style>
 </head>
 <body>
-<div class="mobile-nav" id="mobileNav" role="tablist" aria-label="Site sections"><button onclick="go('home')" class="active">Home</button><button onclick="go('sounds')">Sounds</button><button onclick="go('grammar')">Grammar</button><button onclick="go('lessons')">Lessons</button><button onclick="go('dictionary')">Dictionary</button><button onclick="go('speak')">Tutor</button><button onclick="go('community')">Community</button></div>
+<div class="mobile-nav" id="mobileNav" role="tablist" aria-label="Site sections">
+  <button class="active nav-btn-home" onclick="go('home')">Home</button>
+  <button class="nav-btn-sounds" onclick="go('sounds')">Sounds</button>
+  <button class="nav-btn-grammar" onclick="go('grammar')">Grammar</button>
+  <button class="nav-btn-lessons" onclick="go('lessons')">Lessons</button>
+  <button class="nav-btn-dictionary" onclick="go('dictionary')">Dictionary</button>
+  <button class="nav-btn-phrases" onclick="go('phrases')">Phrases</button>
+  <button class="nav-btn-speak" onclick="go('speak')">Tutor</button>
+  <button class="nav-btn-converse" onclick="go('converse')">Converse</button>
+  <button class="nav-btn-community" onclick="go('community')">Community</button>
+</div>
 <div class="layout">
 <nav class="spine" aria-label="Site sections">
   <div class="wordmark-block">
@@ -238,27 +248,31 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
     <div class="wordmark-sub">shilamo velomo</div>
     <div class="wordmark-url"><a href="https://sylvenka.com">sylvenka.com</a></div>
   </div>
-
   <a href="/chat" class="spine-chat-link">
     <div class="spine-chat-dot"></div>
     <span class="spine-chat-text">LIVE CHAT ROOMS</span>
     <span class="spine-chat-arrow">→</span>
   </a>
-
+  <a href="/keyboard" style="display:flex;align-items:center;gap:.5rem;margin:.3rem .8rem;padding:.45rem .7rem;background:linear-gradient(90deg,#0f2a1e,#0a1a10);border:.5px solid #2F6B5A33;border-radius:8px;text-decoration:none" >
+    <span style="font-size:.7rem;font-family:var(--mono);color:#5ecfa0;letter-spacing:.06em">⌨ KEYBOARD APP</span>
+    <span style="font-size:.7rem;color:#2F6B5A;margin-left:auto">→</span>
+  </a>
   <div class="nav-group">Begin</div>
-  <button data-page="home" class="active">Welcome</button>
-  <button data-page="sounds">Sounds &amp; script</button>
+  <button data-page="home" class="active nav-btn-home" onclick="go('home')">Welcome</button>
+  <button data-page="sounds" class="nav-btn-sounds" onclick="go('sounds')">Sounds &amp; script</button>
   <div class="nav-group">Learn</div>
-  <button data-page="grammar">Complete grammar</button>
-  <button data-page="lessons">Eight lessons</button>
-  <button data-page="dictionary">Dictionary</button>
-  <button data-page="phrases">Phrasebook</button>
+  <button data-page="grammar" class="nav-btn-grammar" onclick="go('grammar')">Complete grammar</button>
+  <button data-page="lessons" class="nav-btn-lessons" onclick="go('lessons')">Eight lessons</button>
+  <button data-page="dictionary" class="nav-btn-dictionary" onclick="go('dictionary')">Dictionary</button>
+  <button data-page="phrases" class="nav-btn-phrases" onclick="go('phrases')">Phrasebook</button>
   <div class="nav-group">Live it</div>
-  <button data-page="speak">Speak with Mira</button>
-  <button data-page="converse">Talk to speakers</button>
-  <button data-page="community">Community</button>
-
-  <a href="/pro" style="display:flex;align-items:center;gap:.5rem;margin:.4rem .8rem;padding:.45rem .7rem;background:linear-gradient(90deg,#1e1030,#0f1020);border:.5px solid #6E549C33;border-radius:8px;text-decoration:none;transition:all .15s" onmouseover="this.style.borderColor='#6E549C'" onmouseout="this.style.borderColor='#6E549C33'"><span style="font-size:.7rem;font-family:var(--mono);color:#c4a0f5;letter-spacing:.06em">✦ SYLVENKA PRO</span><span style="font-size:.7rem;color:#6E549C;margin-left:auto">→</span></a>
+  <button data-page="speak" class="nav-btn-speak" onclick="go('speak')">Speak with Mira</button>
+  <button data-page="converse" class="nav-btn-converse" onclick="go('converse')">Talk to speakers</button>
+  <button data-page="community" class="nav-btn-community" onclick="go('community')">Community</button>
+  <a href="/pro" style="display:flex;align-items:center;gap:.5rem;margin:.4rem .8rem;padding:.45rem .7rem;background:linear-gradient(90deg,#1e1030,#0f1020);border:.5px solid #6E549C33;border-radius:8px;text-decoration:none">
+    <span style="font-size:.7rem;font-family:var(--mono);color:#c4a0f5;letter-spacing:.06em">✦ SYLVENKA PRO</span>
+    <span style="font-size:.7rem;color:#6E549C;margin-left:auto">→</span>
+  </a>
   <div class="spine-bottom">
     <div class="spine-user" onclick="go('speak')">
       <div class="spine-av">M</div>
@@ -271,7 +285,6 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
   </div>
 </nav>
 <main>
-<!-- ============ HOME ============ -->
 <section class="page show" id="page-home">
 
   <!-- Chat banner -->
@@ -294,8 +307,8 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
       <span class="ev-pill-hero ph-le">-le · dreamed</span>
     </div>
     <div class="hero-btns">
-      <a href="#" onclick="go('sounds');return false;" class="hero-btn-primary" style="text-decoration:none;display:inline-block">Start learning</a>
-      <a href="#" onclick="go('speak');return false;" class="hero-btn-primary" style="text-decoration:none;display:inline-block;background:#6E549C">Speak with Mira</a>
+      <button class="hero-btn-primary" onclick="event.preventDefault();go('sounds');window.scrollTo({top:0,behavior:'smooth'})">Start learning</button>
+      <button class="hero-btn-primary" onclick="event.preventDefault();go('speak');window.scrollTo({top:0,behavior:'smooth'})" style="background:#6E549C">Speak with Mira</button>
       <a href="/chat" class="hero-btn-ghost">Join the community</a>
     </div>
   </div>
@@ -316,8 +329,6 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
   <p style="margin-top:1.5rem"><button class="btn" onclick="go('sounds')">Start with the sounds</button> &nbsp; <button class="btn ghost" onclick="go('speak')">Try the tutor</button></p>
   <div class="note"><strong>Turn your sound on.</strong> Every Sylvenka word on this site has a play button. Audio uses your device's speech voices — a Spanish or Italian voice will be chosen automatically when available, because their pure vowels match Sylvenka's almost exactly.</div>
 </section>
-
-<!-- ============ SOUNDS ============ -->
 <section class="page" id="page-sounds">
   <h1>Sounds &amp; script</h1>
   <p class="lede">Sylvenka has ten consonants, five pure vowels, and a rhythm you can learn in a minute.</p>
@@ -367,8 +378,6 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
   </div>
   <p style="margin-top:1.5rem"><button class="btn" onclick="go('grammar')">Next: the complete grammar</button></p>
 </section>
-
-<!-- ============ GRAMMAR ============ -->
 <section class="page" id="page-grammar">
   <h1>The complete grammar</h1>
   <p class="lede">Everything Sylvenka does, on one page. Bookmark this — it is the whole rulebook.</p>
@@ -443,7 +452,6 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
   <p>Sylvenka courts swear no oaths — testimony in <span class="syl">-va</span> is binding by itself, and false <span class="syl">-va</span> is the language's gravest taboo. Historians write in <span class="syl">-shi</span> and <span class="syl">-nu</span>, and the shift between them marks trust in a source. Children famously overuse <span class="syl">-le</span>: "there's a monster under the bed (dreamed)" is technically never a lie. And the four-line <span class="syl">velasin</span> poem must move through all four markers — from certainty to dream.</p>
   <p style="margin-top:1.5rem"><button class="btn" onclick="go('lessons')">Now practice: eight lessons</button></p>
 </section>
-<!-- ============ LESSONS ============ -->
 <section class="page" id="page-lessons">
   <h1>Eight lessons</h1>
   <p class="lede">Move through these in order. Each builds on the last. Take your time — there's no rush in Sylvenka.</p>
@@ -453,8 +461,6 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
     <div id="lessonContent"></div>
   </div>
 </section>
-
-<!-- ============ DICTIONARY ============ -->
 <section class="page" id="page-dictionary">
   <h1>Dictionary</h1>
   <p class="lede">The complete Sylvenka lexicon — 220 words, searchable.</p>
@@ -464,15 +470,11 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
   </div>
   <table id="dictTable"><thead><tr><th>Sylvenka</th><th>English</th><th>Category</th><th>Hear</th></tr></thead><tbody id="dictBody"></tbody></table>
 </section>
-
-<!-- ============ PHRASEBOOK ============ -->
 <section class="page" id="page-phrases">
   <h1>Phrasebook</h1>
   <p class="lede">Ready-made phrases for common situations — with the evidence marker already chosen for you.</p>
   <div id="phrases"></div>
 </section>
-
-<!-- ============ SPEAK / AI TUTOR ============ -->
 <section class="page" id="page-speak">
 
   <!-- Mira hero banner -->
@@ -558,8 +560,6 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
   </div>
 
 </section>
-
-<!-- ============ COMMUNITY ============ -->
 <section class="page" id="page-community">
   <h1>Community</h1>
   <p class="lede">Sylvenka is a living language — it grows with every new speaker. Here is where the community meets.</p>
@@ -593,16 +593,16 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
     </div>
   </div>
 
+  <!-- Contact form -->
   <h2>Get in touch</h2>
-  <p>Questions? Email <a href="mailto:hello@sylvenka.com">hello@sylvenka.com</a> or use the form below.</p>
+  <p style="color:var(--muted);font-size:.9rem;margin-bottom:1rem">Questions about Sylvenka? Want to collaborate? Email us at <a href="mailto:larry@sylvenka.com">larry@sylvenka.com</a> or use the form below.</p>
   <form action="https://formspree.io/f/mnjegqjb" method="POST" style="display:flex;flex-direction:column;gap:.7rem;max-width:480px">
-    <input type="text" name="name" placeholder="Your name" required>
-    <input type="email" name="email" placeholder="Your email" required>
-    <textarea name="message" placeholder="Your message" rows="4" required></textarea>
+    <input type="text" name="name" placeholder="Your name" required style="font-family:var(--body);font-size:.95rem;padding:.7rem .9rem;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--ink)">
+    <input type="email" name="email" placeholder="Your email" required style="font-family:var(--body);font-size:.95rem;padding:.7rem .9rem;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--ink)">
+    <textarea name="message" placeholder="Your message" rows="4" required style="font-family:var(--body);font-size:.95rem;padding:.7rem .9rem;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--ink);resize:vertical"></textarea>
     <button type="submit" class="btn">Send message</button>
   </form>
 </section>
-<!-- ============ CONVERSE ============ -->
 <section class="page" id="page-converse">
   <h1>Talk to speakers</h1>
   <p class="lede">Practice Sylvenka with real people. Join a room, post a message, or find a conversation partner.</p>
@@ -708,28 +708,29 @@ input:focus,textarea:focus{outline:2px solid var(--va);border-color:var(--va)}
 <script>
 // ── Navigation ──────────────────────────────────────────────
 const pages=['home','sounds','grammar','lessons','dictionary','phrases','speak','converse','community'];
-function go(id){
-  document.querySelectorAll('section.page').forEach(function(p){p.classList.remove('show');});
-  var targetPage=document.getElementById('page-'+id);
-  if(targetPage){targetPage.classList.add('show');}
-  document.querySelectorAll('nav button,.mobile-nav button').forEach(function(btn){btn.classList.remove('active');if(btn.getAttribute('onclick')&&btn.getAttribute('onclick').includes("'"+id+"'")){btn.classList.add('active');}});
-  window.scrollTo(0,0);
-  if(id==='dictionary')renderDict();
-  if(id==='lessons')renderLessons();
-  if(id==='phrases')renderPhrases();
-  if(id==='community')renderCommunity();
-  if(id==='converse'){initConverse();}
-}
-window.go=go;b=>{
-    b.classList.toggle('active',b.dataset.page===id);
+function go(id) {
+  // Hide all pages
+  document.querySelectorAll('section.page').forEach(function(p) {
+    p.classList.remove('show');
   });
-  window.scrollTo(0,0);
+  // Show target
+  var targetPage = document.getElementById('page-' + id);
+  if (targetPage) { targetPage.classList.add('show'); }
+  // Update nav buttons
+  document.querySelectorAll('button').forEach(function(btn) {
+    btn.classList.remove('active');
+  });
+  document.querySelectorAll('.nav-btn-' + id).forEach(function(btn) {
+    btn.classList.add('active');
+  });
+  window.scrollTo(0, 0);
   if(id==='dictionary')renderDict();
   if(id==='lessons')renderLessons();
   if(id==='phrases')renderPhrases();
   if(id==='community')renderCommunity();
   if(id==='converse'){initConverse();}
 }
+window.go = go;
 document.querySelectorAll('nav.spine button').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
 // Mobile nav
 const mn=document.getElementById('mobileNav');
@@ -1210,7 +1211,7 @@ function quickAsk(text){
   const inp=document.getElementById('chatInput');
   if(inp){inp.value=text;sendChat();}
 }
-
+function addMsg(role,html){
   const log=document.getElementById('chatLog');
   const div=document.createElement('div');
   div.className=`msg ${role}`;
