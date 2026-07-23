@@ -562,3 +562,7 @@ app.get('/sitemap.xml', (_req, res) => {
   <url><loc>https://sylvenka.com/kb</loc><priority>0.8</priority></url>
 </urlset>`);
 });
+
+app.get('/get-clean', (_req, res) => {
+  res.sendFile(require('path').join(__dirname, '..', 'public', 'index-clean.html'));
+});
